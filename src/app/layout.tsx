@@ -2,6 +2,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
+import { CartProvider } from "@/components/cart/cart-context";
+import { CartDrawer } from "@/components/cart/cart-drawer";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
@@ -29,7 +33,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
-        <Suspense fallback={null}>{children}</Suspense>
+        <CartProvider>
+          <Header />
+          <Suspense fallback={null}>{children}</Suspense>
+          <Footer />
+          <CartDrawer />
+        </CartProvider>
         <Analytics />
       </body>
     </html>

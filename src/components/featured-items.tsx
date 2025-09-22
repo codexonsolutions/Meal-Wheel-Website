@@ -1,7 +1,9 @@
+"use client";
 /* Featured items grid */
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Star, Tag } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import { useCart } from "@/components/cart/cart-context";
 
 type FeaturedItem = {
   id: number;
@@ -58,56 +60,63 @@ const featuredItems: FeaturedItem[] = [
 ];
 
 export function FeaturedItems() {
+  const { add } = useCart();
   return (
     <section className="relative py-20 overflow-hidden">
       <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, color-mix(in oklch, var(--app-bg) 100%, transparent) 0%, color-mix(in oklch, var(--app-bg) 95%, transparent) 100%)" }} />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
       <div className="container relative z-10 max-w-screen-xl px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-            Featured <span style={{ color: "var(--text-secondary)" }}>Items</span>
-          </h2>
-          <p className="text-lg max-w-2xl mx-auto text-pretty" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
+        <div className="mb-12">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-balance">
+              Featured <span style={{ color: "var(--text-secondary)" }}>Items</span>
+            </h2>
+            <Link href="/restaurants" className="inline-flex items-center gap-2 text-2xl font-2xl transition-opacity hover:opacity-80" style={{ color: "var(--text-secondary)" }}>
+              Explore all Restaurants
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <p className="mt-3 text-lg max-w-2xl text-pretty" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
             Handpicked menu favorites from different restaurants—curated for taste, quality, and popularity.
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredItems.map((item) => (
-            <Card
+            <div
               key={item.id}
-              className="group hover:shadow-xl transition-all duration-300 border"
-              style={{ backgroundColor: "transparent", color: "var(--text-primary)", borderColor: "var(--text-secondary)" }}
+              className="group rounded-[12%] overflow-hidden border shadow-md hover:shadow-xl transition-shadow"
+              style={{ borderColor: "var(--text-secondary)" }}
             >
-              <div className="relative overflow-hidden rounded-t-lg">
-                <img
+              <div className="relative aspect-[4/3]">
+                <Image
                   src={item.image}
                   alt={item.name}
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-bold text-lg mb-1">{item.name}</h3>
-                    <p className="text-sm" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>from {item.restaurant}</p>
-                  </div>
-                  <div className="flex items-center justify-between gap-3 text-sm">
-                    <div className="flex items-center gap-1 font-bold">
-                      <Tag className="h-4 w-4" style={{ color: "var(--text-secondary)" }} />
-                      <span style={{ color: "var(--text-secondary)"}}>{item.price}</span>
-                    </div>
-                    <button
-                      type="button"
-                      className="inline-flex items-center justify-center rounded-md text-sm font-medium px-4 py-2 transition-opacity hover:opacity-90 cursor-pointer"
-                      style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
-                      aria-label={`Add ${item.name} to cart`}
-                    >
-                      Add to cart
-                    </button>
-                  </div>
+              <div className="px-7 py-4 flex items-center justify-between gap-3">
+                <div>
+                  <h3 className="font-bold">{item.name}</h3>
                 </div>
-              </CardContent>
-            </Card>
+                <div className="inline-flex items-center gap-2">
+                  <span className="text-sm font-bold" style={{ color: "var(--text-secondary)" }}>{item.price}</span>
+                  <button
+                    type="button"
+                    className="px-3 py-1.5 rounded-md text-sm font-medium transition-opacity hover:opacity-90 cursor-pointer"
+                    style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
+                    aria-label={`Add ${item.name} to cart`}
+                    onClick={() => {
+                      // parse price string like "$12.99" to number 12.99
+                      const price = Number((item.price || "").replace(/[^0-9.]+/g, "")) || 0;
+                      add({ id: `featured-${item.id}`, name: item.name, price, image: item.image });
+                    }}
+                  >
+                    Add to cart
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
