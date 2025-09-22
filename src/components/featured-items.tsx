@@ -1,0 +1,116 @@
+/* Featured items grid */
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Star, Tag } from "lucide-react";
+
+type FeaturedItem = {
+  id: number;
+  name: string;
+  restaurant: string;
+  price: string;
+  rating: number;
+  image: string;
+  featured?: boolean;
+  tags?: string[];
+};
+
+const featuredItems: FeaturedItem[] = [
+  {
+    id: 1,
+    name: "Margherita Pizza",
+    restaurant: "Bella Italia",
+    price: "$12.99",
+    rating: 4.8,
+    image: "/delicious-burger-fries.png",
+    featured: true,
+    tags: ["Vegetarian", "Best Seller"],
+  },
+  {
+    id: 2,
+    name: "Sweet & Sour Pork",
+    restaurant: "Dragon Palace",
+    price: "$10.50",
+    rating: 4.6,
+    image: "/chinese-restaurant-with-red-lanterns.jpg",
+    featured: true,
+    tags: ["Popular"],
+  },
+  {
+    id: 3,
+    name: "Classic Cheeseburger",
+    restaurant: "Burger Junction",
+    price: "$9.99",
+    rating: 4.7,
+    image: "/modern-burger-restaurant.jpg",
+    featured: true,
+    tags: ["Combo Available"],
+  },
+  {
+    id: 4,
+    name: "Salmon Roll",
+    restaurant: "Sakura Sushi",
+    price: "$13.50",
+    rating: 4.9,
+    image: "/elegant-sushi-restaurant.jpg",
+    featured: true,
+    tags: ["Fresh"],
+  },
+];
+
+export function FeaturedItems() {
+  return (
+    <section className="relative py-20 overflow-hidden">
+      <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, color-mix(in oklch, var(--app-bg) 100%, transparent) 0%, color-mix(in oklch, var(--app-bg) 95%, transparent) 100%)" }} />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
+      <div className="container relative z-10 max-w-screen-xl px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
+            Featured <span style={{ color: "var(--text-secondary)" }}>Items</span>
+          </h2>
+          <p className="text-lg max-w-2xl mx-auto text-pretty" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
+            Handpicked menu favorites from different restaurants—curated for taste, quality, and popularity.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {featuredItems.map((item) => (
+            <Card
+              key={item.id}
+              className="group hover:shadow-xl transition-all duration-300 border"
+              style={{ backgroundColor: "transparent", color: "var(--text-primary)", borderColor: "var(--text-secondary)" }}
+            >
+              <div className="relative overflow-hidden rounded-t-lg">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-bold text-lg mb-1">{item.name}</h3>
+                    <p className="text-sm" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>from {item.restaurant}</p>
+                  </div>
+                  <div className="flex items-center justify-between gap-3 text-sm">
+                    <div className="flex items-center gap-1 font-bold">
+                      <Tag className="h-4 w-4" style={{ color: "var(--text-secondary)" }} />
+                      <span style={{ color: "var(--text-secondary)"}}>{item.price}</span>
+                    </div>
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center rounded-md text-sm font-medium px-4 py-2 transition-opacity hover:opacity-90 cursor-pointer"
+                      style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
+                      aria-label={`Add ${item.name} to cart`}
+                    >
+                      Add to cart
+                    </button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

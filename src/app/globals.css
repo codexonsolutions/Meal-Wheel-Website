@@ -1,3 +1,23 @@
+/* Global Tailwind import (no inline comments in file body) */
 @import "tailwindcss";
+
+:root {
+	--app-bg: #ffffff;
+	--text-primary: #000000;
+	--text-secondary: #DF9937;
+}
+
+html, body {
+	background-color: var(--app-bg);
+	color: var(--text-primary);
+}
+
+
+.container {
+	width: 90%;
+	max-width: none;
+	margin-left: auto;
+	margin-right: auto;
+}
 
 

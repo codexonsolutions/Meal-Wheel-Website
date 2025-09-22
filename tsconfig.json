@@ -18,6 +18,8 @@
         "name": "next"
       }
     ],
+    "types": ["node", "estree", "json-schema"],
+    "typeRoots": ["./node_modules/@types"],
     "paths": {
       "@/*": ["./src/*"]
     }
