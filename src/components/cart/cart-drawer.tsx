@@ -1,10 +1,12 @@
 "use client";
 import Image from "next/image";
 import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useCart } from "./cart-context";
 
 export function CartDrawer() {
   const { state, close, remove, increment, decrement, clear, subtotal } = useCart();
+  const router = useRouter();
   const open = state.open;
 
   return (
@@ -86,7 +88,14 @@ export function CartDrawer() {
               <button onClick={clear} className="px-4 py-2 rounded-md text-sm font-medium border hover:opacity-80" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))" }}>
                 Clear cart
               </button>
-              <button className="px-4 py-2 rounded-md text-sm font-medium hover:opacity-90" style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}>
+              <button
+                className="px-4 py-2 rounded-md text-sm font-medium hover:opacity-90"
+                style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
+                onClick={() => {
+                  close();
+                  router.push("/checkout");
+                }}
+              >
                 Checkout
               </button>
             </div>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useCart } from "@/components/cart/cart-context";
+import { useAdmin } from "@/store/admin-store";
 
 type FeaturedItem = {
   id: number;
@@ -61,6 +62,7 @@ const featuredItems: FeaturedItem[] = [
 
 export function FeaturedItems() {
   const { add } = useCart();
+  const { items: adminItems } = useAdmin();
   return (
     <section className="relative py-20 overflow-hidden">
       <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, color-mix(in oklch, var(--app-bg) 100%, transparent) 0%, color-mix(in oklch, var(--app-bg) 95%, transparent) 100%)" }} />
@@ -81,7 +83,14 @@ export function FeaturedItems() {
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredItems.map((item) => (
+          {(adminItems.filter((i) => i.featured).slice(0, 8).map((i) => ({
+            id: i.id,
+            name: i.name,
+            price: `$${i.price.toFixed(2)}`,
+            image: i.image || "/placeholder.svg",
+          })) as Array<{ id: string | number; name: string; price: string; image: string }> ).concat(
+            adminItems.some((i) => i.featured) ? [] : featuredItems
+          ).slice(0, 8).map((item) => (
             <div
               key={item.id}
               className="group rounded-[12%] overflow-hidden border shadow-md hover:shadow-xl transition-shadow"
