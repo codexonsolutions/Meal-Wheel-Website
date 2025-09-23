@@ -59,7 +59,7 @@ export function CartDrawer() {
                   <div className="flex-1">
                     <div className="font-medium">{item.name}</div>
                     <div className="text-sm" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
-                      ${(item.price * item.qty).toFixed(2)} ({item.qty} × ${item.price.toFixed(2)})
+                      Rs. {(item.price * item.qty).toFixed(2)} ({item.qty} × Rs. {item.price.toFixed(2)})
                     </div>
                     <div className="mt-2 inline-flex items-center gap-2">
                       <button onClick={() => decrement(item.id)} className="px-2 py-1 rounded border" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))" }}>
@@ -82,7 +82,7 @@ export function CartDrawer() {
           <div className="border-t border-[color:color-mix(in_oklch,var(--text-primary)_15%,var(--app-bg))] p-4 space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-medium">Subtotal</span>
-              <span className="font-semibold">${subtotal.toFixed(2)}</span>
+              <span className="font-semibold">Rs. {subtotal.toFixed(2)}</span>
             </div>
             <div className="flex items-center justify-between gap-3">
               <button onClick={clear} className="px-4 py-2 rounded-md text-sm font-medium border hover:opacity-80" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))" }}>

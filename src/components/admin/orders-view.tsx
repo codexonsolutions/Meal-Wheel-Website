@@ -37,13 +37,13 @@ export default function OrdersView() {
                   <span>
                     {it.name} × {it.qty}
                   </span>
-                  <span>${(it.qty * it.price).toFixed(2)}</span>
+                  <span>Rs. {(it.qty * it.price).toFixed(2)}</span>
                 </div>
               ))}
             </div>
             <div className="mt-3 border-t pt-3 flex justify-between font-medium" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
               <span>Total</span>
-              <span>${o.total.toFixed(2)}</span>
+              <span>Rs. {o.total.toFixed(2)}</span>
             </div>
           </div>
         ))

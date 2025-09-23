@@ -22,7 +22,7 @@ const featuredItems: FeaturedItem[] = [
     id: 1,
     name: "Margherita Pizza",
     restaurant: "Bella Italia",
-    price: "$12.99",
+    price: "Rs. 12.99",
     rating: 4.8,
     image: "/delicious-burger-fries.png",
     featured: true,
@@ -32,7 +32,7 @@ const featuredItems: FeaturedItem[] = [
     id: 2,
     name: "Sweet & Sour Pork",
     restaurant: "Dragon Palace",
-    price: "$10.50",
+    price: "Rs. 10.50",
     rating: 4.6,
     image: "/chinese-restaurant-with-red-lanterns.jpg",
     featured: true,
@@ -42,7 +42,7 @@ const featuredItems: FeaturedItem[] = [
     id: 3,
     name: "Classic Cheeseburger",
     restaurant: "Burger Junction",
-    price: "$9.99",
+    price: "Rs. 9.99",
     rating: 4.7,
     image: "/modern-burger-restaurant.jpg",
     featured: true,
@@ -52,7 +52,7 @@ const featuredItems: FeaturedItem[] = [
     id: 4,
     name: "Salmon Roll",
     restaurant: "Sakura Sushi",
-    price: "$13.50",
+    price: "Rs. 13.50",
     rating: 4.9,
     image: "/elegant-sushi-restaurant.jpg",
     featured: true,
@@ -86,7 +86,7 @@ export function FeaturedItems() {
           {(adminItems.filter((i) => i.featured).slice(0, 8).map((i) => ({
             id: i.id,
             name: i.name,
-            price: `$${i.price.toFixed(2)}`,
+            price: `Rs. ${i.price.toFixed(2)}`,
             image: i.image || "/placeholder.svg",
           })) as Array<{ id: string | number; name: string; price: string; image: string }> ).concat(
             adminItems.some((i) => i.featured) ? [] : featuredItems
@@ -116,7 +116,7 @@ export function FeaturedItems() {
                     style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
                     aria-label={`Add ${item.name} to cart`}
                     onClick={() => {
-                      // parse price string like "$12.99" to number 12.99
+                      // parse price string like "Rs. 12.99" to number 12.99
                       const price = Number((item.price || "").replace(/[^0-9.]+/g, "")) || 0;
                       add({ id: `featured-${item.id}`, name: item.name, price, image: item.image });
                     }}

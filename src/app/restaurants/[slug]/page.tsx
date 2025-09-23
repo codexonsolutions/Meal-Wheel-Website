@@ -1,6 +1,5 @@
 /* Restaurant detail page with category filters */
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { RestaurantMenu } from "@/components/restaurant-menu";
 
 // Demo data: per-restaurant categories and items
@@ -14,18 +13,18 @@ const data: Record<string, {
     banner: "/delicious-burger-fries.png",
     categories: {
       Starter: [
-        { id: 1, name: "Bruschetta", image: "/placeholder.svg", price: "$6.50" },
-        { id: 2, name: "Garlic Bread", image: "/placeholder.svg", price: "$5.00" },
+  { id: 1, name: "Bruschetta", image: "/placeholder.svg", price: "Rs. 6.50" },
+  { id: 2, name: "Garlic Bread", image: "/placeholder.svg", price: "Rs. 5.00" },
       ],
       "Main Course": [
-        { id: 3, name: "Margherita Pizza", image: "/placeholder.svg", price: "$12.99" },
-        { id: 4, name: "Pasta Carbonara", image: "/placeholder.svg", price: "$13.99" },
+  { id: 3, name: "Margherita Pizza", image: "/placeholder.svg", price: "Rs. 12.99" },
+  { id: 4, name: "Pasta Carbonara", image: "/placeholder.svg", price: "Rs. 13.99" },
       ],
       Desserts: [
-        { id: 5, name: "Tiramisu", image: "/placeholder.svg", price: "$7.50" },
+  { id: 5, name: "Tiramisu", image: "/placeholder.svg", price: "Rs. 7.50" },
       ],
       "Midnight Deals": [
-        { id: 6, name: "Pizza + Drink Combo", image: "/placeholder.svg", price: "$14.99" },
+  { id: 6, name: "Pizza + Drink Combo", image: "/placeholder.svg", price: "Rs. 14.99" },
       ],
     },
   },
@@ -34,22 +33,18 @@ const data: Record<string, {
     banner: "/chinese-restaurant-with-red-lanterns.jpg",
     categories: {
       Starter: [
-        { id: 7, name: "Spring Rolls", image: "/placeholder.svg", price: "$5.99" },
+  { id: 7, name: "Spring Rolls", image: "/placeholder.svg", price: "Rs. 5.99" },
       ],
       "Main Course": [
-        { id: 8, name: "Sweet & Sour Pork", image: "/placeholder.svg", price: "$10.50" },
-        { id: 9, name: "Fried Rice", image: "/placeholder.svg", price: "$8.25" },
+  { id: 8, name: "Sweet & Sour Pork", image: "/placeholder.svg", price: "Rs. 10.50" },
+  { id: 9, name: "Fried Rice", image: "/placeholder.svg", price: "Rs. 8.25" },
       ],
       "Chef Special": [
-        { id: 10, name: "Mapo Tofu", image: "/placeholder.svg", price: "$9.75" },
+  { id: 10, name: "Mapo Tofu", image: "/placeholder.svg", price: "Rs. 9.75" },
       ],
     },
   },
 };
-
-function slugify(name: string) {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-}
 
 function restaurantFromSlug(slug: string) {
   // data is keyed by slug

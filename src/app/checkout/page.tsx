@@ -153,7 +153,7 @@ export default function CheckoutPage() {
                       <div className="text-sm font-medium">{item.name}</div>
                       <div className="text-xs" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>Qty: {item.qty}</div>
                     </div>
-                    <div className="text-sm font-medium">${(item.qty * item.price).toFixed(2)}</div>
+                    <div className="text-sm font-medium">Rs. {(item.qty * item.price).toFixed(2)}</div>
                   </div>
                 ))
               )}
@@ -161,15 +161,15 @@ export default function CheckoutPage() {
               <div className="mt-4 border-t pt-4 space-y-2" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
                 <div className="flex justify-between text-sm">
                   <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>Rs. {subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Delivery Fee</span>
-                  <span>${deliveryFee.toFixed(2)}</span>
+                  <span>Rs. {deliveryFee.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-semibold pt-2">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>Rs. {total.toFixed(2)}</span>
                 </div>
               </div>
             </div>

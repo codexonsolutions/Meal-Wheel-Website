@@ -61,7 +61,7 @@ export default function ItemsView() {
               <div key={it.id} className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <div className="font-medium truncate">{it.name}</div>
-                  <div className="text-xs" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>${it.price.toFixed(2)} {it.category ? `• ${it.category}` : ""}</div>
+                  <div className="text-xs" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>Rs. {it.price.toFixed(2)} {it.category ? `• ${it.category}` : ""}</div>
                 </div>
                 <div className="flex items-center gap-2">
                   <label className="text-xs">Featured</label>
