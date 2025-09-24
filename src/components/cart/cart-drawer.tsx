@@ -85,15 +85,23 @@ export function CartDrawer() {
               <span className="font-semibold">Rs. {subtotal.toFixed(2)}</span>
             </div>
             <div className="flex items-center justify-between gap-3">
-              <button onClick={clear} className="px-4 py-2 rounded-md text-sm font-medium border hover:opacity-80" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))" }}>
+              <button 
+                onClick={clear} 
+                disabled={state.items.length === 0}
+                className="px-4 py-2 rounded-md text-sm font-medium border hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed" 
+                style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))" }}
+              >
                 Clear cart
               </button>
               <button
-                className="px-4 py-2 rounded-md text-sm font-medium hover:opacity-90"
+                disabled={state.items.length === 0}
+                className="px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
                 onClick={() => {
-                  close();
-                  router.push("/checkout");
+                  if (state.items.length > 0) {
+                    close();
+                    router.push("/checkout");
+                  }
                 }}
               >
                 Checkout

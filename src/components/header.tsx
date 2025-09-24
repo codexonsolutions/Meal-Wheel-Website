@@ -19,7 +19,7 @@ export function Header() {
           </Button>
 
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.svg" alt="Meal Wheel" width={40} height={40} className="rounded-lg" />
+            <Image src="/Meal_Wheel_Logo_Final.svg" alt="Meal Wheel" width={40} height={40} className="rounded-lg" />
             <span className="text-3xl font-bold">
               <span style={{ color: "var(--text-secondary)" }}>Meal</span> <span style={{ color: "var(--text-primary)" }}>Wheel</span>
             </span>

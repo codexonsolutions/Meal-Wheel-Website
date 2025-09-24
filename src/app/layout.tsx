@@ -1,5 +1,4 @@
 /* Root layout for Meal Wheel application */
-import { AdminProvider } from "@/store/admin-store";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
@@ -34,14 +33,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
-              <AdminProvider>
-                <CartProvider>
-                  <Header />
-                  <Suspense fallback={null}>{children}</Suspense>
-                  <Footer />
-                  <CartDrawer />
-                </CartProvider>
-              </AdminProvider>
+        <CartProvider>
+          <Header />
+          <Suspense fallback={null}>{children}</Suspense>
+          <Footer />
+          <CartDrawer />
+        </CartProvider>
         <Analytics />
       </body>
     </html>

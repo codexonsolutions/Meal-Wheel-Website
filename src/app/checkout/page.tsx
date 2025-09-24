@@ -2,14 +2,13 @@
 /* Checkout page: Collects user details and shows order summary */
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/cart-context";
-import { useAdmin } from "@/store/admin-store";
-import type { Order } from "@/types";
 
 export default function CheckoutPage() {
   const { state, subtotal, clear } = useCart();
-  const { addOrder } = useAdmin();
+  const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -21,28 +20,82 @@ export default function CheckoutPage() {
   const deliveryFee = state.items.length > 0 ? 150 : 0; // flat fee example
   const total = subtotal + deliveryFee;
 
-  const placeOrder = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Redirect to home if cart is empty
+  useEffect(() => {
+    if (state.items.length === 0) {
+      router.push('/');
+    }
+  }, [state.items.length, router]);
+
+  const placeOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    
     // Basic validation
     if (!fullName || !email || !phone || !street || !city || !postal) {
-      alert("Please complete all required fields.");
+      setError("Please complete all required fields.");
       return;
     }
-    // Create order and persist into admin store
-    const order: Order = {
-      id: `ord_${Date.now()}`,
-      customer: { fullName, email, phone },
-      address: { street, city, postal, notes },
-      items: state.items.map((i) => ({ name: i.name, price: i.price, qty: i.qty, image: i.image })),
-      subtotal,
-      deliveryFee,
-      total,
-      status: "pending",
-      createdAt: Date.now(),
-    };
-    addOrder(order);
-    alert("Order placed successfully! (Demo)");
-    clear();
+
+    if (state.items.length === 0) {
+      setError("Your cart is empty.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Prepare order data for backend
+      const orderData = {
+        customer: {
+          fullName: fullName.trim(),
+          email: email.trim(),
+          phone: phone.trim()
+        },
+        deliveryAddress: {
+          street: street.trim(),
+          city: city.trim(),
+          postal: postal.trim(),
+          notes: notes.trim() || undefined
+        },
+        items: state.items.map(item => ({
+          id: item.id,
+          quantity: item.qty
+        })),
+        deliveryFee: deliveryFee
+      };
+
+      // Send order to backend
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/public`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Failed to place order' }));
+        throw new Error(errorData.error || 'Failed to place order');
+      }
+
+      const result = await response.json();
+      
+      alert(`Order placed successfully! Order ID: ${result.order._id}`);
+      clear();
+      
+      // Optionally redirect to a success page
+      // window.location.href = '/order-success';
+      
+    } catch (err) {
+      console.error('Order placement error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to place order. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -124,9 +177,20 @@ export default function CheckoutPage() {
               </div>
             </div>
 
+            {error && (
+              <div className="p-4 rounded-md bg-red-50 border border-red-200">
+                <p className="text-red-800 text-sm">{error}</p>
+              </div>
+            )}
+
             <div className="flex justify-end">
-              <button type="submit" className="px-5 py-3 rounded-md font-medium hover:opacity-90" style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}>
-                Place Order
+              <button 
+                type="submit" 
+                disabled={isLoading || state.items.length === 0}
+                className="px-5 py-3 rounded-md font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed" 
+                style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
+              >
+                {isLoading ? "Placing Order..." : "Place Order"}
               </button>
             </div>
           </form>
