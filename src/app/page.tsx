@@ -9,7 +9,6 @@ export default function HomePage() {
       <main>
         <HeroSection />
         <FeaturedItems />
-        <StatsSection />
       </main>
     </div>
   );

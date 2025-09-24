@@ -13,6 +13,7 @@ type FeaturedItem = {
   price: number;
   category: string;
   isFeatured: boolean;
+  restaurantName?: string;
 };
 
 export function FeaturedItems() {
@@ -44,7 +45,7 @@ export function FeaturedItems() {
   }, []);
 
   return (
-    <section className="relative py-20 overflow-hidden">
+    <section id="featured-items" className="relative py-20 overflow-hidden">
       <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, color-mix(in oklch, var(--app-bg) 100%, transparent) 0%, color-mix(in oklch, var(--app-bg) 95%, transparent) 100%)" }} />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
       <div className="container relative z-10 max-w-screen-xl px-4">
@@ -100,6 +101,11 @@ export function FeaturedItems() {
                 <div className="px-7 py-4 flex items-center justify-between gap-3">
                   <div>
                     <h3 className="font-bold">{item.name}</h3>
+                    {item.restaurantName && (
+                      <p className="text-l mt-1 " style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
+                        {item.restaurantName}
+                      </p>
+                    )}
                   </div>
                   <div className="inline-flex items-center gap-2">
                     <span className="text-sm font-bold" style={{ color: "var(--text-secondary)" }}>

@@ -100,8 +100,9 @@ export function RestaurantMenu({
                   onClick={() => {
                     const price =
                       Number((it.price || "").replace(/[^0-9.]+/g, "")) || 0;
+                    // Use the raw backend item id so checkout can submit valid ObjectIds
                     add({
-                      id: `menu-${it.id}`,
+                      id: it.id,
                       name: it.name,
                       price,
                       image: it.image,

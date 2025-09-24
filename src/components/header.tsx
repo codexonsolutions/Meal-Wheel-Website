@@ -32,26 +32,43 @@ export function Header() {
             <Link href="/restaurants" className="font-medium transition-colors" style={{ color: pathname?.startsWith("/restaurants") ? "var(--text-secondary)" : "var(--text-primary)" }}>
               Restaurants
             </Link>
-            <Link href="/about" className="font-medium transition-colors" style={{ color: pathname?.startsWith("/about") ? "var(--text-secondary)" : "var(--text-primary)" }}>
-              About
-            </Link>
           </nav>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="hidden md:flex items-center gap-2 rounded-full px-4 py-2 min-w-[300px]" style={{ backgroundColor: "color-mix(in oklch, var(--app-bg) 75%, white 5%)" }}>
-            <Search className="h-4 w-4" style={{ color: "color-mix(in oklch, var(--text-primary) 60%, var(--app-bg))" }} />
-            <input
-              type="text"
-              placeholder="Search restaurants or dishes..."
-              className="bg-transparent border-none outline-none flex-1 text-sm"
-              style={{ color: "var(--text-primary)" }}
-            />
-          </div>
+  <div className="flex items-center gap-4">
+
 
           <Button variant="ghost" size="icon" className="md:hidden">
             <Search className="h-8 w-8" />
           </Button>
+
+          {/* Social icons */}
+          <div className="hidden sm:flex items-center gap-2 mr-1">
+            <a
+              href="https://wa.me/1234567890"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="w-8 h-8 inline-flex items-center justify-center rounded-md overflow-hidden border transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
+              style={{
+                borderColor: "color-mix(in oklch, var(--text-primary) 25%, transparent)"
+              }}
+            >
+              <Image src="/whatsapp.png" alt="WhatsApp" width={40} height={40} className="object-cover" />
+            </a>
+            <a
+              href="https://www.instagram.com/mealwheelpk/?utm_source=ig_web_button_share_sheet"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="w-8 h-8 inline-flex items-center justify-center rounded-md overflow-hidden border transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-pink-500"
+              style={{
+                borderColor: "color-mix(in oklch, var(--text-primary) 25%, transparent)"
+              }}
+            >
+              <Image src="/instagram.png" alt="Instagram" width={40} height={40} className="object-cover" />
+            </a>
+          </div>
 
           <Button variant="ghost" size="icon" className="relative" onClick={open} aria-label="Open cart">
             <ShoppingCart className="h-8 w-8" />

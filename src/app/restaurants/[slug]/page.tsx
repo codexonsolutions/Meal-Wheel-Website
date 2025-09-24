@@ -78,7 +78,7 @@ export default function RestaurantDetailPage({ params }: { params: { slug: strin
         <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, color-mix(in oklch, var(--app-bg) 100%, transparent) 0%, color-mix(in oklch, var(--app-bg) 95%, transparent) 100%)" }} />
         <div className="container relative z-10 max-w-screen-xl px-4">
           <div className="flex justify-center items-center py-12">
-            <div className="text-lg" style={{ color: "var(--text-secondary)" }}>Loading restaurant...</div>
+            <div className="text-lg" style={{ color: "var(--text-secondary)" }}>Loading Items...</div>
           </div>
         </div>
       </section>

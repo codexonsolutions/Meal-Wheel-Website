@@ -1,8 +1,16 @@
 /* Hero section */
+"use client";
 import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
+import { AnimatedFood, SparkleRing } from "@/components/animated/animated-food";
+import { motion } from "framer-motion";
+import { useCallback } from "react";
 
 export function HeroSection() {
+  const scrollToFeatured = useCallback(() => {
+    const el = document.getElementById('featured-items');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       <div
@@ -31,7 +39,7 @@ export function HeroSection() {
                 }}
               >
                 Order from your favorite restaurants and get fresh, hot meals
-                delivered right to your door in minutes.
+                delivered right to your door step.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -39,15 +47,9 @@ export function HeroSection() {
                 size="lg"
                 className="text-lg px-8 py-6 hover:opacity-90"
                 style={{ backgroundColor: "var(--text-secondary)" }}
+                onClick={scrollToFeatured}
               >
                 Order Now
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="text-lg px-8 py-6 bg-transparent"
-              >
-                Browse Restaurants
               </Button>
             </div>
             <div className="flex items-center gap-8 pt-4">
@@ -69,40 +71,30 @@ export function HeroSection() {
             </div>
           </div>
           <div className="relative">
-            <div className="grid grid-cols-2 gap-4">
+            <SparkleRing />
+            <motion.div
+              className="grid grid-cols-2 gap-4"
+              initial="hidden"
+              animate="show"
+              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.15 } } }}
+            >
               <div className="space-y-4">
-                <div className="aspect-square rounded-2xl bg-gradient-to-br from-orange-500/20 to-orange-500/5 p-6 flex items-center justify-center">
-                  <img
-                    src="/placeholder.svg"
-                    alt="Burger"
-                    className="w-full h-full object-cover rounded-xl"
-                  />
-                </div>
-                <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-zinc-800/50 to-zinc-800/20 p-6 flex items-center justify-center">
-                  <img
-                    src="/placeholder.svg"
-                    alt="Sushi"
-                    className="w-full h-full object-cover rounded-xl"
-                  />
-                </div>
+                <AnimatedFood shape="circle" gradient="bg-gradient-to-br from-orange-500/30 to-orange-500/5" delay={0}>
+                  🍔
+                </AnimatedFood>
+                <AnimatedFood shape="blob" gradient="bg-gradient-to-br from-zinc-800/60 to-zinc-800/20" size="landscape" delay={0.1}>
+                  🍣
+                </AnimatedFood>
               </div>
               <div className="space-y-4 pt-8">
-                <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 p-6 flex items-center justify-center">
-                  <img
-                    src="/placeholder.svg"
-                    alt="Pizza"
-                    className="w-full h-full object-cover rounded-xl"
-                  />
-                </div>
-                <div className="aspect-square rounded-2xl bg-gradient-to-br from-orange-500/10 to-orange-500/5 p-6 flex items-center justify-center">
-                  <img
-                    src="/placeholder.svg"
-                    alt="Salad"
-                    className="w-full h-full object-cover rounded-xl"
-                  />
-                </div>
+                <AnimatedFood shape="diamond" gradient="bg-gradient-to-br from-emerald-500/25 to-emerald-500/5" size="landscape" delay={0.2}>
+                  🍕
+                </AnimatedFood>
+                <AnimatedFood shape="pill" gradient="bg-gradient-to-br from-orange-500/15 to-orange-500/5" delay={0.3}>
+                  🥗
+                </AnimatedFood>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
