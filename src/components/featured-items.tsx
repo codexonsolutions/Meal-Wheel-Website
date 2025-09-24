@@ -45,23 +45,29 @@ export function FeaturedItems() {
   }, []);
 
   return (
-    <section id="featured-items" className="relative py-20 overflow-hidden">
+    <section id="featured-items" className="relative py-12 md:py-20 overflow-hidden">
       <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, color-mix(in oklch, var(--app-bg) 100%, transparent) 0%, color-mix(in oklch, var(--app-bg) 95%, transparent) 100%)" }} />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
       <div className="container relative z-10 max-w-screen-xl px-4">
-        <div className="mb-12">
-          <div className="flex items-center justify-between gap-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-balance">
+        <div className="mb-8 md:mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-balance px-2 md:px-0">
               Featured <span style={{ color: "var(--text-secondary)" }}>Items</span>
             </h2>
-            <Link href="/restaurants" className="inline-flex items-center gap-2 text-2xl font-2xl transition-opacity hover:opacity-80" style={{ color: "var(--text-secondary)" }}>
+            <Link href="/restaurants" className="hidden sm:inline-flex items-center gap-2 text-lg md:text-xl transition-opacity hover:opacity-80 px-2 md:px-0" style={{ color: "var(--text-secondary)" }}>
               Explore all Restaurants
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <p className="mt-3 text-lg max-w-2xl text-pretty" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
+          <p className="mt-2 md:mt-3 text-sm md:text-lg max-w-2xl text-pretty px-2 md:px-0" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
             Handpicked menu favorites from different restaurants—curated for taste, quality, and popularity.
           </p>
+          <div className="sm:hidden mt-4 px-2">
+            <Link href="/restaurants" className="inline-flex items-center gap-2 text-base transition-opacity hover:opacity-80" style={{ color: "var(--text-secondary)" }}>
+              Explore all Restaurants
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
 
         {loading && (
@@ -83,11 +89,11 @@ export function FeaturedItems() {
         )}
 
         {!loading && !error && featuredItems.length > 0 && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {featuredItems.slice(0, 8).map((item) => (
               <div
                 key={item._id}
-                className="group rounded-[12%] overflow-hidden border shadow-md hover:shadow-xl transition-shadow"
+                className="group rounded-lg md:rounded-[12%] overflow-hidden border shadow-md hover:shadow-xl transition-shadow"
                 style={{ borderColor: "var(--text-secondary)" }}
               >
                 <div className="relative aspect-[4/3]">
@@ -98,35 +104,37 @@ export function FeaturedItems() {
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
-                <div className="px-7 py-4 flex items-center justify-between gap-3">
-                  <div>
-                    <h3 className="font-bold">{item.name}</h3>
-                    {item.restaurantName && (
-                      <p className="text-l mt-1 " style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
-                        {item.restaurantName}
-                      </p>
-                    )}
-                  </div>
-                  <div className="inline-flex items-center gap-2">
-                    <span className="text-sm font-bold" style={{ color: "var(--text-secondary)" }}>
-                      Rs. {item.price.toFixed(2)}
-                    </span>
-                    <button
-                      type="button"
-                      className="px-3 py-1.5 rounded-md text-sm font-medium transition-opacity hover:opacity-90 cursor-pointer"
-                      style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
-                      aria-label={`Add ${item.name} to cart`}
-                      onClick={() => {
-                        add({ 
-                          id: item._id, 
-                          name: item.name, 
-                          price: item.price, 
-                          image: item.imageUrl || "/placeholder.jpg" 
-                        });
-                      }}
-                    >
-                      Add to cart
-                    </button>
+                <div className="p-3 md:px-7 md:py-4">
+                  <div className="flex flex-col space-y-2">
+                    <div>
+                      <h3 className="font-bold text-sm md:text-base leading-tight">{item.name}</h3>
+                      {item.restaurantName && (
+                        <p className="text-xs md:text-sm mt-0.5" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
+                          {item.restaurantName}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs md:text-sm font-bold" style={{ color: "var(--text-secondary)" }}>
+                        Rs. {item.price.toFixed(2)}
+                      </span>
+                      <button
+                        type="button"
+                        className="px-2 py-1 md:px-3 md:py-1.5 rounded text-xs md:text-sm font-medium transition-opacity hover:opacity-90 cursor-pointer"
+                        style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
+                        aria-label={`Add ${item.name} to cart`}
+                        onClick={() => {
+                          add({ 
+                            id: item._id, 
+                            name: item.name, 
+                            price: item.price, 
+                            image: item.imageUrl || "/placeholder.jpg" 
+                          });
+                        }}
+                      >
+                        Add
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

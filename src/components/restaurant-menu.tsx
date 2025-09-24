@@ -65,11 +65,11 @@ export function RestaurantMenu({
         })}
       </div>
 
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
         {items.map((it) => (
           <div
             key={it.id}
-            className="group rounded-[12%] overflow-hidden border shadow-md hover:shadow-xl transition-shadow"
+            className="group rounded-lg md:rounded-[12%] overflow-hidden border shadow-md hover:shadow-xl transition-shadow"
             style={{ borderColor: "var(--text-secondary)" }}
           >
             <div className="relative aspect-[4/3]">
@@ -80,37 +80,39 @@ export function RestaurantMenu({
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
-            <div className="px-7 py-4 flex items-center justify-between gap-3">
-              <div>
-                <h3 className="font-bold">{it.name}</h3>
-              </div>
-              <div className="inline-flex items-center gap-2">
-                <span
-                  className="text-sm font-bold"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  {it.price}
-                </span>
-                <button
-                  className="px-3 py-1.5 rounded-md text-sm font-medium transition-opacity hover:opacity-90"
-                  style={{
-                    backgroundColor: "var(--text-secondary)",
-                    color: "var(--text-primary)",
-                  }}
-                  onClick={() => {
-                    const price =
-                      Number((it.price || "").replace(/[^0-9.]+/g, "")) || 0;
-                    // Use the raw backend item id so checkout can submit valid ObjectIds
-                    add({
-                      id: it.id,
-                      name: it.name,
-                      price,
-                      image: it.image,
-                    });
-                  }}
-                >
-                  Add to cart
-                </button>
+            <div className="p-3 md:px-7 md:py-4">
+              <div className="flex flex-col space-y-2">
+                <div>
+                  <h3 className="font-bold text-sm md:text-base leading-tight">{it.name}</h3>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <span
+                    className="text-xs md:text-sm font-bold"
+                    style={{ color: "var(--text-secondary)" }}
+                  >
+                    {it.price}
+                  </span>
+                  <button
+                    className="px-2 py-1 md:px-3 md:py-1.5 rounded-md text-xs md:text-sm font-medium transition-opacity hover:opacity-90"
+                    style={{
+                      backgroundColor: "var(--text-secondary)",
+                      color: "var(--text-primary)",
+                    }}
+                    onClick={() => {
+                      const price =
+                        Number((it.price || "").replace(/[^0-9.]+/g, "")) || 0;
+                      // Use the raw backend item id so checkout can submit valid ObjectIds
+                      add({
+                        id: it.id,
+                        name: it.name,
+                        price,
+                        image: it.image,
+                      });
+                    }}
+                  >
+                    Add 
+                  </button>
+                </div>
               </div>
             </div>
           </div>

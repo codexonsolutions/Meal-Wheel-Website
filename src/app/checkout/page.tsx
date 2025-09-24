@@ -114,9 +114,53 @@ export default function CheckoutPage() {
         <h1 className="text-3xl md:text-4xl font-bold mb-2">Checkout</h1>
         <p className="mb-8" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>Complete your order details below</p>
 
-        <div className="grid lg:grid-cols-[1fr_380px] gap-8 items-start">
-          {/* Left: Form */}
-          <form onSubmit={placeOrder} className="space-y-6">
+        <div className="flex flex-col lg:grid lg:grid-cols-[1fr_380px] gap-8 items-start">
+          {/* Order Summary - appears first on mobile */}
+          <aside className="order-1 lg:order-2 rounded-xl border shadow-sm lg:sticky lg:top-24" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))", backgroundColor: "color-mix(in oklch, var(--app-bg) 90%, white 3%)" }}>
+            <div className="px-5 py-4 border-b" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
+              <h2 className="font-semibold">Order Summary</h2>
+            </div>
+            <div className="p-5 space-y-4">
+              {state.items.length === 0 ? (
+                <p className="text-sm" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>Your cart is empty.</p>
+              ) : (
+                state.items.map((item) => (
+                  <div key={item.id} className="flex items-center gap-3">
+                    {item.image ? (
+                      <div className="relative h-12 w-12 overflow-hidden rounded-md border" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))" }}>
+                        <Image src={item.image} alt={item.name} fill className="object-cover" />
+                      </div>
+                    ) : (
+                      <div className="h-12 w-12 rounded-md bg-[color:color-mix(in_oklch,var(--text-primary)_10%,var(--app-bg))]" />
+                    )}
+                    <div className="flex-1">
+                      <div className="text-sm font-medium">{item.name}</div>
+                      <div className="text-xs" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>Qty: {item.qty}</div>
+                    </div>
+                    <div className="text-sm font-medium">Rs. {(item.qty * item.price).toFixed(2)}</div>
+                  </div>
+                ))
+              )}
+
+              <div className="mt-4 border-t pt-4 space-y-2" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
+                <div className="flex justify-between text-sm">
+                  <span>Subtotal</span>
+                  <span>Rs. {subtotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Delivery Fee</span>
+                  <span>Rs. {deliveryFee.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between font-semibold pt-2">
+                  <span>Total</span>
+                  <span>Rs. {total.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          {/* Form - appears second on mobile */}
+          <form onSubmit={placeOrder} className="order-2 lg:order-1 space-y-6">
             {/* Personal Information */}
             <div className="rounded-xl border shadow-sm" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))", backgroundColor: "color-mix(in oklch, var(--app-bg) 90%, white 3%)" }}>
               <div className="px-5 py-4 border-b" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
@@ -194,50 +238,6 @@ export default function CheckoutPage() {
               </button>
             </div>
           </form>
-
-          {/* Right: Order Summary */}
-          <aside className="rounded-xl border shadow-sm sticky top-24" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))", backgroundColor: "color-mix(in oklch, var(--app-bg) 90%, white 3%)" }}>
-            <div className="px-5 py-4 border-b" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
-              <h2 className="font-semibold">Order Summary</h2>
-            </div>
-            <div className="p-5 space-y-4">
-              {state.items.length === 0 ? (
-                <p className="text-sm" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>Your cart is empty.</p>
-              ) : (
-                state.items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3">
-                    {item.image ? (
-                      <div className="relative h-12 w-12 overflow-hidden rounded-md border" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))" }}>
-                        <Image src={item.image} alt={item.name} fill className="object-cover" />
-                      </div>
-                    ) : (
-                      <div className="h-12 w-12 rounded-md bg-[color:color-mix(in_oklch,var(--text-primary)_10%,var(--app-bg))]" />
-                    )}
-                    <div className="flex-1">
-                      <div className="text-sm font-medium">{item.name}</div>
-                      <div className="text-xs" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>Qty: {item.qty}</div>
-                    </div>
-                    <div className="text-sm font-medium">Rs. {(item.qty * item.price).toFixed(2)}</div>
-                  </div>
-                ))
-              )}
-
-              <div className="mt-4 border-t pt-4 space-y-2" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
-                <div className="flex justify-between text-sm">
-                  <span>Subtotal</span>
-                  <span>Rs. {subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span>Delivery Fee</span>
-                  <span>Rs. {deliveryFee.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between font-semibold pt-2">
-                  <span>Total</span>
-                  <span>Rs. {total.toFixed(2)}</span>
-                </div>
-              </div>
-            </div>
-          </aside>
         </div>
       </div>
     </section>

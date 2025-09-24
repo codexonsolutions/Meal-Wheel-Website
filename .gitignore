@@ -16,11 +16,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Local environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+
 
 # OS files
 .DS_Store

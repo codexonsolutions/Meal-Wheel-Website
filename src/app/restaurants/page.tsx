@@ -51,7 +51,7 @@ export default function RestaurantsPage() {
   }, [restaurants, query]);
 
   return (
-    <section className="relative py-20 overflow-hidden">
+    <section className="relative pt-8 pb-20 overflow-hidden min-h-screen">
       <div
         className="absolute inset-0"
         style={{
@@ -72,7 +72,10 @@ export default function RestaurantsPage() {
               placeholder="Search restaurants..."
               aria-label="Search restaurants"
               className="pl-9 shadow-sm text-sm"
-              style={{ color: "var(--text-primary)" }}
+              style={{ 
+                color: "var(--text-primary)",
+                backgroundColor: "white"
+              }}
             />
             {query && (
               <button
@@ -107,16 +110,16 @@ export default function RestaurantsPage() {
         )}
 
         {!loading && !error && filtered.length > 0 && (
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {filtered.map((r) => {
               const slug = r.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
               return (
-                <Link key={r._id} href={`/restaurants/${slug}`} className="group rounded-[12%] overflow-hidden border shadow-md hover:shadow-xl cursor-pointer transition-shadow" style={{ borderColor: "var(--text-secondary)" }}>
+                <Link key={r._id} href={`/restaurants/${slug}`} className="group rounded-lg md:rounded-[12%] overflow-hidden border shadow-md hover:shadow-xl cursor-pointer transition-shadow" style={{ borderColor: "var(--text-secondary)" }}>
                   <div className="relative aspect-[4/3]">
                     <Image src={r.imageUrl || "/placeholder.jpg"} alt={r.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold text-lg">{r.name}</h3>
+                  <div className="p-3 md:px-7 md:py-4">
+                    <h3 className="font-semibold text-sm md:text-base leading-tight">{r.name}</h3>
                   </div>
                 </Link>
               );

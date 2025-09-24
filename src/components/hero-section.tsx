@@ -12,7 +12,7 @@ export function HeroSection() {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, []);
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+    <section className="relative py-12 md:min-h-[80vh] md:flex md:items-center md:justify-center overflow-hidden">
       <div
         className="absolute inset-0"
         style={{
@@ -22,17 +22,17 @@ export function HeroSection() {
       />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
       <div className="container relative z-10 max-w-screen-xl px-4">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight text-balance">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div className="space-y-4 md:space-y-8">
+            <div className="space-y-3 md:space-y-6">
+              <h1 className="text-2xl sm:text-3xl md:text-6xl lg:text-7xl font-bold leading-tight text-balance px-2 md:px-0">
                 Delicious food,{" "}
                 <span style={{ color: "var(--text-secondary)" }}>
                   delivered fast
                 </span>
               </h1>
               <p
-                className="text-lg md:text-xl max-w-lg text-pretty"
+                className="text-sm sm:text-base md:text-xl max-w-lg text-pretty px-2 md:px-0"
                 style={{
                   color:
                     "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))",
@@ -42,24 +42,24 @@ export function HeroSection() {
                 delivered right to your door step.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 px-2 md:px-0">
               <Button
                 size="lg"
-                className="text-lg px-8 py-6 hover:opacity-90"
+                className="text-sm md:text-lg px-6 md:px-8 py-3 md:py-6 hover:opacity-90 w-full sm:w-auto"
                 style={{ backgroundColor: "var(--text-secondary)" }}
                 onClick={scrollToFeatured}
               >
                 Order Now
               </Button>
             </div>
-            <div className="flex items-center gap-8 pt-4">
+            <div className="flex items-center gap-8 pt-2 md:pt-4 px-2 md:px-0">
               <div className="flex items-center gap-2">
                 <MapPin
-                  className="h-5 w-5"
+                  className="h-4 w-4 md:h-5 md:w-5"
                   style={{ color: "var(--text-secondary)" }}
                 />
                 <span
-                  className="text-sm"
+                  className="text-xs md:text-sm"
                   style={{
                     color:
                       "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))",
@@ -70,7 +70,7 @@ export function HeroSection() {
               </div>
             </div>
           </div>
-          <div className="relative">
+          <div className="relative mt-8 lg:mt-0 hidden lg:block">
             <SparkleRing />
             <motion.div
               className="grid grid-cols-2 gap-4"
