@@ -2,7 +2,7 @@
 /* Client-side restaurant menu with category tabs and filtered items */
 import { useState, useMemo } from "react";
 import { useCart } from "@/components/cart/cart-context";
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/safe-image";
 
 type Item = { id: string; name: string; image: string; price: string };
 
@@ -73,7 +73,7 @@ export function RestaurantMenu({
             style={{ borderColor: "var(--text-secondary)" }}
           >
             <div className="relative aspect-[4/3]">
-              <Image
+              <SafeImage
                 src={it.image}
                 alt={it.name}
                 fill

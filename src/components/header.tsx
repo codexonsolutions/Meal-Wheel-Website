@@ -150,7 +150,7 @@ export function Header() {
               <div className="flex items-center justify-between px-6 h-16 border-b" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))" }}>
                 <Link href="/" onClick={closeMobile} className="flex items-center gap-2">
                   <Image src="/Meal_Wheel_Logo_Final.svg" alt="Meal Wheel" width={36} height={36} className="rounded-md" />
-                  <span className="text-2xl font-bold"><span style={{ color: 'var(--text-secondary)' }}>Meal</span> <span style={{ color: 'var(--text-primary)' }}>Wheel</span></span>
+                  <span className="text-xl font-bold"><span style={{ color: 'var(--text-secondary)' }}>Meal</span> <span style={{ color: 'var(--text-primary)' }}>Wheel</span></span>
                 </Link>
                 <Button variant="ghost" size="icon" onClick={closeMobile} aria-label="Close menu">
                   <X className="h-5 w-5" />

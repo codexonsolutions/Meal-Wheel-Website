@@ -1,7 +1,7 @@
 "use client";
 /* Checkout page: Collects user details and shows order summary */
 import Link from "next/link";
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/safe-image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/cart-context";
@@ -128,7 +128,7 @@ export default function CheckoutPage() {
                   <div key={item.id} className="flex items-center gap-3">
                     {item.image ? (
                       <div className="relative h-12 w-12 overflow-hidden rounded-md border" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))" }}>
-                        <Image src={item.image} alt={item.name} fill className="object-cover" />
+                        <SafeImage src={item.image} alt={item.name} fill className="object-cover" />
                       </div>
                     ) : (
                       <div className="h-12 w-12 rounded-md bg-[color:color-mix(in_oklch,var(--text-primary)_10%,var(--app-bg))]" />

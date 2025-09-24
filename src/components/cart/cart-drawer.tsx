@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/safe-image";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCart } from "./cart-context";
@@ -51,7 +51,7 @@ export function CartDrawer() {
                 <div key={item.id} className="flex gap-3 items-center">
                   {item.image ? (
                     <div className="relative h-16 w-16 rounded overflow-hidden border" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))" }}>
-                      <Image src={item.image} alt={item.name} fill className="object-cover" />
+                      <SafeImage src={item.image} alt={item.name} fill className="object-cover" />
                     </div>
                   ) : (
                     <div className="h-16 w-16 rounded bg-[color:color-mix(in_oklch,var(--text-primary)_10%,var(--app-bg))]" />

@@ -1,7 +1,7 @@
 "use client";
 /* Featured items grid */
 import Link from "next/link";
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/safe-image";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useCart } from "@/components/cart/cart-context";
@@ -97,7 +97,7 @@ export function FeaturedItems() {
                 style={{ borderColor: "var(--text-secondary)" }}
               >
                 <div className="relative aspect-[4/3]">
-                  <Image
+                  <SafeImage
                     src={item.imageUrl || "/placeholder.jpg"}
                     alt={item.name}
                     fill
