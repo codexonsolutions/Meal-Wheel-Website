@@ -128,7 +128,7 @@ export default function RestaurantsPage() {
         )}
         {!loading && !error && filtered.length === 0 && restaurants.length > 0 && (
           <div className="flex justify-center items-center py-12">
-            <div className="text-lg" style={{ color: "var(--text-secondary)" }}>No restaurants match "{query}"</div>
+            <div className="text-lg" style={{ color: "var(--text-secondary)" }}>No restaurants match &ldquo;{query}&rdquo;</div>
           </div>
         )}
       </div>
