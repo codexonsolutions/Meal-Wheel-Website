@@ -4,22 +4,27 @@ import { useState, useMemo } from "react";
 import { useCart } from "@/components/cart/cart-context";
 import Image from "next/image";
 
-type Item = { id: number; name: string; image: string; price: string };
+type Item = { id: string; name: string; image: string; price: string };
 
 export function RestaurantMenu({
   name,
   categories,
+  restaurantCategories = [],
 }: {
   name: string;
   banner?: string;
   categories: Record<string, Item[]>;
+  restaurantCategories?: string[];
 }) {
   const { add } = useCart();
   const allKey = "All";
-  const categoryKeys = useMemo(
-    () => [allKey, ...Object.keys(categories)],
-    [categories]
-  );
+  const categoryKeys = useMemo(() => {
+    // Use restaurant categories if available, otherwise fallback to categories from items
+    const availableCategories = restaurantCategories.length > 0 
+      ? restaurantCategories.filter(cat => categories[cat] && categories[cat].length > 0)
+      : Object.keys(categories);
+    return [allKey, ...availableCategories];
+  }, [categories, restaurantCategories]);
   const [selected, setSelected] = useState<string>(allKey);
 
   const items = useMemo(() => {

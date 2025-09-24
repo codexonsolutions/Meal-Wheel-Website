@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Search, ShoppingCart, User, Menu } from "lucide-react";
+import { Search, ShoppingCart, Menu } from "lucide-react";
 import { useCart } from "@/components/cart/cart-context";
 import { usePathname } from "next/navigation";
 
@@ -62,9 +62,6 @@ export function Header() {
             )}
           </Button>
 
-          <Button variant="ghost" size="icon">
-            <User className="h-8 w-8" />
-          </Button>
         </div>
       </div>
     </header>
