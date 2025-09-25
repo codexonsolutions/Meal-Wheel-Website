@@ -1,6 +1,9 @@
 /* Footer component */
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> staging
 export function Footer() {
   return (
   <footer className="border-t border-zinc-800/40" style={{ backgroundColor: "color-mix(in oklch, var(--app-bg) 90%, transparent)" }}>

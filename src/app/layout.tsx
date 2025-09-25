@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer";
 import { CartProvider } from "@/components/cart/cart-context";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { Analytics } from "@vercel/analytics/react";
+import CountdownModal from "@/components/countdown-modal";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         <CartProvider>
           <Header />
+          <CountdownModal />
           <Suspense fallback={null}>{children}</Suspense>
           <Footer />
           <CartDrawer />
