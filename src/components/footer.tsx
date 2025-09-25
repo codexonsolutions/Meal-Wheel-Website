@@ -1,10 +1,4 @@
 /* Footer component */
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
-
 export function Footer() {
   return (
   <footer className="border-t border-zinc-800/40" style={{ backgroundColor: "color-mix(in oklch, var(--app-bg) 90%, transparent)" }}>
