@@ -6,25 +6,16 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: '**',
-<<<<<<< HEAD
-=======
         port: '',
         pathname: '**',
->>>>>>> staging
       },
       {
         protocol: 'http',
         hostname: '**',
-<<<<<<< HEAD
-      }
-    ],
-    unoptimized: false, // Keep optimization enabled
-=======
         port: '',
         pathname: '**',
       },
     ],
->>>>>>> staging
   },
 };
 

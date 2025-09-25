@@ -128,11 +128,7 @@ export default function RestaurantsPage() {
         )}
         {!loading && !error && filtered.length === 0 && restaurants.length > 0 && (
           <div className="flex justify-center items-center py-12">
-<<<<<<< HEAD
-            <div className="text-lg" style={{ color: "var(--text-secondary)" }}>No restaurants match &ldquo;{query}&rdquo;</div>
-=======
             <div className="text-lg" style={{ color: "var(--text-secondary)" }}>No restaurants match &quot;{query}&quot;</div>
->>>>>>> staging
           </div>
         )}
       </div>
