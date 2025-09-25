@@ -1,23 +1,28 @@
 /* Global Tailwind import (no inline comments in file body) */
 @import "tailwindcss";
 
+@theme {
+  /* Use Poppins as the default sans font */
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
 :root {
-	--app-bg: #ffffff;
-	--text-primary: #000000;
-	--text-secondary: #DF9937;
+  --app-bg: #ffffff;
+  --text-primary: #000000;
+  --text-secondary: #df9937;
 }
 
-html, body {
-	background-color: var(--app-bg);
-	color: var(--text-primary);
+html,
+body {
+  background-color: var(--app-bg);
+  color: var(--text-primary);
 }
-
 
 .container {
-	width: 90%;
-	max-width: none;
-	margin-left: auto;
-	margin-right: auto;
+  width: 90%;
+  max-width: none;
+  margin-left: auto;
+  margin-right: auto;
 }
-
-
