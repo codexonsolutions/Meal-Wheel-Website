@@ -1,6 +1,6 @@
 /* Root layout for Meal Wheel application */
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit } from "next/font/google";
 import { Suspense } from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -10,20 +10,14 @@ import { Analytics } from "@vercel/analytics/react";
 import CountdownModal from "@/components/countdown-modal";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   title: "Meal Wheel - Food Delivery Made Simple",
-  description: "Order from your favorite restaurants with Meal Wheel",
-  generator: "v0.app",
+  description: "Order from your favorite restaurants with Meal Wheel"
 };
 
 export default function RootLayout({
@@ -33,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
+      <body className={`${outfit.variable} font-sans antialiased`}>
         <CartProvider>
           <Header />
           <CountdownModal />

@@ -5,13 +5,14 @@
 	--app-bg: #ffffff;
 	--text-primary: #000000;
 	--text-secondary: #DF9937;
+	--font-outfit: 'Outfit', system-ui, -apple-system, sans-serif;
 }
 
 html, body {
 	background-color: var(--app-bg);
 	color: var(--text-primary);
+	font-family: var(--font-outfit);
 }
-
 
 .container {
 	width: 90%;
@@ -19,5 +20,3 @@ html, body {
 	margin-left: auto;
 	margin-right: auto;
 }
-
-
