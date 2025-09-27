@@ -18,7 +18,6 @@ function getNextOpeningTime() {
   if (now < open) {
     return open;
   }
-  // After close, next open is tomorrow 8pm
   open.setDate(open.getDate() + 1);
   return open;
 }
@@ -36,23 +35,38 @@ function getTimeDiff(target: Date) {
 
 const CountdownRibbon: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
-  const [nextOpen] = useState<Date | null>(getNextOpeningTime());
-  const [timeLeft, setTimeLeft] = useState(() =>
-    nextOpen ? getTimeDiff(nextOpen) : { hours: 0, minutes: 0, seconds: 0 }
-  );
+  const [isMounted, setIsMounted] = useState(false);
+  const [nextOpen, setNextOpen] = useState<Date | null>(null);
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    if (!nextOpen) {
-      setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+    setIsMounted(true);
+    const nextOpenTime = getNextOpeningTime();
+    setNextOpen(nextOpenTime);
+    
+    if (nextOpenTime) {
+      setTimeLeft(getTimeDiff(nextOpenTime));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted || !nextOpen) {
       return;
     }
+    
     const interval = setInterval(() => {
       setTimeLeft(getTimeDiff(nextOpen));
     }, 1000);
+    
     return () => clearInterval(interval);
-  }, [nextOpen]);
+  }, [nextOpen, isMounted]);
+
+  if (!isMounted) {
+    return null;
+  }
 
   if (!nextOpen || !isVisible) return null;
+  
   const message = `Ordering is available from 6:00 PM to 2:00 AM. Opens in ${String(timeLeft.hours).padStart(2, "0")}:${String(timeLeft.minutes).padStart(2, "0")}:${String(timeLeft.seconds).padStart(2, "0")}`;
 
   return (
