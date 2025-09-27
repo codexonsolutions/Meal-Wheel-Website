@@ -99,170 +99,221 @@ export default function CheckoutPage() {
   };
 
   return (
-    <section className="relative py-12 md:py-16 overflow-hidden">
-      {/* subtle background like other pages */}
-      <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, color-mix(in oklch, var(--app-bg) 100%, transparent) 0%, color-mix(in oklch, var(--app-bg) 95%, transparent) 100%)" }} />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="relative py-16 md:py-24">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5" />
+        <div className="container relative z-10">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              <span className="text-secondary">Checkout</span>
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground mb-8">
+              Complete your order details below
+            </p>
+          </div>
+        </div>
+      </section>
 
-      <div className="container relative z-10 max-w-screen-xl px-4">
-        {showSuccess && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
-            <div className="relative w-full max-w-sm rounded-xl border shadow-xl" style={{ backgroundColor: "color-mix(in oklch, var(--app-bg) 92%, white 8%)", borderColor: "color-mix(in oklch, var(--text-primary) 18%, var(--app-bg))" }}>
-              <div className="px-6 pt-8 pb-6 text-center space-y-3">
-                <div className="text-2xl font-semibold">Order Successful!</div>
-                <p className="text-sm" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
-                  {orderId ? `Thanks for your order.` : 'Thanks for your order!'}
-                </p>
-                <button
-                  className="mt-4 inline-flex items-center justify-center px-6 py-2 rounded-md font-medium hover:opacity-90"
-                  style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
-                  onClick={() => {
-                    setShowSuccess(false);
-                    router.push('/');
-                  }}
-                >
-                  OK
-                </button>
+      {/* Checkout Form */}
+      <section className="py-16">
+        <div className="container">
+          {showSuccess && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+              <div className="relative w-full max-w-sm bg-white rounded-2xl shadow-xl border border-gray-100">
+                <div className="px-6 pt-8 pb-6 text-center space-y-3">
+                  <div className="text-2xl font-semibold text-gray-900">Order Successful!</div>
+                  <p className="text-sm text-gray-600">
+                    {orderId ? `Thanks for your order.` : 'Thanks for your order!'}
+                  </p>
+                  <button
+                    className="mt-4 inline-flex items-center justify-center px-6 py-2 bg-secondary text-white rounded-lg font-medium hover:bg-secondary/90 transition-colors"
+                    onClick={() => {
+                      setShowSuccess(false);
+                      router.push('/');
+                    }}
+                  >
+                    OK
+                  </button>
+                </div>
               </div>
             </div>
+          )}
+
+          <div className="mb-6">
+            <Link href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-secondary transition-colors">
+              <span>←</span> Back to Menu
+            </Link>
           </div>
-        )}
 
-        <div className="mb-6">
-          <Link href="/" className="inline-flex items-center gap-2 text-sm hover:opacity-80" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
-            <span>←</span> Back to Menu
-          </Link>
-        </div>
-
-        <h1 className="text-3xl md:text-4xl font-bold mb-2">Checkout</h1>
-        <p className="mb-8" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>Complete your order details below</p>
-
-        <div className="flex flex-col lg:grid lg:grid-cols-[1fr_380px] gap-8 items-start">
-          {/* Order Summary - appears first on mobile */}
-          <aside className="order-1 lg:order-2 rounded-xl border shadow-sm lg:sticky lg:top-24" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))", backgroundColor: "color-mix(in oklch, var(--app-bg) 90%, white 3%)" }}>
-            <div className="px-5 py-4 border-b" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
-              <h2 className="font-semibold">Order Summary</h2>
-            </div>
-            <div className="p-5 space-y-4">
-              {state.items.length === 0 ? (
-                <p className="text-sm" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>Your cart is empty.</p>
-              ) : (
-                state.items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3">
-                    {item.image ? (
-                      <div className="relative h-12 w-12 overflow-hidden rounded-md border" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))" }}>
-                        <SafeImage src={item.image} alt={item.name} fill className="object-cover" />
+          <div className="flex flex-col lg:grid lg:grid-cols-[1fr_400px] gap-8 items-start">
+            {/* Order Summary */}
+            <aside className="order-1 lg:order-2 bg-white rounded-2xl shadow-lg border border-gray-100 lg:sticky lg:top-24">
+              <div className="px-6 py-4 border-b border-gray-100">
+                <h2 className="text-xl font-bold text-gray-900">Order Summary</h2>
+              </div>
+              <div className="p-6 space-y-4">
+                {state.items.length === 0 ? (
+                  <p className="text-sm text-gray-500">Your cart is empty.</p>
+                ) : (
+                  state.items.map((item) => (
+                    <div key={item.id} className="flex items-center gap-3">
+                      {item.image ? (
+                        <div className="relative h-12 w-12 overflow-hidden rounded-lg border border-gray-200">
+                          <SafeImage src={item.image} alt={item.name} fill className="object-cover" />
+                        </div>
+                      ) : (
+                        <div className="h-12 w-12 rounded-lg bg-gray-100" />
+                      )}
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-gray-900">{item.name}</div>
+                        <div className="text-xs text-gray-500">Qty: {item.qty}</div>
                       </div>
-                    ) : (
-                      <div className="h-12 w-12 rounded-md bg-[color:color-mix(in_oklch,var(--text-primary)_10%,var(--app-bg))]" />
-                    )}
-                    <div className="flex-1">
-                      <div className="text-sm font-medium">{item.name}</div>
-                      <div className="text-xs" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>Qty: {item.qty}</div>
+                      <div className="text-sm font-bold text-secondary">Rs. {(item.qty * item.price).toFixed(2)}</div>
                     </div>
-                    <div className="text-sm font-medium">Rs. {(item.qty * item.price).toFixed(2)}</div>
+                  ))
+                )}
+
+                <div className="mt-6 border-t border-gray-200 pt-4 space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Subtotal</span>
+                    <span className="font-medium">Rs. {subtotal.toFixed(2)}</span>
                   </div>
-                ))
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Delivery Fee</span>
+                    <span className="font-medium">Rs. {deliveryFee.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200">
+                    <span>Total</span>
+                    <span className="text-secondary">Rs. {total.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            {/* Form */}
+            <form onSubmit={placeOrder} className="order-2 lg:order-1 space-y-6">
+              {/* Personal Information */}
+              <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
+                <div className="px-6 py-4 border-b border-gray-100">
+                  <h2 className="text-xl font-bold text-gray-900">Personal Information</h2>
+                </div>
+                <div className="p-6 grid gap-4 md:grid-cols-2">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-medium text-gray-700">Full Name <span className="text-secondary">*</span></label>
+                    <input 
+                      value={fullName} 
+                      onChange={(e) => setFullName(e.target.value)} 
+                      required 
+                      placeholder="Enter your full name" 
+                      className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors" 
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-medium text-gray-700">Email Address <span className="text-secondary">*</span></label>
+                    <input 
+                      type="email" 
+                      value={email} 
+                      onChange={(e) => setEmail(e.target.value)} 
+                      required 
+                      placeholder="Enter your email" 
+                      className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors" 
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2 md:col-span-2">
+                    <label className="text-sm font-medium text-gray-700">Phone Number <span className="text-secondary">*</span></label>
+                    <input 
+                      value={phone} 
+                      onChange={(e) => setPhone(e.target.value)} 
+                      required 
+                      placeholder="Enter your phone number" 
+                      className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors" 
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Delivery Address */}
+              <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
+                <div className="px-6 py-4 border-b border-gray-100">
+                  <h2 className="text-xl font-bold text-gray-900">Delivery Address</h2>
+                </div>
+                <div className="p-6 grid gap-4">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-medium text-gray-700">Street Address <span className="text-secondary">*</span></label>
+                    <input 
+                      value={street} 
+                      onChange={(e) => setStreet(e.target.value)} 
+                      required 
+                      placeholder="Enter your street address" 
+                      className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors" 
+                    />
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm font-medium text-gray-700">City <span className="text-secondary">*</span></label>
+                      <input 
+                        value={city} 
+                        onChange={(e) => setCity(e.target.value)} 
+                        required 
+                        placeholder="Enter your city" 
+                        className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors" 
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm font-medium text-gray-700">Postal Code <span className="text-secondary">*</span></label>
+                      <input 
+                        value={postal} 
+                        onChange={(e) => setPostal(e.target.value)} 
+                        required 
+                        placeholder="Enter postal code" 
+                        className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors" 
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-medium text-gray-700">Special Instructions</label>
+                    <textarea 
+                      value={notes} 
+                      onChange={(e) => setNotes(e.target.value)} 
+                      placeholder="Any special delivery instructions..." 
+                      className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors min-h-[90px] resize-none" 
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Method */}
+              <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
+                <div className="px-6 py-4 border-b border-gray-100">
+                  <h2 className="text-xl font-bold text-gray-900">Payment Method</h2>
+                </div>
+                <div className="p-6">
+                  <p className="text-sm text-gray-600">
+                    Payment will be collected upon delivery. We accept cash and card payments.
+                  </p>
+                </div>
+              </div>
+
+              {error && (
+                <div className="p-4 rounded-lg bg-red-50 border border-red-200">
+                  <p className="text-red-800 text-sm">{error}</p>
+                </div>
               )}
 
-              <div className="mt-4 border-t pt-4 space-y-2" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
-                <div className="flex justify-between text-sm">
-                  <span>Subtotal</span>
-                  <span>Rs. {subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span>Delivery Fee</span>
-                  <span>Rs. {deliveryFee.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between font-semibold pt-2">
-                  <span>Total</span>
-                  <span>Rs. {total.toFixed(2)}</span>
-                </div>
+              <div className="flex justify-end">
+                <button 
+                  type="submit" 
+                  disabled={isLoading || state.items.length === 0}
+                  className="px-8 py-3 bg-secondary text-white rounded-lg font-medium hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {isLoading ? "Placing Order..." : "Place Order"}
+                </button>
               </div>
-            </div>
-          </aside>
-
-          {/* Form - appears second on mobile */}
-          <form onSubmit={placeOrder} className="order-2 lg:order-1 space-y-6">
-            {/* Personal Information */}
-            <div className="rounded-xl border shadow-sm" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))", backgroundColor: "color-mix(in oklch, var(--app-bg) 90%, white 3%)" }}>
-              <div className="px-5 py-4 border-b" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
-                <h2 className="font-semibold">Personal Information</h2>
-              </div>
-              <div className="p-5 grid gap-4 md:grid-cols-2">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm">Full Name <span style={{ color: "var(--text-secondary)" }}>*</span></label>
-                  <input value={fullName} onChange={(e) => setFullName(e.target.value)} required placeholder="Enter your full name" className="px-3 py-2 rounded-md border bg-transparent outline-none" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))", color: "var(--text-primary)" }} />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm">Email Address <span style={{ color: "var(--text-secondary)" }}>*</span></label>
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="Enter your email" className="px-3 py-2 rounded-md border bg-transparent outline-none" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))", color: "var(--text-primary)" }} />
-                </div>
-                <div className="flex flex-col gap-1.5 md:col-span-2">
-                  <label className="text-sm">Phone Number <span style={{ color: "var(--text-secondary)" }}>*</span></label>
-                  <input value={phone} onChange={(e) => setPhone(e.target.value)} required placeholder="Enter your phone number" className="px-3 py-2 rounded-md border bg-transparent outline-none" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))", color: "var(--text-primary)" }} />
-                </div>
-              </div>
-            </div>
-
-            {/* Delivery Address */}
-            <div className="rounded-xl border shadow-sm" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))", backgroundColor: "color-mix(in oklch, var(--app-bg) 90%, white 3%)" }}>
-              <div className="px-5 py-4 border-b" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
-                <h2 className="font-semibold">Delivery Address</h2>
-              </div>
-              <div className="p-5 grid gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm">Street Address <span style={{ color: "var(--text-secondary)" }}>*</span></label>
-                  <input value={street} onChange={(e) => setStreet(e.target.value)} required placeholder="Enter your street address" className="px-3 py-2 rounded-md border bg-transparent outline-none" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))", color: "var(--text-primary)" }} />
-                </div>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-sm">City <span style={{ color: "var(--text-secondary)" }}>*</span></label>
-                    <input value={city} onChange={(e) => setCity(e.target.value)} required placeholder="Enter your city" className="px-3 py-2 rounded-md border bg-transparent outline-none" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))", color: "var(--text-primary)" }} />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-sm">Postal Code <span style={{ color: "var(--text-secondary)" }}>*</span></label>
-                    <input value={postal} onChange={(e) => setPostal(e.target.value)} required placeholder="Enter postal code" className="px-3 py-2 rounded-md border bg-transparent outline-none" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))", color: "var(--text-primary)" }} />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm">Special Instructions</label>
-                  <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Any special delivery instructions..." className="px-3 py-2 rounded-md border bg-transparent outline-none min-h-[90px]" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))", color: "var(--text-primary)" }} />
-                </div>
-              </div>
-            </div>
-
-            {/* Payment Method */}
-            <div className="rounded-xl border shadow-sm" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))", backgroundColor: "color-mix(in oklch, var(--app-bg) 90%, white 3%)" }}>
-              <div className="px-5 py-4 border-b" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 12%, var(--app-bg))" }}>
-                <h2 className="font-semibold">Payment Method</h2>
-              </div>
-              <div className="p-5">
-                <p className="text-sm" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
-                  Payment will be collected upon delivery. We accept cash and card payments.
-                </p>
-              </div>
-            </div>
-
-            {error && (
-              <div className="p-4 rounded-md bg-red-50 border border-red-200">
-                <p className="text-red-800 text-sm">{error}</p>
-              </div>
-            )}
-
-            <div className="flex justify-end">
-              <button 
-                type="submit" 
-                disabled={isLoading || state.items.length === 0}
-                className="px-5 py-3 rounded-md font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed" 
-                style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
-              >
-                {isLoading ? "Placing Order..." : "Place Order"}
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }

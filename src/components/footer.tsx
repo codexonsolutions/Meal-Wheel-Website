@@ -90,7 +90,7 @@ export function Footer() {
             </p>
             <Link 
               href="/menu"
-              className="inline-flex items-center justify-center px-4 py-2 bg-secondary text-background text-sm font-medium rounded-lg hover:bg-secondary/90 transition-colors"
+              className="inline-flex items-center justify-center px-4 py-2 bg-secondary rounded-full text-background text-sm font-medium hover:bg-secondary/90 transition-colors"
             >
               View Menu
             </Link>
