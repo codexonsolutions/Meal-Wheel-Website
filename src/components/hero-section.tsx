@@ -1,9 +1,6 @@
-/* Hero section */
 "use client";
 import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
-import { AnimatedFood, SparkleRing } from "@/components/animated/animated-food";
-import { motion } from "framer-motion";
 import { useCallback } from "react";
 
 export function HeroSection() {
@@ -11,90 +8,104 @@ export function HeroSection() {
     const el = document.getElementById('featured-items');
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, []);
+
+  const scrollToOrders = useCallback(() => {
+    const el = document.getElementById('order-section');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
+
+  const scrollToMenu = useCallback(() => {
+    const el = document.getElementById('menu-section');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
+
   return (
-    <section className="relative py-12 md:min-h-[80vh] md:flex md:items-center md:justify-center overflow-hidden">
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(135deg, color-mix(in oklch, var(--app-bg) 100%, transparent) 0%, color-mix(in oklch, var(--app-bg) 95%, transparent) 100%)",
-        }}
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
-      <div className="container relative z-10 max-w-screen-xl px-4">
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div className="space-y-4 md:space-y-8">
-            <div className="space-y-3 md:space-y-6">
-              <h1 className="text-2xl sm:text-3xl md:text-6xl lg:text-7xl font-bold leading-tight text-balance px-2 md:px-0">
-                Delicious food,{" "}
-                <span style={{ color: "var(--text-secondary)" }}>
-                  delivered fast
-                </span>
-              </h1>
-              <p
-                className="text-sm sm:text-base md:text-xl max-w-lg text-pretty px-2 md:px-0"
-                style={{
-                  color:
-                    "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))",
-                }}
-              >
-                Order from your favorite restaurants and get fresh, hot meals
-                delivered right to your door step.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3 px-2 md:px-0">
-              <Button
-                size="lg"
-                className="text-sm md:text-lg px-6 md:px-8 py-3 md:py-6 hover:opacity-90 w-full sm:w-auto"
-                style={{ backgroundColor: "var(--text-secondary)" }}
-                onClick={scrollToFeatured}
-              >
-                Order Now
-              </Button>
-            </div>
-            <div className="flex items-center gap-8 pt-2 md:pt-4 px-2 md:px-0">
-              <div className="flex items-center gap-2">
-                <MapPin
-                  className="h-4 w-4 md:h-5 md:w-5"
-                  style={{ color: "var(--text-secondary)" }}
-                />
-                <span
-                  className="text-xs md:text-sm"
-                  style={{
-                    color:
-                      "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))",
-                  }}
+    <section className="py-4 px-3 sm:px-4 md:px-6">
+      <div className="w-full max-w-none">
+        <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-bg-secondary rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 mx-2 sm:mx-3 md:mx-4 min-h-[70vh] md:min-h-[80vh]">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center h-full">
+            
+            {/* Left Side - Text Content */}
+            <div className="space-y-6 md:space-y-8">
+              <div className="space-y-4 md:space-y-6">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
+                  Delicious{" "}
+                  <span className="text-primary">food</span>,{" "}
+                  <span className="text-primary">delivered</span>{" "}
+                  fast
+                </h1>
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-foreground/70 max-w-2xl leading-relaxed">
+                  Order from your favorite restaurants and get fresh, hot meals 
+                  delivered right to your doorstep in minutes.
+                </p>
+              </div>
+              
+             {/* Buttons */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 pt-2">
+                <Button 
+                  onClick={scrollToOrders}
+                  size="lg"
                 >
-                  Delivery in 40-60 min
+                  Order Now
+                </Button>
+                <Button 
+                  onClick={scrollToMenu}
+                  variant="outline" 
+                  size="lg"
+                >
+                  View Menu
+                </Button>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 pt-4 md:pt-6">
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5 md:h-6 md:w-6 text-primary" />
+                  <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium">
+                    Free delivery in 30-45 min
+                  </span>
+                </div>
+                <div className="hidden sm:block w-2 h-2 bg-primary/30 rounded-full"></div>
+                <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium">
+                  Available 6PM - 2AM
                 </span>
               </div>
             </div>
-          </div>
-          <div className="relative mt-8 lg:mt-0 hidden lg:block">
-            <SparkleRing />
-            <motion.div
-              className="grid grid-cols-2 gap-4"
-              initial="hidden"
-              animate="show"
-              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.15 } } }}
-            >
-              <div className="space-y-4">
-                <AnimatedFood shape="circle" gradient="bg-gradient-to-br from-orange-500/30 to-orange-500/5" delay={0}>
-                  🍔
-                </AnimatedFood>
-                <AnimatedFood shape="blob" gradient="bg-gradient-to-br from-zinc-800/60 to-zinc-800/20" size="landscape" delay={0.1}>
-                  🍣
-                </AnimatedFood>
+
+             <div className="relative mt-8 lg:mt-0">
+              <div className="flex flex-col items-center space-y-4 md:space-y-6">
+                {/* Top Image - Centered */}
+                <div className="relative group">
+                  <img 
+                    src="/f1.png" 
+                    alt="Food Item 1"
+                    className="w-36 sm:w-44 md:w-52 lg:w-64 h-auto object-contain group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                
+                {/* Bottom Two Images - Side by Side */}
+                <div className="flex items-center justify-center gap-4 md:gap-6 lg:gap-8">
+                  <div className="relative group">
+                    <img 
+                      src="/f2.png" 
+                      alt="Food Item 2"
+                      className="w-36 sm:w-44 md:w-52 lg:w-60 h-auto object-contain group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="relative group">
+                    <img 
+                      src="/f3.png" 
+                      alt="Food Item 3"
+                      className="w-36 sm:w-44 md:w-52 lg:w-60 h-auto object-contain group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="space-y-4 pt-8">
-                <AnimatedFood shape="diamond" gradient="bg-gradient-to-br from-emerald-500/25 to-emerald-500/5" size="landscape" delay={0.2}>
-                  🍕
-                </AnimatedFood>
-                <AnimatedFood shape="pill" gradient="bg-gradient-to-br from-orange-500/15 to-orange-500/5" delay={0.3}>
-                  🥗
-                </AnimatedFood>
+
+              {/* Floating Badge */}
+              <div className="absolute -top-2 md:-top-4 -right-2 md:-right-4 bg-primary text-background px-3 md:px-4 py-2 rounded-full shadow-lg">
+                <span className="font-bold text-xs sm:text-sm md:text-base">30+ Restaurants</span>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

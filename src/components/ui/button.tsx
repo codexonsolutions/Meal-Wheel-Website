@@ -15,9 +15,9 @@ const sizeClass = {
 } as const satisfies Record<NonNullable<ButtonProps["size"]>, string>;
 
 const variantClass = {
-  default: "bg-orange-500 text-white hover:bg-orange-600",
-  outline: "border border-zinc-800 bg-transparent hover:bg-zinc-800/40",
-  ghost: "hover:bg-zinc-800/40",
+  default: "bg-primary text-white hover:bg-primary/90 cursor-pointer",
+  outline: "border border-primary text-primary bg-transparent hover:bg-primary hover:border-primary hover:text-background cursor-pointer",
+  ghost: "hover:bg-primary hover:text-background cursor-pointer",
 } as const satisfies Record<NonNullable<ButtonProps["variant"]>, string>;
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -26,7 +26,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={clsx(
-          "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed",
+          "inline-flex items-center justify-center rounded-full shadow-md text-md font-medium transition-colors focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed",
           sizeClass[size],
           variantClass[variant],
           className

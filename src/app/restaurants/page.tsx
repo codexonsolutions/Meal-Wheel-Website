@@ -1,137 +1,114 @@
 "use client";
-/* Restaurants listing page: shows restaurant cards with only image and name */
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-
-type Restaurant = {
-  _id: string;
-  name: string;
-  imageUrl: string;
-  categories: string[];
-};
+import { restaurants } from "@/data/restaurants";
+import { SafeImage } from "@/components/ui/safe-image";
+import { ArrowRight, Star } from "lucide-react";
 
 export default function RestaurantsPage() {
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    async function fetchRestaurants() {
-      try {
-        setLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/restaurant`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch restaurants');
-        }
-        
-        const data = await response.json();
-        setRestaurants(data.restaurants || []);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load restaurants');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchRestaurants();
-  }, []);
-
-  const filtered = useMemo(() => {
-    if (!query.trim()) return restaurants;
-    const q = query.trim().toLowerCase();
-    return restaurants.filter(r =>
-      r.name.toLowerCase().includes(q) ||
-      r.categories.some(c => c.toLowerCase().includes(q))
-    );
-  }, [restaurants, query]);
-
   return (
-    <section className="relative pt-8 pb-20 overflow-hidden min-h-screen">
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(135deg, color-mix(in oklch, var(--app-bg) 100%, transparent) 0%, color-mix(in oklch, var(--app-bg) 95%, transparent) 100%)",
-        }}
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
-
-      <div className="container relative z-10 max-w-screen-xl px-4">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-3xl md:text-4xl font-bold">Restaurants</h1>
-          <div className="w-full sm:max-w-xs relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "color-mix(in oklch, var(--text-primary) 65%, var(--app-bg))" }} />
-            <Input
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              placeholder="Search restaurants..."
-              aria-label="Search restaurants"
-              className="pl-9 shadow-sm text-sm"
-              style={{ 
-                color: "var(--text-primary)",
-                backgroundColor: "white"
-              }}
-            />
-            {query && (
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-xs px-2 py-0.5 rounded-md border border-zinc-700/60 hover:bg-zinc-800/50 transition"
-                style={{ color: "var(--text-secondary)" }}
-                aria-label="Clear search"
-              >
-                Clear
-              </button>
-            )}
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="relative py-16 md:py-24">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5" />
+        <div className="container relative z-10">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Our <span className="text-secondary">Restaurants</span>
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground mb-8">
+              Discover amazing flavors from our partner restaurants. Each one offers unique dishes crafted with love and tradition.
+            </p>
           </div>
         </div>
+      </section>
 
-        {loading && (
-          <div className="flex justify-center items-center py-12">
-            <div className="text-lg" style={{ color: "var(--text-secondary)" }}>Loading restaurants...</div>
-          </div>
-        )}
-
-        {error && (
-          <div className="flex justify-center items-center py-12">
-            <div className="text-lg text-red-500">Error: {error}</div>
-          </div>
-        )}
-
-        {!loading && !error && restaurants.length === 0 && (
-          <div className="flex justify-center items-center py-12">
-            <div className="text-lg" style={{ color: "var(--text-secondary)" }}>No restaurants found</div>
-          </div>
-        )}
-
-        {!loading && !error && filtered.length > 0 && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-            {filtered.map((r) => {
-              const slug = r.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-              return (
-                <Link key={r._id} href={`/restaurants/${slug}`} className="group rounded-lg md:rounded-[12%] overflow-hidden border shadow-md hover:shadow-xl cursor-pointer transition-shadow" style={{ borderColor: "var(--text-secondary)" }}>
-                  <div className="relative aspect-[4/3]">
-                    <Image src={r.imageUrl || "/placeholder.jpg"} alt={r.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+      {/* Restaurants Grid */}
+      <section className="py-16">
+        <div className="container">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {restaurants.map((restaurant) => (
+              <Link
+                key={restaurant.id}
+                href={`/restaurants/${restaurant.slug}`}
+                className="group block"
+              >
+                <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
+                  {/* Restaurant Image */}
+                  <div className="relative h-48 md:h-56 overflow-hidden">
+                    <SafeImage
+                      src={restaurant.image || "/placeholder.jpg"}
+                      alt={restaurant.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                   </div>
-                  <div className="p-3 md:px-7 md:py-4">
-                    <h3 className="font-semibold text-sm md:text-base leading-tight">{r.name}</h3>
+
+                  {/* Restaurant Info */}
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-secondary transition-colors">
+                        {restaurant.name}
+                      </h3>
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm font-medium text-gray-600">4.8</span>
+                      </div>
+                    </div>
+
+                    <p className="text-gray-600 mb-4 line-clamp-2">
+                      {restaurant.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {restaurant.categories.slice(0, 3).map((category) => (
+                        <span
+                          key={category}
+                          className="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full font-medium"
+                        >
+                          {category}
+                        </span>
+                      ))}
+                      {restaurant.categories.length > 3 && (
+                        <span className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">
+                          +{restaurant.categories.length - 3} more
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">
+                        {restaurant.categories.length} categories
+                      </span>
+                      <div className="flex items-center gap-2 text-secondary font-medium group-hover:gap-3 transition-all">
+                        <span>View Menu</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </div>
+                    </div>
                   </div>
-                </Link>
-              );
-            })}
+                </div>
+              </Link>
+            ))}
           </div>
-        )}
-        {!loading && !error && filtered.length === 0 && restaurants.length > 0 && (
-          <div className="flex justify-center items-center py-12">
-            <div className="text-lg" style={{ color: "var(--text-secondary)" }}>No restaurants match &quot;{query}&quot;</div>
-          </div>
-        )}
-      </div>
-    </section>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-16 bg-gray-50">
+        <div className="container text-center">
+          <h2 className="text-3xl font-bold mb-4">Can't decide?</h2>
+          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+            Browse our featured items to discover popular dishes from all restaurants.
+          </p>
+          <Link
+            href="/#featured-items"
+            className="inline-flex items-center gap-2 bg-secondary text-background px-6 py-3 rounded-full font-medium hover:bg-secondary/90 transition-colors"
+          >
+            View Featured Items
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+    </div>
   );
 }

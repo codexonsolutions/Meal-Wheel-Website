@@ -1,230 +1,238 @@
 "use client";
-/* Header component */
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Menu, X } from "lucide-react";
 import { useCart } from "@/components/cart/cart-context";
 import { usePathname } from "next/navigation";
-import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import Logo from "./ui/logo";
+import { useState } from "react";
 
 export function Header() {
   const pathname = usePathname();
   const { open, totalQty } = useCart();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Close mobile menu on route change
-  useEffect(() => { setMobileOpen(false); }, [pathname]);
-
-  // Lock body scroll when menu open
-  useEffect(() => {
-    if (mobileOpen) {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => { document.body.style.overflow = prev; };
-    }
-  }, [mobileOpen]);
-
-  const toggleMobile = useCallback(() => setMobileOpen(o => !o), []);
-  const closeMobile = useCallback(() => setMobileOpen(false), []);
-
-  // Close on Escape key
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) { if (e.key === 'Escape') closeMobile(); }
-    if (mobileOpen) window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [mobileOpen, closeMobile]);
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
-  <header className="sticky top-0 z-50 w-full border-b border-zinc-800/40 backdrop-blur supports-[backdrop-filter]:bg-black/60" style={{ backgroundColor: "color-mix(in oklch, var(--app-bg) 95%, transparent)" }}>
-      <div className="container flex h-16 max-w-screen-xl items-center justify-between px-4">
-  <div className="flex items-center gap-3 sm:gap-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={toggleMobile}
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-nav"
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
-
-          <Link href="/" className="flex items-center gap-2">
-            <Image src="/Meal_Wheel_Logo_Final.svg" alt="Meal Wheel" width={36} height={36} className="rounded-lg" />
-            <span className="text-2xl sm:text-3xl font-bold leading-none">
-              <span style={{ color: "var(--text-secondary)" }}>Meal</span> <span style={{ color: "var(--text-primary)" }}>Wheel</span>
-            </span>
-          </Link>
-
-          <nav className="hidden md:flex items-center gap-6 text-xl">
-            <Link href="/" className="font-medium transition-colors" style={{ color: pathname === "/" ? "var(--text-secondary)" : "var(--text-primary)" }}>
-              Home
+    <header className="sticky top-0 left-0 right-0 z-50 bg-background border-b border-gray-100">
+      <div className="container">
+        <div className="flex items-center justify-between px-4 py-4">
+          {/* Logo - Desktop */}
+          <div className="hidden md:block">
+            <Logo />
+          </div>
+          
+          {/* Mobile Logo - Just the SVG icon */}
+          <div className="md:hidden">
+            <Link href="/" className="flex items-center">
+              <img 
+                src="/mealwheel.svg" 
+                alt="Meal Wheel" 
+                className="h-8 w-8"
+              />
             </Link>
-            <Link href="/restaurants" className="font-medium transition-colors" style={{ color: pathname?.startsWith("/restaurants") ? "var(--text-secondary)" : "var(--text-primary)" }}>
-              Restaurants
-            </Link>
-          </nav>
-        </div>
-
-  <div className="flex items-center gap-3">
-
-
-
-          {/* Social icons */}
-          <div className="hidden sm:flex items-center gap-2 mr-1">
-            <a
-              href="https://wa.me/923188868811"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="WhatsApp"
-              className="w-8 h-8 inline-flex items-center justify-center rounded-md overflow-hidden border transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
-              style={{
-                borderColor: "color-mix(in oklch, var(--text-primary) 25%, transparent)"
-              }}
-            >
-              <Image src="/whatsapp.png" alt="WhatsApp" width={40} height={40} className="object-cover" />
-            </a>
-            <a
-              href="https://www.instagram.com/mealwheelpk/?utm_source=ig_web_button_share_sheet"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="w-8 h-8 inline-flex items-center justify-center rounded-md overflow-hidden border transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-pink-500"
-              style={{
-                borderColor: "color-mix(in oklch, var(--text-primary) 25%, transparent)"
-              }}
-            >
-              <Image src="/instagram.png" alt="Instagram" width={40} height={40} className="object-cover" />
-            </a>
           </div>
 
-          <Button variant="ghost" size="icon" className="relative" onClick={open} aria-label="Open cart">
-            <ShoppingCart className="h-7 w-7" />
-            {totalQty > 0 && (
-              <span className="absolute -top-1 -right-1 text-xs rounded-full h-5 min-w-5 px-1 flex items-center justify-center" style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}>
-                {totalQty}
-              </span>
-            )}
-          </Button>
-
-        </div>
-      </div>
-
-      {/* Mobile nav overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            id="mobile-nav"
-            key="mobile-nav"
-            initial={{ opacity: 0}}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] md:hidden"
-            aria-modal="true"
-            role="dialog"
-          >
-            {/* Backdrop */}
-            <motion.div
-              onClick={closeMobile}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.4 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black"
-            />
-            {/* Panel */}
-            <motion.nav
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="relative left-0 top-0 bottom-0 w-5/6 max-w-sm border-r flex flex-col shadow-xl z-10"
-              style={{ 
-                backgroundColor: "var(--app-bg)",
-                borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))",
-                height: "100vh"
-              }}
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-8">
+            <Link 
+              href="/" 
+              className={`relative text-lg font-medium transition-all duration-200 hover:text-secondary group ${
+                pathname === "/" ? "text-secondary" : "text-gray-700"
+              }`}
             >
-              <div className="flex items-center justify-between px-6 h-16 border-b" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))" }}>
-                <Link href="/" onClick={closeMobile} className="flex items-center gap-2">
-                  <Image src="/Meal_Wheel_Logo_Final.svg" alt="Meal Wheel" width={36} height={36} className="rounded-md" />
-                  <span className="text-xl font-bold"><span style={{ color: 'var(--text-secondary)' }}>Meal</span> <span style={{ color: 'var(--text-primary)' }}>Wheel</span></span>
+              Home
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+            <Link 
+              href="/restaurants" 
+              className={`relative text-lg font-medium transition-all duration-200 hover:text-secondary group ${
+                pathname?.startsWith("/restaurants") ? "text-secondary" : "text-gray-700"
+              }`}
+            >
+              Restaurants
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+            <Link 
+              href="/menu" 
+              className={`relative text-lg font-medium transition-all duration-200 hover:text-secondary group ${
+                pathname?.startsWith("/menu") ? "text-secondary" : "text-gray-700"
+              }`}
+            >
+              Menu
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+            <Link 
+              href="/orders" 
+              className={`relative text-lg font-medium transition-all duration-200 hover:text-secondary group ${
+                pathname?.startsWith("/orders") ? "text-secondary" : "text-gray-700"
+              }`}
+            >
+              Orders
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+          </nav>
+
+          {/* Desktop Social Icons and Cart */}
+          <div className="hidden md:flex items-center gap-3">
+            {/* WhatsApp */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="w-10 h-10 transition-colors group bg-transparent rounded-2xl hover:bg-gray-100"
+            >
+              <a
+                href="https://wa.me/923188868811"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp"
+                className="w-5 h-5 bg-[url('/whatsapp.png')] bg-contain bg-no-repeat bg-center block"
+              >
+              </a>
+            </Button>
+
+            {/* Instagram */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="w-10 h-10 transition-colors group text-gray-700 bg-transparent rounded-2xl hover:bg-gray-100"
+            >
+              <a
+                href="https://www.instagram.com/mealwheelpk/?utm_source=ig_web_button_share_sheet"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="w-5 h-5 bg-[url('/instagram.png')] bg-contain bg-no-repeat bg-center block"
+              >
+              </a>
+            </Button>
+
+            {/* Cart */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative w-10 h-10 transition-colors group text-gray-700 bg-transparent rounded-2xl hover:bg-gray-100"
+              onClick={open}
+              aria-label="Open cart"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {totalQty > 0 && (
+                <span className="absolute -top-1 -right-1 text-xs rounded-full h-3 min-w-3 px-1 flex items-center justify-center font-medium bg-secondary text-white">
+                  {totalQty}
+                </span>
+              )}
+            </Button>
+          </div>
+
+          {/* Mobile Actions */}
+          <div className="flex md:hidden items-center gap-2">
+            {/* Cart */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative w-10 h-10 transition-colors group text-gray-700 bg-transparent rounded-2xl hover:bg-gray-100"
+              onClick={open}
+              aria-label="Open cart"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {totalQty > 0 && (
+                <span className="absolute -top-1 -right-1 text-xs rounded-full h-3 min-w-3 px-1 flex items-center justify-center font-medium bg-secondary text-white">
+                  {totalQty}
+                </span>
+              )}
+            </Button>
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="w-10 h-10 transition-colors text-gray-700 bg-transparent rounded-2xl hover:bg-gray-100"
+              onClick={toggleMobileMenu}
+              aria-label="Toggle mobile menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-100 bg-white">
+            <div className="px-4 py-4 space-y-4">
+              {/* Mobile Navigation Links */}
+              <nav className="space-y-3">
+                <Link 
+                  href="/" 
+                  className={`block text-lg font-medium transition-colors ${
+                    pathname === "/" ? "text-secondary" : "text-gray-700 hover:text-secondary"
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Home
                 </Link>
-                <Button variant="ghost" size="icon" onClick={closeMobile} aria-label="Close menu">
-                  <X className="h-5 w-5" />
-                </Button>
-              </div>
-              <div className="flex-1 px-6 py-8 min-h-0">
-                <ul className="space-y-2 text-xl">
-                  <li>
-                    <Link
-                      href="/"
-                      onClick={closeMobile}
-                      className="block font-medium py-2 rounded-lg px-3 transition-colors"
-                      style={{ 
-                        color: pathname === '/' ? 'var(--text-secondary)' : 'var(--text-primary)',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'color-mix(in oklch, var(--text-primary) 8%, var(--app-bg))';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                      }}
-                    >
-                      Home
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/restaurants"
-                      onClick={closeMobile}
-                      className="block font-medium py-2 rounded-lg px-3 transition-colors"
-                      style={{ 
-                        color: pathname?.startsWith('/restaurants') ? 'var(--text-secondary)' : 'var(--text-primary)',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'color-mix(in oklch, var(--text-primary) 8%, var(--app-bg))';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                      }}
-                    >
-                      Restaurants
-                    </Link>
-                  </li>
-                </ul>
-                <div className="mt-12 border-t pt-8" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))" }}>
-                  <p className="text-sm mb-4 font-medium" style={{ color: 'color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))' }}>Connect with us</p>
-                  <div className="flex items-center gap-3">
-                    <a
-                      href="https://wa.me/923188868811"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="WhatsApp"
-                      className="w-10 h-10 inline-flex items-center justify-center rounded-md overflow-hidden border transition hover:opacity-90"
-                      style={{ borderColor: 'color-mix(in oklch, var(--text-primary) 25%, transparent)' }}
-                    >
-                      <Image src="/whatsapp.png" alt="WhatsApp" width={40} height={40} className="object-cover" />
-                    </a>
-                    <a
-                      href="https://www.instagram.com/mealwheelpk/?utm_source=ig_web_button_share_sheet"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Instagram"
-                      className="w-10 h-10 inline-flex items-center justify-center rounded-md overflow-hidden border transition hover:opacity-90"
-                      style={{ borderColor: 'color-mix(in oklch, var(--text-primary) 25%, transparent)' }}
-                    >
-                      <Image src="/instagram.png" alt="Instagram" width={40} height={40} className="object-cover" />
-                    </a>
-                  </div>
+                <Link 
+                  href="/restaurants" 
+                  className={`block text-lg font-medium transition-colors ${
+                    pathname?.startsWith("/restaurants") ? "text-secondary" : "text-gray-700 hover:text-secondary"
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Restaurants
+                </Link>
+                <Link 
+                  href="/menu" 
+                  className={`block text-lg font-medium transition-colors ${
+                    pathname?.startsWith("/menu") ? "text-secondary" : "text-gray-700 hover:text-secondary"
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Menu
+                </Link>
+                <Link 
+                  href="/orders" 
+                  className={`block text-lg font-medium transition-colors ${
+                    pathname?.startsWith("/orders") ? "text-secondary" : "text-gray-700 hover:text-secondary"
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Orders
+                </Link>
+              </nav>
+
+              {/* Mobile Social Links */}
+              <div className="pt-4 border-t border-gray-100">
+                <div className="flex items-center gap-4">
+                  <a
+                    href="https://wa.me/923188868811"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-gray-700 hover:text-secondary transition-colors"
+                  >
+                    <div className="w-5 h-5 bg-[url('/whatsapp.png')] bg-contain bg-no-repeat bg-center"></div>
+                    <span className="text-sm">WhatsApp</span>
+                  </a>
+                  <a
+                    href="https://www.instagram.com/mealwheelpk/?utm_source=ig_web_button_share_sheet"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-gray-700 hover:text-secondary transition-colors"
+                  >
+                    <div className="w-5 h-5 bg-[url('/instagram.png')] bg-contain bg-no-repeat bg-center"></div>
+                    <span className="text-sm">Instagram</span>
+                  </a>
                 </div>
               </div>
-            </motion.nav>
-          </motion.div>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
+      </div>
     </header>
   );
 }
