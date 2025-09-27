@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCart } from "./cart-context";
 import { useEffect, useState } from "react";
+import { Button } from "../ui";
 
 function isWithinDeliveryWindow() {
   const now = new Date();
@@ -15,12 +16,9 @@ function isWithinDeliveryWindow() {
   close.setHours(closeHour, 0, 0, 0);
   if (closeHour <= openHour) close.setDate(close.getDate() + 1);
 
-  // If window does not cross midnight
   if (open < close) {
     return now >= open && now < close;
   } else {
-    // Overnight window (crosses midnight)
-    // Open if now >= open (today) or now < close (next day)
     return now >= open || now < close;
   }
 }
@@ -54,7 +52,7 @@ export function CartDrawer() {
       {/* Drawer */}
       <aside
         className={
-          "fixed top-0 right-0 h-full w-full sm:w-[420px] bg-[color:var(--app-bg)] border-l border-[color:color-mix(in_oklch,var(--text-primary)_15%,var(--app-bg))] shadow-xl transition-transform" +
+          "fixed top-0 right-0 h-full w-full sm:w-[420px] bg-background border-l border-border rounded-md shadow-xl transition-transform" +
           (open ? " translate-x-0" : " translate-x-full")
         }
         style={{ zIndex: 70 }}
@@ -62,9 +60,9 @@ export function CartDrawer() {
         aria-modal="true"
         aria-label="Shopping cart"
       >
-        <div className="flex items-center justify-between p-4 border-b border-[color:color-mix(in_oklch,var(--text-primary)_15%,var(--app-bg))]">
+        <div className="flex items-center justify-between p-4 border-b border-border">
           <h2 className="text-lg font-semibold">Your Cart</h2>
-          <button aria-label="Close cart" onClick={close} className="p-2 rounded hover:opacity-80" style={{ color: "var(--text-primary)" }}>
+          <button aria-label="Close cart" onClick={close} className="p-2 rounded cursor-pointer hover:opacity-80">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -72,33 +70,33 @@ export function CartDrawer() {
         <div className="flex flex-col h-[calc(100%-56px)]">
           <div className="flex-1 overflow-auto p-4 space-y-4">
             {state.items.length === 0 ? (
-              <p className="text-sm" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
+              <p className="text-sm">
                 Your cart is empty.
               </p>
             ) : (
               state.items.map((item) => (
                 <div key={item.id} className="flex gap-3 items-center">
                   {item.image ? (
-                    <div className="relative h-16 w-16 rounded overflow-hidden border" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 15%, var(--app-bg))" }}>
+                    <div className="relative h-16 w-16 overflow-hidden" >
                       <SafeImage src={item.image} alt={item.name} fill className="object-cover" />
                     </div>
                   ) : (
-                    <div className="h-16 w-16 rounded bg-[color:color-mix(in_oklch,var(--text-primary)_10%,var(--app-bg))]" />
+                    <div className="h-16 w-16 rounded bg-background" />
                   )}
                   <div className="flex-1">
                     <div className="font-medium">{item.name}</div>
-                    <div className="text-sm" style={{ color: "color-mix(in oklch, var(--text-primary) 70%, var(--app-bg))" }}>
+                    <div className="text-sm" >
                       Rs. {(item.price * item.qty).toFixed(2)} ({item.qty} × Rs. {item.price.toFixed(2)})
                     </div>
                     <div className="mt-2 inline-flex items-center gap-2">
-                      <button onClick={() => decrement(item.id)} className="px-2 py-1 rounded border" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))" }}>
+                      <button onClick={() => decrement(item.id)} className="px-2 rounded-full border border-border cursor-pointer" >
                         −
                       </button>
                       <span className="min-w-6 text-center">{item.qty}</span>
-                      <button onClick={() => increment(item.id)} className="px-2 py-1 rounded border" style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))" }}>
+                      <button onClick={() => increment(item.id)} className="px-2 rounded-full border border-border cursor-pointer" >
                         +
                       </button>
-                      <button onClick={() => remove(item.id)} className="ml-3 text-sm hover:opacity-80" style={{ color: "var(--text-secondary)" }}>
+                      <button onClick={() => remove(item.id)} className="ml-3 text-sm hover:opacity-80 text-secondary cursor-pointer" >
                         Remove
                       </button>
                     </div>
@@ -108,34 +106,30 @@ export function CartDrawer() {
             )}
           </div>
 
-          <div className="border-t border-[color:color-mix(in_oklch,var(--text-primary)_15%,var(--app-bg))] p-4 space-y-3">
+          <div className="border-t border-border p-4 space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-medium">Subtotal</span>
               <span className="font-semibold">Rs. {subtotal.toFixed(2)}</span>
             </div>
             <div className="flex items-center justify-between gap-3">
-              <button
-                onClick={clear}
-                disabled={state.items.length === 0}
-                className="px-4 py-2 rounded-md text-sm font-medium border hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ borderColor: "color-mix(in oklch, var(--text-primary) 20%, var(--app-bg))" }}
-              >
-                Clear cart
-              </button>
-              <button
-                disabled={state.items.length === 0 || !canCheckout}
-                className="px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: "var(--text-secondary)", color: "var(--text-primary)" }}
+              <Button variant="outline" 
+              className="flex-1" onClick={clear} disabled={state.items.length === 0}>
+                Clear Cart
+              </Button>
+              <Button
+                className="flex-1"
                 onClick={() => {
-                  if (state.items.length > 0 && canCheckout) {
-                    close();
-                    router.push("/checkout");
-                  }
+                  close();
+                  router.push("/checkout");
                 }}
-                title={!canCheckout ? "Checkout is only available from 9:00 PM to 2:00 AM" : undefined}
+                disabled={state.items.length === 0 || !canCheckout}
+                title={canCheckout ? undefined : "Orders can be placed only between 6PM and 2AM"}
               >
                 Checkout
-              </button>
+              </Button>
+            </div>
+            <div className="text-xs text-foreground/70">
+              {canCheckout ? "You can place your order now!" : "Orders can be placed only between 6PM and 2AM"}
             </div>
           </div>
         </div>
