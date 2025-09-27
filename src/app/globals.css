@@ -4,10 +4,9 @@
 /* Tailwind tokens so utilities like bg-background work */
 @theme inline {
   --color-background: #ffffff;
-  --color-text-primary: #000000;
+  --color-foreground: #000000;
   --color-primary: #df9937;
   --color-secondary: #df9937;
-  --color-text-secondary: var(--color-secondary);
   --color-bg-secondary: #f9fafb;
   --color-hover: #f5f5f5;
   --color-border: #e5e7eb;
@@ -19,8 +18,7 @@
   /* === CORE COLORS === */
   --background: var(--color-background);
   --app-bg: var(--color-background);
-  --text-primary: var(--color-text-primary);
-  --text-secondary: var(--color-text-secondary);
+  --foreground: var(--color-foreground);
   --primary: var(--color-primary);
   --secondary: var(--color-secondary);
   --bg-secondary: var(--color-bg-secondary);
