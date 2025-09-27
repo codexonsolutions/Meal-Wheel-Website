@@ -16,7 +16,7 @@ const sizeClass = {
 
 const variantClass = {
   default: "bg-primary text-white hover:bg-primary/90 cursor-pointer",
-  outline: "border border-primary text-primary bg-transparent hover:bg-primary hover:border-primary cursor-pointer",
+  outline: "border border-primary text-primary bg-transparent hover:bg-primary hover:border-primary hover:text-background cursor-pointer",
   ghost: "hover:bg-primary hover:text-background cursor-pointer",
 } as const satisfies Record<NonNullable<ButtonProps["variant"]>, string>;
 
