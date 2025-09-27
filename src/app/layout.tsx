@@ -29,8 +29,9 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${outfit.variable} font-sans antialiased`}>
         <CartProvider>
+                    <CountdownModal />
+
           <Header />
-          <CountdownModal />
           <Suspense fallback={null}>{children}</Suspense>
           <Footer />
           <CartDrawer />
