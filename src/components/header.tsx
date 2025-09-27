@@ -13,12 +13,12 @@ export function Header() {
 
   return (
     <header className="sticky top-0 left-0 right-0 z-50 px-4 py-0">
-      <div className="mx-auto bg-background backdrop-blur-sm border border-border rounded-2xl shadow-lg">
+      <div className="mx-auto bg-background">
         <div className="flex items-center justify-between px-6 py-4">
           
           {/* Left - Logo and Brand */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center shadow-md rounded-2xl">
+            <div className="w-10 h-10 flex items-center justify-center">
               <Image 
                 src="/Meal_Wheel_Logo_Final.svg" 
                 alt="Meal Wheel" 
@@ -37,35 +37,39 @@ export function Header() {
           <nav className="hidden md:flex items-center gap-8">
             <Link 
               href="/" 
-              className={`text-lg font-medium transition-all duration-200 hover:text-secondary ${
+              className={`relative text-lg font-medium transition-all duration-200 hover:text-secondary group ${
                 pathname === "/" ? "text-secondary" : "text-text-primary"
               }`}
             >
               Home
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
             </Link>
             <Link 
               href="/restaurants" 
-              className={`text-lg font-medium transition-all duration-200 hover:text-secondary ${
+              className={`relative text-lg font-medium transition-all duration-200 hover:text-secondary group ${
                 pathname?.startsWith("/restaurants") ? "text-secondary" : "text-text-primary"
               }`}
             >
               Restaurants
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
             </Link>
             <Link 
               href="/menu" 
-              className={`text-lg font-medium transition-all duration-200 hover:text-secondary ${
+              className={`relative text-lg font-medium transition-all duration-200 hover:text-secondary group ${
                 pathname?.startsWith("/menu") ? "text-secondary" : "text-text-primary"
               }`}
             >
               Menu
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
             </Link>
             <Link 
               href="/orders" 
-              className={`text-lg font-medium transition-all duration-200 hover:text-secondary ${
+              className={`relative text-lg font-medium transition-all duration-200 hover:text-secondary group ${
                 pathname?.startsWith("/orders") ? "text-secondary" : "text-text-primary"
               }`}
             >
               Orders
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"></span>
             </Link>
           </nav>
 
@@ -76,7 +80,7 @@ export function Header() {
             <Button
               variant="ghost"
               size="icon"
-              className="w-10 h-10 transition-colors group text-text-primary bg-transparent rounded-2xl hover:bg-hover-mix"
+              className="w-10 h-10 transition-colors group  bg-transparent rounded-2xl hover:bg-hover-mix"
             >
               <a
                 href="https://wa.me/923188868811"
