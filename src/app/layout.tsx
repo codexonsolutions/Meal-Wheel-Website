@@ -17,7 +17,10 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "Meal Wheel - Food Delivery Made Simple",
-  description: "Order from your favorite restaurants with Meal Wheel"
+  description: "Order from your favorite restaurants with Meal Wheel",
+  icons: {
+    icon: "/Meal_Wheel_Logo_Final.svg",
+  },
 };
 
 export default function RootLayout({
@@ -29,8 +32,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${outfit.variable} font-sans antialiased`}>
         <CartProvider>
-                    <CountdownModal />
-
+          <CountdownModal />
           <Header />
           <Suspense fallback={null}>{children}</Suspense>
           <Footer />
