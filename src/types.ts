@@ -5,7 +5,24 @@ export type Restaurant = {
   name: string;
   image?: string;
   slug: string;
+  description?: string;
+  categories: string[];
   createdAt: number;
+};
+
+export type MenuCategory = {
+  name: string;
+  items: MenuItem[];
+};
+
+export type MenuItem = {
+  id: ID;
+  name: string;
+  price: number;
+  description?: string;
+  image?: string;
+  featured?: boolean;
+  category: string;
 };
 
 export type Item = {
