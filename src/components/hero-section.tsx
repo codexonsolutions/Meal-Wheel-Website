@@ -45,7 +45,6 @@ export function HeroSection() {
                 <Button 
                   onClick={scrollToOrders}
                   size="lg"
-                  className="rounded-full border border-primary/20 hover:border-primary/40 transition-colors"
                 >
                   Order Now
                 </Button>
@@ -53,7 +52,6 @@ export function HeroSection() {
                   onClick={scrollToMenu}
                   variant="outline" 
                   size="lg"
-                  className="rounded-full border border-primary/30 hover:border-primary/50 hover:bg-primary/5 transition-colors"
                 >
                   View Menu
                 </Button>
