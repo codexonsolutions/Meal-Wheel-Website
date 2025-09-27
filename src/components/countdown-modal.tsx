@@ -57,7 +57,7 @@ const CountdownRibbon: React.FC = () => {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-50 w-full bg-yellow-400 text-black py-1 border-b border-yellow-500 z-40 flex items-center justify-center"
+      className="fixed top-0 left-0 right-0 z-50 w-full bg-primary text-black py-1 flex items-center justify-center"
       style={{ position: 'relative', minHeight: 32 }}
     >
       <span className="font-semibold text-sm text-center px-4">{message}</span>
