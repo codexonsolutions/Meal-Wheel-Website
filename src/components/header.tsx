@@ -1,11 +1,10 @@
 "use client";
-/* Refactored Header component using only Tailwind CSS classes */
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, MessageCircle, Instagram } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/components/cart/cart-context";
 import { usePathname } from "next/navigation";
+import Logo from "./ui/logo";
 
 export function Header() {
   const pathname = usePathname();
@@ -15,25 +14,8 @@ export function Header() {
     <header className="sticky top-0 left-0 right-0 z-50 px-4 py-0">
       <div className="mx-auto bg-background">
         <div className="flex items-center justify-between px-6 py-4">
-          
-          {/* Left - Logo and Brand */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center">
-              <Image 
-                src="/Meal_Wheel_Logo_Final.svg" 
-                alt="Meal Wheel" 
-                width={24} 
-                height={24}
-              />
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-2xl font-bold text-secondary">
-                mealwheel
-              </span>
-            </div>
-          </div>
-
-          {/* Middle - Navigation */}
+          <Logo />
+          {/*Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <Link 
               href="/" 
@@ -73,7 +55,7 @@ export function Header() {
             </Link>
           </nav>
 
-          {/* Right - Social Icons and Cart */}
+          {/* Social Icons and Cart */}
           <div className="flex items-center gap-3">
             
             {/* WhatsApp */}

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: "Meal Wheel - Food Delivery Made Simple",
   description: "Order from your favorite restaurants with Meal Wheel",
   icons: {
-    icon: "/Meal_Wheel_Logo_Final.svg",
+    icon: "/mealwheel.svg",
   },
 };
 

@@ -1,29 +1,17 @@
 import Link from "next/link";
-import Image from "next/image";
 import { MessageCircle, Instagram, Phone, Mail } from "lucide-react";
+import Logo from "./ui/logo";
 
 export function Footer() {
   return (
     <footer className="bg-bg-secondary mt-16">
-      {/* Muted horizontal line */}
       <div className="w-full h-px bg-border-mix mb-0"></div>
-      
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
           {/* Brand Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 flex items-center justify-center shadow-md rounded-2xl">
-                <Image 
-                  src="/Meal_Wheel_Logo_Final.svg" 
-                  alt="Meal Wheel" 
-                  width={24} 
-                  height={24}
-                />
-              </div>
-              <span className="text-xl font-bold text-secondary">mealwheel</span>
-            </div>
+            <Logo />
             <p className="text-sm text-foreground/70 leading-relaxed">
               Delicious meals delivered fresh to your doorstep. Experience the best flavors from local restaurants.
             </p>
