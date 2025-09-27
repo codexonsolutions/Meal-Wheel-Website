@@ -77,20 +77,20 @@ export function Header() {
           <div className="flex items-center gap-3">
             
             {/* WhatsApp */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="w-10 h-10 transition-colors group  bg-transparent rounded-2xl hover:bg-hover-mix"
+           <Button
+            variant="ghost"
+            size="icon"
+            className="w-10 h-10 transition-colors group bg-transparent rounded-2xl hover:bg-hover-mix"
             >
-              <a
-                href="https://wa.me/923188868811"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="WhatsApp"
-              >
-                <MessageCircle className="h-5 w-5" />
-              </a>
-            </Button>
+            <a
+              href="https://wa.me/923188868811"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="w-5 h-5 bg-[url('/whatsapp.png')] bg-contain bg-no-repeat bg-center block"
+            >
+            </a>
+          </Button>
 
             {/* Instagram */}
             <Button
@@ -103,8 +103,8 @@ export function Header() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
+                className="w-5 h-5 bg-[url('/instagram.png')] bg-contain bg-no-repeat bg-center block"
               >
-                <Instagram className="h-5 w-5" />
               </a>
             </Button>
 
@@ -118,7 +118,7 @@ export function Header() {
             >
               <ShoppingCart className="h-5 w-5" />
               {totalQty > 0 && (
-                <span className="absolute -top-1 -right-1 text-xs rounded-full h-5 min-w-5 px-1 flex items-center justify-center font-medium bg-secondary text-primary">
+                <span className="absolute -top-1 -right-1 text-xs rounded-full h-3 min-w-3 px-1 flex items-center justify-center font-medium bg-secondary text-primary">
                   {totalQty}
                 </span>
               )}
