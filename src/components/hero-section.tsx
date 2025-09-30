@@ -22,7 +22,7 @@ export function HeroSection() {
   return (
     <section className="py-4 px-3 sm:px-4 md:px-6">
       <div className="w-full max-w-none">
-        <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-bg-secondary rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 mx-2 sm:mx-3 md:mx-4 min-h-[70vh] md:min-h-[80vh]">
+        <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-bg-secondary rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 mx-2 sm:mx-3 md:mx-4 min-h-0 md:min-h-[80vh]">
           <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center h-full">
             
             {/* Left Side - Text Content */}
@@ -41,7 +41,7 @@ export function HeroSection() {
               </div>
               
              {/* Buttons */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 pt-2">
+              <div className="flex flex-row items-center justify-center sm:justify-start gap-3 sm:gap-4 pt-2">
                 <Button 
                   onClick={scrollToOrders}
                   size="lg"
@@ -57,7 +57,7 @@ export function HeroSection() {
                 </Button>
               </div>
               
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 pt-4 md:pt-6">
+              <div className="flex flex-row items-center justify-center gap-4 sm:gap-6 pt-4 md:pt-6">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                   <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium">
@@ -71,7 +71,7 @@ export function HeroSection() {
               </div>
             </div>
 
-             <div className="relative mt-8 lg:mt-0">
+             <div className="relative mt-8 lg:mt-0 hidden md:block">
               <div className="flex flex-col items-center space-y-4 md:space-y-6">
                 {/* Top Image - Centered */}
                 <div className="relative group">
