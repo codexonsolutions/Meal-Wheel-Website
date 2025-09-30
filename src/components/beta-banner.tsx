@@ -16,7 +16,7 @@ export const BetaBanner = () => {
       <div className="mx-4 w-full max-w-2xl rounded-lg bg-[#FFFFFF] p-6 shadow-[0_0_15px_rgba(0,0,0,0.3)] text-[#FF6B35]">
         <div className="flex flex-col items-center gap-4 text-center">
           <Logo />
-          <p className="text-lg font-semibold">
+          <p className="text-lg font-semibold text-neutral-600">
             We are finalizing a few things. Please use WhatsApp to place your
             order.
           </p>
