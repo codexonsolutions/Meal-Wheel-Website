@@ -8,6 +8,7 @@ import { CartProvider } from "@/components/cart/cart-context";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { Analytics } from "@vercel/analytics/react";
 import CountdownModal from "@/components/countdown-modal";
+import { BetaBanner } from "@/components/beta-banner";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body className={`${outfit.variable} font-sans antialiased`}>
         <CartProvider>
           <CountdownModal />
+          <BetaBanner />
           <Header />
           <Suspense fallback={null}>{children}</Suspense>
           <Footer />
