@@ -28,7 +28,11 @@ export function Header() {
           {/* Mobile Logo - Just the SVG icon */}
           <div className="md:hidden">
             <Link href="/" className="flex items-center">
-              <img src="/mealwheel.svg" alt="Meal Wheel" className="h-8 w-8" />
+              <img
+                src="/mealwheel.svg"
+                alt="Meal Wheel"
+                className="h-14 w-14"
+              />
             </Link>
           </div>
 
