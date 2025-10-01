@@ -34,7 +34,7 @@ export default function RootLayout({
       <body className={`${outfit.variable} font-sans antialiased`}>
         <CartProvider>
           <CountdownModal />
-          <BetaBanner />
+          {/* <BetaBanner /> */}
           <Header />
           <Suspense fallback={null}>{children}</Suspense>
           <Footer />
