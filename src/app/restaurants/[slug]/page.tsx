@@ -67,7 +67,7 @@ export default function RestaurantPage({ params }: Params) {
   }
 
   const categories = Array.from(new Set(items.map(i => i.category)))
-  const featured = items.filter(i => i.isFeatured).slice(0, 4)
+  const featured = items.filter(i => i.isFeatured).slice(0, 8)
   const activeItems = items.filter(i => i.category === activeCategory)
 
   function handleAdd(item: ItemApi) {
@@ -123,18 +123,39 @@ export default function RestaurantPage({ params }: Params) {
               </div>
               <div className="lg:col-span-2">
                 {featured.length > 0 && (
-                  <div className="mb-8">
-                    <h2 className="text-2xl font-bold mb-4">Featured Items</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="mb-10">
+                    <h2 className="text-2xl font-bold mb-6">Featured Items</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                       {featured.map(f => (
-                        <div key={f._id} className="bg-white rounded-lg border p-4 hover:shadow-md transition-shadow">
-                          <div className="flex justify-between items-start mb-2">
-                            <h3 className="font-semibold text-lg">{f.name}</h3>
-                            <span className="text-secondary font-bold">Rs. {f.price}</span>
+                        <div
+                          key={f._id}
+                          className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+                        >
+                          <div className="relative aspect-[4/3] overflow-hidden">
+                            <SafeImage
+                              src={f.imageUrl || '/placeholder.jpg'}
+                              alt={f.name}
+                              fill
+                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
                           </div>
-                          <Button onClick={() => handleAdd(f)} className="w-full bg-secondary hover:bg-secondary/90">
-                            <Plus className="h-4 w-4 mr-2" /> Add to Cart
-                          </Button>
+                          <div className="p-4">
+                            <div className="mb-3">
+                              <h3 className="font-bold text-lg mb-1">{f.name}</h3>
+                              <p className="text-sm text-muted-foreground">{f.category}</p>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-lg font-bold text-secondary">Rs. {f.price.toFixed(2)}</span>
+                              <Button
+                                onClick={() => handleAdd(f)}
+                                size="sm"
+                                variant="default"
+                                className="bg-secondary hover:bg-secondary/90 text-white"
+                              >
+                                <Plus className="h-4 w-4 mr-2" /> Add
+                              </Button>
+                            </div>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -150,21 +171,42 @@ export default function RestaurantPage({ params }: Params) {
                 </div>
                 {activeCategory && (
                   <div>
-                    <h3 className="text-xl font-bold mb-4">{activeCategory}</h3>
-                    <div className="space-y-3">
+                    <h3 className="text-xl font-bold mb-6">{activeCategory}</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                       {activeItems.map(it => (
-                        <div key={it._id} className="bg-white rounded-lg border border-primary/50 p-4 hover:shadow-md transition-shadow">
-                          <div className="flex justify-between items-start">
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-lg mb-1">{it.name}</h4>
-                              <span className="text-secondary font-bold text-lg">Rs. {it.price}</span>
+                        <div
+                          key={it._id}
+                          className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+                        >
+                          <div className="relative aspect-[4/3] overflow-hidden">
+                            <SafeImage
+                              src={it.imageUrl || '/placeholder.jpg'}
+                              alt={it.name}
+                              fill
+                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                          </div>
+                          <div className="p-4">
+                            <div className="mb-3">
+                              <h4 className="font-bold text-lg mb-1">{it.name}</h4>
+                              <p className="text-sm text-muted-foreground">{it.category}</p>
                             </div>
-                            <Button onClick={() => handleAdd(it)} size="sm" className="bg-secondary hover:bg-secondary/90 ml-4"><Plus className="h-4 w-4" /></Button>
+                            <div className="flex items-center justify-between">
+                              <span className="text-lg font-bold text-secondary">Rs. {it.price.toFixed(2)}</span>
+                              <Button
+                                onClick={() => handleAdd(it)}
+                                size="sm"
+                                variant="default"
+                                className="bg-secondary hover:bg-secondary/90 text-white"
+                              >
+                                <Plus className="h-4 w-4 mr-2" /> Add
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       ))}
                       {activeItems.length === 0 && (
-                        <div className="text-sm text-muted-foreground">No items in this category</div>
+                        <div className="text-sm text-muted-foreground col-span-full">No items in this category</div>
                       )}
                     </div>
                   </div>
