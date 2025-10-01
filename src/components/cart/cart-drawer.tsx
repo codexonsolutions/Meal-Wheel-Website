@@ -8,7 +8,7 @@ import { Button } from "../ui";
 
 function isWithinDeliveryWindow() {
   const now = new Date();
-  const openHour = 18; // 6pm
+  const openHour = 13; // 1pm
   const closeHour = 2; // 2am (next day)
   const open = new Date(now);
   const close = new Date(now);

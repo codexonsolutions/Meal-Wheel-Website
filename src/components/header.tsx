@@ -6,6 +6,7 @@ import { useCart } from "@/components/cart/cart-context";
 import { usePathname } from "next/navigation";
 import Logo from "./ui/logo";
 import { useState } from "react";
+import { SafeImage } from "@/components/ui/safe-image";
 
 export function Header() {
   const pathname = usePathname();
@@ -27,12 +28,8 @@ export function Header() {
 
           {/* Mobile Logo - Just the SVG icon */}
           <div className="md:hidden">
-            <Link href="/" className="flex items-center">
-              <img
-                src="/mealwheel.svg"
-                alt="Meal Wheel"
-                className="h-14 w-14"
-              />
+            <Link href="/" className="flex items-center relative h-14 w-14">
+              <SafeImage src="/mealwheel.svg" alt="Meal Wheel" fill className="object-contain" />
             </Link>
           </div>
 
@@ -99,9 +96,9 @@ export function Header() {
             <Button
               variant="ghost"
               size="icon"
-              className="w-8 h-8 flex items-center justify-center rounded-lg bg-white shadow-sm text-foreground hover:bg-secondary hover:text-background transition-colors"
+              className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-white shadow-sm text-foreground hover:bg-secondary hover:text-background transition-colors"
               onClick={open}
-              aria-label="Open cart"
+              aria-label={totalQty > 0 ? `Open cart, ${totalQty} items` : 'Open cart'}
             >
               <ShoppingCart className="h-4 w-4" />
               {totalQty > 0 && (
@@ -120,7 +117,7 @@ export function Header() {
               size="icon"
               className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-white shadow-sm text-foreground hover:bg-secondary hover:text-background transition-colors"
               onClick={open}
-              aria-label="Open cart"
+              aria-label={totalQty > 0 ? `Open cart, ${totalQty} items` : 'Open cart'}
             >
               <ShoppingCart className="h-4 w-4" />
               {totalQty > 0 && (

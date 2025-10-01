@@ -3,13 +3,47 @@ import Link from "next/link";
 import { SafeImage } from "@/components/ui/safe-image";
 import { ArrowRight, Plus } from "lucide-react";
 import { useCart } from "@/components/cart/cart-context";
-import { getFeaturedItems } from "@/data/restaurants";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
+
+interface FeaturedItemApi {
+  _id: string
+  name: string
+  imageUrl: string
+  price: number
+  category: string
+  restaurant?: string
+  restaurantName?: string
+}
 
 export function FeaturedItems() {
   const { add } = useCart();
-  const featuredItems = getFeaturedItems();
+  const [items, setItems] = useState<FeaturedItemApi[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let active = true
+    async function load() {
+      try {
+        setLoading(true)
+        const base = process.env.NEXT_PUBLIC_API_URL
+        if (!base) throw new Error('Missing NEXT_PUBLIC_API_URL')
+        const res = await fetch(`${base}/items/featured`, { cache: 'no-store' })
+        if (!res.ok) throw new Error('Failed to fetch featured items')
+        const data = await res.json()
+        if (active) setItems(Array.isArray(data.items) ? data.items : [])
+      } catch (e: unknown) {
+        const msg = e instanceof Error ? e.message : 'Failed to load items'
+        if (active) setError(msg)
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+    load()
+    return () => { active = false }
+  }, [])
 
   return (
     <section id="featured-items" className="relative py-12 md:py-20 overflow-hidden">
@@ -37,22 +71,33 @@ export function FeaturedItems() {
           </div>
         </div>
 
-        {featuredItems.length === 0 && (
+        {!loading && !error && items.length === 0 && (
           <div className="flex justify-center items-center py-12">
             <div className="text-lg text-secondary">No featured items found</div>
           </div>
         )}
-
-        {featuredItems.length > 0 && (
+        {loading && (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6" aria-busy="true">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="rounded-2xl border border-gray-100 bg-white p-4 animate-pulse h-48" />
+            ))}
+          </div>
+        )}
+        {error && (
+          <div className="flex justify-center items-center py-12">
+            <div className="text-sm text-red-500">{error}</div>
+          </div>
+        )}
+        {!loading && !error && items.length > 0 && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-            {featuredItems.slice(0, 8).map((item) => (
+            {items.slice(0, 8).map((item) => (
               <div
-                key={item.id}
+                key={item._id}
                 className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <SafeImage
-                    src={item.image || "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop&crop=center"}
+                    src={item.imageUrl || "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop&crop=center"}
                     alt={item.name}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -61,11 +106,11 @@ export function FeaturedItems() {
                 <div className="p-4">
                   <div className="mb-3">
                     <h3 className="font-bold text-sm md:text-base leading-tight mb-1">{item.name}</h3>
-                    <p className="text-xs text-muted-foreground">{item.category}</p>
+                    <p className="text-xs text-muted-foreground">{item.category}{item.restaurantName ? ` · ${item.restaurantName}` : ''}</p>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-bold text-secondary">
-                      Rs. {item.price}
+                      Rs. {item.price.toFixed(2)}
                     </span>
                     <Button
                       size="sm"
@@ -73,10 +118,11 @@ export function FeaturedItems() {
                       className="bg-secondary hover:bg-secondary/90 text-white"
                       onClick={() => {
                         add({ 
-                          id: item.id, 
+                          id: item._id, 
                           name: item.name, 
                           price: item.price, 
-                          image: item.image || "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop&crop=center" 
+                          image: item.imageUrl || "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop&crop=center",
+                          restaurantId: typeof item.restaurant === 'string' ? item.restaurant : undefined
                         });
                       }}
                     >

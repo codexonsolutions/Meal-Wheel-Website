@@ -47,11 +47,19 @@ export default function CheckoutPage() {
       return;
     }
 
+
+    const restaurantIds = [...new Set(state.items.map(i => i.restaurantId).filter(Boolean))];
+    if (restaurantIds.length > 1) {
+      setError("All items must be from the same restaurant.");
+      return;
+    }
+    const restaurantId = restaurantIds[0]; 
+
     setIsLoading(true);
 
     try {
       // Prepare order data for backend
-      const orderData = {
+      const orderData: Record<string, unknown> = {
         customer: {
           fullName: fullName.trim(),
           email: email.trim(),
@@ -63,12 +71,19 @@ export default function CheckoutPage() {
           postal: postal.trim(),
           notes: notes.trim() || undefined
         },
-        items: state.items.map(item => ({
-          id: item.id,
-          quantity: item.qty
-        })),
+        items: state.items.map(item => ({ id: item.id, quantity: item.qty })),
         deliveryFee: deliveryFee
       };
+      if (restaurantId) orderData.restaurant = restaurantId; // tolerated extra field; backend ignores on public route
+
+      if (!process.env.NEXT_PUBLIC_API_URL) {
+        throw new Error('Missing NEXT_PUBLIC_API_URL environment variable');
+      }
+
+      // Debug log (can be removed in production)
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('Submitting order payload', orderData);
+      }
 
       // Send order to backend
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/public`, {
@@ -80,8 +95,14 @@ export default function CheckoutPage() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Failed to place order' }));
-        throw new Error(errorData.error || 'Failed to place order');
+        let errorMsg = 'Failed to place order';
+        try {
+          const errorData = await response.json();
+          if (errorData?.error) errorMsg = errorData.error;
+        } catch {
+          /* ignore */
+        }
+        throw new Error(errorMsg);
       }
 
       const result = await response.json();

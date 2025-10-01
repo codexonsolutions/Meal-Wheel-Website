@@ -2,11 +2,12 @@
 import { createContext, useContext, useMemo, useReducer, ReactNode } from "react";
 
 export type CartItem = {
-  id: string; // unique per product/variant
+  id: string;
   name: string;
-  price: number; // store as number for totals
+  price: number;
   image?: string;
   qty: number;
+  restaurantId?: string; // optional to maintain backward compatibility
 };
 
 type State = {
@@ -33,14 +34,21 @@ function reducer(state: State, action: Action): State {
     case "TOGGLE":
       return { ...state, open: !state.open };
     case "ADD": {
-      const { id, name, price, image, qty = 1 } = action.payload;
+      const { id, name, price, image, qty = 1, restaurantId } = action.payload;
+      // If cart already has items from a different restaurant, block mixing
+      if (state.items.length > 0) {
+        const existing = state.items[0].restaurantId
+        if (existing && restaurantId && existing !== restaurantId) {
+          return state; // ignore add (could enhance with user feedback UI later)
+        }
+      }
       const idx = state.items.findIndex((i) => i.id === id);
       if (idx >= 0) {
         const items = [...state.items];
         items[idx] = { ...items[idx], qty: items[idx].qty + qty };
         return { ...state, items };
       }
-      return { ...state, items: [...state.items, { id, name, price, image, qty }] };
+      return { ...state, items: [...state.items, { id, name, price, image, qty, restaurantId }] };
     }
     case "REMOVE":
       return { ...state, items: state.items.filter((i) => i.id !== action.payload.id) };
