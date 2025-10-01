@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 function getNextOpeningTime() {
   const now = new Date();
-  const openHour = 13; // 1pm (for testing)
+  const openHour = 18; // 1pm (for testing)
   const closeHour = 2; // 2am (next day)
   const open = new Date(now);
   const close = new Date(now);
