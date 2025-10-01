@@ -125,7 +125,7 @@ export default function RestaurantPage({ params }: Params) {
                 {featured.length > 0 && (
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold mb-6">Featured Items</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
                       {featured.map(f => (
                         <div
                           key={f._id}
@@ -141,16 +141,17 @@ export default function RestaurantPage({ params }: Params) {
                           </div>
                           <div className="p-4">
                             <div className="mb-3">
-                              <h3 className="font-bold text-lg mb-1">{f.name}</h3>
-                              <p className="text-sm text-muted-foreground">{f.category}</p>
+                              <h3 className="font-bold text-sm md:text-base leading-tight mb-1">{f.name}</h3>
+                              <p className="text-xs text-muted-foreground">{f.category}</p>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-lg font-bold text-secondary">Rs. {f.price.toFixed(2)}</span>
+                              <span className="text-sm md:text-lg font-bold text-secondary">Rs. {f.price.toFixed(2)}</span>
                               <Button
                                 onClick={() => handleAdd(f)}
                                 size="sm"
                                 variant="default"
                                 className="bg-secondary hover:bg-secondary/90 text-white"
+                                aria-label={`Add ${f.name} to cart`}
                               >
                                 <Plus className="h-4 w-4 mr-2" /> Add
                               </Button>
@@ -172,7 +173,7 @@ export default function RestaurantPage({ params }: Params) {
                 {activeCategory && (
                   <div>
                     <h3 className="text-xl font-bold mb-6">{activeCategory}</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
                       {activeItems.map(it => (
                         <div
                           key={it._id}
@@ -188,16 +189,17 @@ export default function RestaurantPage({ params }: Params) {
                           </div>
                           <div className="p-4">
                             <div className="mb-3">
-                              <h4 className="font-bold text-lg mb-1">{it.name}</h4>
-                              <p className="text-sm text-muted-foreground">{it.category}</p>
+                              <h4 className="font-bold text-sm md:text-base leading-tight mb-1">{it.name}</h4>
+                              <p className="text-xs text-muted-foreground">{it.category}</p>
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-lg font-bold text-secondary">Rs. {it.price.toFixed(2)}</span>
+                              <span className="text-sm md:text-lg font-bold text-secondary">Rs. {it.price.toFixed(2)}</span>
                               <Button
                                 onClick={() => handleAdd(it)}
                                 size="sm"
                                 variant="default"
                                 className="bg-secondary hover:bg-secondary/90 text-white"
+                                aria-label={`Add ${it.name} to cart`}
                               >
                                 <Plus className="h-4 w-4 mr-2" /> Add
                               </Button>
