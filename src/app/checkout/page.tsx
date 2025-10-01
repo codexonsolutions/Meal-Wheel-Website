@@ -48,13 +48,6 @@ export default function CheckoutPage() {
     }
 
 
-    const restaurantIds = [...new Set(state.items.map(i => i.restaurantId).filter(Boolean))];
-    if (restaurantIds.length > 1) {
-      setError("All items must be from the same restaurant.");
-      return;
-    }
-    const restaurantId = restaurantIds[0]; 
-
     setIsLoading(true);
 
     try {
@@ -74,7 +67,7 @@ export default function CheckoutPage() {
         items: state.items.map(item => ({ id: item.id, quantity: item.qty })),
         deliveryFee: deliveryFee
       };
-      if (restaurantId) orderData.restaurant = restaurantId; // tolerated extra field; backend ignores on public route
+  // restaurant field no longer required; backend derives restaurants from item docs
 
       if (!process.env.NEXT_PUBLIC_API_URL) {
         throw new Error('Missing NEXT_PUBLIC_API_URL environment variable');
