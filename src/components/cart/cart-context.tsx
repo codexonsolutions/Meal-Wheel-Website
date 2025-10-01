@@ -35,13 +35,6 @@ function reducer(state: State, action: Action): State {
       return { ...state, open: !state.open };
     case "ADD": {
       const { id, name, price, image, qty = 1, restaurantId } = action.payload;
-      // If cart already has items from a different restaurant, block mixing
-      if (state.items.length > 0) {
-        const existing = state.items[0].restaurantId
-        if (existing && restaurantId && existing !== restaurantId) {
-          return state; // ignore add (could enhance with user feedback UI later)
-        }
-      }
       const idx = state.items.findIndex((i) => i.id === id);
       if (idx >= 0) {
         const items = [...state.items];
