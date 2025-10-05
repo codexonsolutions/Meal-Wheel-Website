@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
 import { useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 export function HeroSection() {
   const scrollToFeatured = useCallback(() => {
@@ -9,15 +10,7 @@ export function HeroSection() {
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
-  const scrollToOrders = useCallback(() => {
-    const el = document.getElementById("order-section");
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
-
-  const scrollToMenu = useCallback(() => {
-    const el = document.getElementById("menu-section");
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
+  const router = useRouter();
 
   return (
     <section className="py-4 px-3 sm:px-4 md:px-6">
@@ -39,10 +32,16 @@ export function HeroSection() {
 
               {/* Buttons */}
               <div className="flex flex-row items-center justify-center sm:justify-start gap-3 sm:gap-4 pt-2">
-                <Button onClick={scrollToOrders} size="lg">
+                <Button onClick={scrollToFeatured} size="lg">
                   Order Now
                 </Button>
-                <Button onClick={scrollToMenu} variant="outline" size="lg">
+                <Button
+                  onClick={() => {
+                    router.push("/menu");
+                  }}
+                  variant="outline"
+                  size="lg"
+                >
                   View Menu
                 </Button>
               </div>
