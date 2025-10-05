@@ -10,17 +10,24 @@ function isWithinDeliveryWindow() {
   const now = new Date();
   const openHour = 18; // 6pm
   const closeHour = 2; // 2am (next day)
-  const open = new Date(now);
-  const close = new Date(now);
-  open.setHours(openHour, 0, 0, 0);
-  close.setHours(closeHour, 0, 0, 0);
-  if (closeHour <= openHour) close.setDate(close.getDate() + 1);
 
-  if (open < close) {
-    return now >= open && now < close;
-  } else {
-    return now >= open || now < close;
+  const start = new Date(now);
+  const end = new Date(now);
+  start.setHours(openHour, 0, 0, 0);
+  end.setHours(closeHour, 0, 0, 0);
+
+  // If window crosses midnight, anchor start/end around 'now'
+  if (closeHour <= openHour) {
+    if (now < start) {
+      // After midnight but before today's opening: start was yesterday
+      start.setDate(start.getDate() - 1);
+    } else {
+      // Evening: closing happens next calendar day
+      end.setDate(end.getDate() + 1);
+    }
   }
+
+  return now >= start && now < end;
 }
 
 export function CartDrawer() {

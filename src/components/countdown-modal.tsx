@@ -3,23 +3,40 @@ import React, { useEffect, useState } from "react";
 
 function getNextOpeningTime() {
   const now = new Date();
-  const openHour = 18; // 1pm (for testing)
+  const openHour = 18; // 6pm
   const closeHour = 2; // 2am (next day)
-  const open = new Date(now);
-  const close = new Date(now);
-  open.setHours(openHour, 0, 0, 0);
-  close.setHours(closeHour, 0, 0, 0);
-  if (closeHour < openHour) close.setDate(close.getDate() + 1);
 
-  if (now >= open && now < close) {
-    // Currently open
+  const start = new Date(now);
+  const end = new Date(now);
+  start.setHours(openHour, 0, 0, 0);
+  end.setHours(closeHour, 0, 0, 0);
+
+  // Align start/end around 'now' for windows crossing midnight
+  if (closeHour <= openHour) {
+    if (now < start) {
+      // After midnight, before today's opening
+      // Current window (yesterday 6pm -> today 2am) already ended; next open is today 6pm
+      // 'start' already points to today 6pm
+    } else {
+      // Evening: closing is next day
+      end.setDate(end.getDate() + 1);
+    }
+  }
+
+  // If currently within the window, no countdown
+  if (now >= start && now < end) {
     return null;
   }
-  if (now < open) {
-    return open;
+
+  // Not within window: determine next opening
+  if (now < start) {
+    // Before opening today
+    return start;
   }
-  open.setDate(open.getDate() + 1);
-  return open;
+
+  // After today's opening window -> next is tomorrow's opening
+  start.setDate(start.getDate() + 1);
+  return start;
 }
 
 function getTimeDiff(target: Date) {
