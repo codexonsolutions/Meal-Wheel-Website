@@ -205,48 +205,6 @@ export default function RestaurantPage({ params }: Params) {
                 </div>
               </div>
               <div className="lg:col-span-2">
-                {featured.length > 0 && (
-                  <div className="mb-10">
-                    <h2 className="text-2xl font-bold mb-6">Featured Items</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-                      {featured.map((f) => (
-                        <Card
-                          key={f._id}
-                          className="p-0 overflow-hidden hover:border-primary transition-border duration-100"
-                        >
-                          <div className="relative aspect-[4/3]">
-                            <SafeImage
-                              src={f.imageUrl || "/placeholder.jpg"}
-                              alt={f.name}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                          <CardContent className="py-3 px-4">
-                            <div className="text-sm font-semibold truncate mb-2">
-                              {f.name}
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <Badge variant="secondary">{f.category}</Badge>
-                              <span className="text-sm font-bold text-secondary">
-                                Rs. {f.price.toFixed(2)}
-                              </span>
-                            </div>
-                            <div className="mt-3 flex justify-end">
-                              <Button
-                                onClick={() => openAdd(f)}
-                                size="sm"
-                                aria-label={`Add ${f.name} to cart`}
-                              >
-                                <Plus className="h-4 w-4 mr-1" /> Add
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-                )}
                 <div className="mb-6">
                   <h2 className="text-2xl font-bold mb-4">Menu Categories</h2>
                   <div className="flex flex-wrap gap-2">
