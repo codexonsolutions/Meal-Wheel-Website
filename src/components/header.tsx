@@ -99,7 +99,7 @@ export function Header() {
             <Button
               variant="secondary"
               size="icon"
-              className="w-10 h-10"
+              className="relative w-10 h-10"
               onClick={open}
               aria-label={
                 totalQty > 0 ? `Open cart, ${totalQty} items` : "Open cart"
@@ -107,7 +107,7 @@ export function Header() {
             >
               <ShoppingCart className="h-6 w-6 cursor-pointer" />
               {totalQty > 0 && (
-                <span className="absolute -top-1 -right-1 text-xs rounded-full h-3 min-w-3 px-1 flex items-center justify-center font-medium bg-secondary text-white">
+                <span className="absolute -top-2 -right-2 text-xs rounded-full h-5 min-w-5 px-1 flex items-center justify-center font-medium bg-green-700 text-white">
                   {totalQty}
                 </span>
               )}

@@ -8,6 +8,9 @@ import {
   type Customization,
 } from "@/components/customization-dialog";
 import { SafeImage } from "@/components/ui/safe-image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 
 interface MenuItemApi {
   _id: string;
@@ -27,6 +30,7 @@ export default function MenuPage() {
   const [dialogItem, setDialogItem] = useState<MenuItemApi | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -149,6 +153,17 @@ export default function MenuPage() {
               Browse every available item across restaurants. Freshly updated in
               real time from our partners.
             </p>
+            <div className="max-w-2xl mx-auto">
+              <div className="flex items-center gap-2">
+                <Input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search by name, category, or restaurant"
+                  aria-label="Search menu items"
+                  className="h-12 text-base"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -174,53 +189,81 @@ export default function MenuPage() {
                 No items available
               </div>
             )}
-            {!loading &&
-              !error &&
-              items.map((item) => (
-                <div
-                  key={item._id}
-                  className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <SafeImage
-                      src={
-                        item.imageUrl ||
-                        "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop&crop=center"
-                      }
-                      alt={item.name}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </div>
-
-                  <div className="p-4">
-                    <div className="mb-3">
-                      <h3 className="font-bold text-lg mb-1">{item.name}</h3>
-                      <p className="text-xs text-muted-foreground mb-1">
-                        {item.restaurantName || "Unknown Restaurant"}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {item.category}
-                      </p>
+            {!loading && !error &&
+              items
+                .filter((it) => {
+                  const q = query.trim().toLowerCase();
+                  if (!q) return true;
+                  return (
+                    it.name.toLowerCase().includes(q) ||
+                    it.category.toLowerCase().includes(q) ||
+                    (it.restaurantName || "").toLowerCase().includes(q)
+                  );
+                })
+                .map((item) => (
+                  <Card
+                    key={item._id}
+                    className="p-0 overflow-hidden hover:border-primary transition-border duration-100"
+                  >
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <SafeImage
+                        src={
+                          item.imageUrl ||
+                          "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop&crop=center"
+                        }
+                        alt={item.name}
+                        fill
+                        className="object-cover transition-transform duration-300 hover:scale-105"
+                      />
                     </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-secondary">
-                        Rs. {item.price.toFixed(2)}
-                      </span>
-                      <Button
-                        onClick={() => handleAddToCart(item)}
-                        size="sm"
-                        variant="default"
-                        className="bg-secondary hover:bg-secondary/90 text-white"
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add
-                      </Button>
-                    </div>
-                  </div>
+                    <CardContent className="py-3 px-4">
+                      <div className="mb-2">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-semibold text-base truncate">
+                            {item.name}
+                          </h3>
+                          {item.isFeatured && <Badge>Featured</Badge>}
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {item.category && (
+                            <Badge variant="secondary">{item.category}</Badge>
+                          )}
+                          {item.restaurantName && (
+                            <Badge variant="outline">{item.restaurantName}</Badge>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-lg font-bold text-secondary">
+                          Rs. {item.price.toFixed(2)}
+                        </span>
+                        <Button
+                          onClick={() => handleAddToCart(item)}
+                          size="sm"
+                          variant="default"
+                          className="bg-secondary hover:bg-secondary/90 text-white"
+                        >
+                          <Plus className="h-4 w-4" />
+                          Add
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+            {!loading && !error && items.length > 0 &&
+              items.filter((it) => {
+                const q = query.trim().toLowerCase();
+                if (!q) return false;
+                return !(
+                  it.name.toLowerCase().includes(q) ||
+                  it.category.toLowerCase().includes(q) ||
+                  (it.restaurantName || "").toLowerCase().includes(q)
+                );
+              }).length === items.length && (
+                <div className="col-span-full text-center text-muted-foreground">
+                  No items match your search
                 </div>
-              ))}
+              )}
           </div>
         </div>
       </section>
