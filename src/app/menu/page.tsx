@@ -150,8 +150,7 @@ export default function MenuPage() {
               All <span className="text-secondary">Items</span>
             </h1>
             <p className="text-lg md:text-xl text-foreground/70 mb-8">
-              Browse every available item across restaurants. Freshly updated in
-              real time from our partners.
+              Browse every available item across restaurants. Freshly updated!
             </p>
           </div>
         </div>

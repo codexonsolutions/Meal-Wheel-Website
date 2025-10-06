@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useContext, useMemo, useReducer, ReactNode } from "react";
+import { useToast } from "@/components/ui/toast";
 
 export type CartItem = {
   id: string;
@@ -84,6 +85,7 @@ const CartContext = createContext<{
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, { open: false, items: [] });
+  const { toast } = useToast();
 
   const api = useMemo(() => {
     const totalQty = state.items.reduce((sum, i) => sum + i.qty, 0);
@@ -93,7 +95,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
       open: () => dispatch({ type: "OPEN" }),
       close: () => dispatch({ type: "CLOSE" }),
       toggle: () => dispatch({ type: "TOGGLE" }),
-      add: (item: Omit<CartItem, "qty"> & { qty?: number }) => dispatch({ type: "ADD", payload: item }),
+      add: (item: Omit<CartItem, "qty"> & { qty?: number }) => {
+        // Determine if this will create a new line item
+        const raw: any = item as any;
+        const baseId = String(raw.id ?? "");
+        const cartId = raw.variantKey ? `${baseId}::${raw.variantKey}` : baseId;
+        const exists = state.items.some((i) => i.id === cartId);
+
+        dispatch({ type: "ADD", payload: item });
+
+        // Toast only when a new line item is created
+        if (!exists) {
+          try {
+            const name = raw?.name ? String(raw.name) : "Item";
+            toast({ title: "Added to cart", description: `${name} has been added.` });
+          } catch {
+            // no-op toast failures
+          }
+        }
+      },
       remove: (id: string) => dispatch({ type: "REMOVE", payload: { id } }),
       increment: (id: string) => dispatch({ type: "INCREMENT", payload: { id } }),
       decrement: (id: string) => dispatch({ type: "DECREMENT", payload: { id } }),
@@ -101,7 +121,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       totalQty,
       subtotal,
     };
-  }, [state]);
+  }, [state, toast]);
 
   return <CartContext.Provider value={api}>{children}</CartContext.Provider>;
 }

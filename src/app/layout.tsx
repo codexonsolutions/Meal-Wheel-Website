@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CartProvider } from "@/components/cart/cart-context";
+import { ToastProvider } from "@/components/ui/toast";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { Analytics } from "@vercel/analytics/react";
 import CountdownModal from "@/components/countdown-modal";
@@ -47,14 +48,16 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${outfit.variable} font-sans antialiased`}>
-        <CartProvider>
-          <CountdownModal />
-          {/* <BetaBanner /> */}
-          <Header />
-          <Suspense fallback={null}>{children}</Suspense>
-          <Footer />
-          <CartDrawer />
-        </CartProvider>
+        <ToastProvider>
+          <CartProvider>
+            <CountdownModal />
+            {/* <BetaBanner /> */}
+            <Header />
+            <Suspense fallback={null}>{children}</Suspense>
+            <Footer />
+            <CartDrawer />
+          </CartProvider>
+        </ToastProvider>
         <Analytics />
       </body>
     </html>
