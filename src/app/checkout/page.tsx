@@ -5,6 +5,10 @@ import { SafeImage } from "@/components/ui/safe-image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/cart-context";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function CheckoutPage() {
   const { state, subtotal, clear } = useCart();
@@ -64,12 +68,12 @@ export default function CheckoutPage() {
           notes: notes.trim() || undefined,
         },
         items: state.items.map((item) => ({
-          id: (item.id.includes('::') ? item.id.split('::')[0] : item.id),
+          id: item.id.includes("::") ? item.id.split("::")[0] : item.id,
           quantity: item.qty,
-          selectedOptions: item.selectedOptions?.map(g => ({
+          selectedOptions: item.selectedOptions?.map((g) => ({
             group: g.group,
-            options: g.options.map(o => ({ name: o.name, price: o.price }))
-          }))
+            options: g.options.map((o) => ({ name: o.name, price: o.price })),
+          })),
         })),
         deliveryFee: deliveryFee,
       };
@@ -134,7 +138,7 @@ export default function CheckoutPage() {
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               <span className="text-secondary">Checkout</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8">
+            <p className="text-lg md:text-xl text-foreground/70 mb-8">
               Complete your order details below
             </p>
           </div>
@@ -156,15 +160,16 @@ export default function CheckoutPage() {
                       ? `Thanks for your order.`
                       : "Thanks for your order!"}
                   </p>
-                  <button
-                    className="mt-4 inline-flex items-center justify-center px-6 py-2 bg-secondary text-white rounded-lg font-medium hover:bg-secondary/90 transition-colors"
+                  <Button
+                    className="mt-4"
+                    size="lg"
                     onClick={() => {
                       setShowSuccess(false);
                       router.push("/");
                     }}
                   >
                     OK
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -181,75 +186,88 @@ export default function CheckoutPage() {
 
           <div className="flex flex-col lg:grid lg:grid-cols-[1fr_400px] gap-8 items-start">
             {/* Order Summary */}
-            <aside className="order-1 lg:order-2 bg-white rounded-2xl shadow-lg border border-gray-100 lg:sticky lg:top-24">
-              <div className="px-6 py-4 border-b border-gray-100">
-                <h2 className="text-xl font-bold text-gray-900">
-                  Order Summary
-                </h2>
-              </div>
-              <div className="p-6 space-y-4">
-                {state.items.length === 0 ? (
-                  <p className="text-sm text-gray-500">Your cart is empty.</p>
-                ) : (
-                  state.items.map((item) => (
-                    <div key={item.id} className="flex items-center gap-3">
-                      {item.image ? (
-                        <div className="relative h-12 w-12 overflow-hidden rounded-lg border border-gray-200">
-                          <SafeImage
-                            src={item.image}
-                            alt={item.name}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                      ) : (
-                        <div className="h-12 w-12 rounded-lg bg-gray-100" />
-                      )}
-                      <div className="flex-1">
-                        <div className="text-sm font-medium text-gray-900">
-                          {item.name}
-                        </div>
-                        {item.selectedOptions && item.selectedOptions.length > 0 && (
-                          <div className="text-xs text-gray-500 mt-1 space-y-1">
-                            {item.selectedOptions.map((g) => (
-                              <div key={g.group}>
-                                <span className="font-medium">{g.group}:</span> {g.options.map(o => `${o.name}${o.price ? ` (+Rs. ${o.price.toFixed(2)})` : ''}`).join(', ')}
-                              </div>
-                            ))}
+            <aside className="order-1 lg:order-2 lg:sticky lg:top-24">
+              <Card>
+                <CardHeader className="border-b">
+                  <CardTitle className="text-xl">Order Summary</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {state.items.length === 0 ? (
+                    <p className="text-sm text-gray-500">Your cart is empty.</p>
+                  ) : (
+                    state.items.map((item) => (
+                      <div key={item.id} className="flex items-center gap-3">
+                        {item.image ? (
+                          <div className="relative h-12 w-12 overflow-hidden rounded-lg border border-gray-200">
+                            <SafeImage
+                              src={item.image}
+                              alt={item.name}
+                              fill
+                              className="object-cover"
+                            />
                           </div>
+                        ) : (
+                          <div className="h-12 w-12 rounded-lg bg-gray-100" />
                         )}
-                        <div className="text-xs text-gray-500 mt-1">
-                          Qty: {item.qty}
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-gray-900">
+                            {item.name}
+                          </div>
+                          {item.selectedOptions &&
+                            item.selectedOptions.length > 0 && (
+                              <div className="text-xs text-gray-500 mt-1 space-y-1">
+                                {item.selectedOptions.map((g) => (
+                                  <div key={g.group}>
+                                    <span className="font-medium">
+                                      {g.group}:
+                                    </span>{" "}
+                                    {g.options
+                                      .map(
+                                        (o) =>
+                                          `${o.name}${
+                                            o.price
+                                              ? ` (+Rs. ${o.price.toFixed(2)})`
+                                              : ""
+                                          }`
+                                      )
+                                      .join(", ")}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          <div className="text-xs text-gray-500 mt-1">
+                            Qty: {item.qty}
+                          </div>
+                        </div>
+                        <div className="text-sm font-bold text-secondary">
+                          Rs. {(item.qty * item.price).toFixed(2)}
                         </div>
                       </div>
-                      <div className="text-sm font-bold text-secondary">
-                        Rs. {(item.qty * item.price).toFixed(2)}
-                      </div>
-                    </div>
-                  ))
-                )}
+                    ))
+                  )}
 
-                <div className="mt-6 border-t border-gray-200 pt-4 space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium">
-                      Rs. {subtotal.toFixed(2)}
-                    </span>
+                  <div className="mt-6 border-t border-gray-200 pt-4 space-y-3">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Subtotal</span>
+                      <span className="font-medium">
+                        Rs. {subtotal.toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Delivery Fee</span>
+                      <span className="font-medium">
+                        Rs. {deliveryFee.toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200">
+                      <span>Total</span>
+                      <span className="text-secondary">
+                        Rs. {total.toFixed(2)}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Delivery Fee</span>
-                    <span className="font-medium">
-                      Rs. {deliveryFee.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200">
-                    <span>Total</span>
-                    <span className="text-secondary">
-                      Rs. {total.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </aside>
 
             {/* Form */}
@@ -258,71 +276,69 @@ export default function CheckoutPage() {
               className="order-2 lg:order-1 space-y-6"
             >
               {/* Personal Information */}
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
-                <div className="px-6 py-4 border-b border-gray-100">
-                  <h2 className="text-xl font-bold text-gray-900">
+              <Card>
+                <CardHeader className="border-b">
+                  <CardTitle className="text-xl">
                     Personal Information
-                  </h2>
-                </div>
-                <div className="p-6 grid gap-4 md:grid-cols-2">
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="grid gap-4 md:grid-cols-2">
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-medium text-gray-700">
                       Full Name <span className="text-secondary">*</span>
                     </label>
-                    <input
+                    <Input
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       required
                       placeholder="Enter your full name"
-                      className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors"
+                      className="h-12 text-base"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-medium text-gray-700">
                       Email Address <span className="text-secondary">*</span>
                     </label>
-                    <input
+                    <Input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       placeholder="Enter your email"
-                      className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors"
+                      className="h-12 text-base"
                     />
                   </div>
                   <div className="flex flex-col gap-2 md:col-span-2">
                     <label className="text-sm font-medium text-gray-700">
                       Phone Number <span className="text-secondary">*</span>
                     </label>
-                    <input
+                    <Input
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       required
                       placeholder="Enter your phone number"
-                      className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors"
+                      className="h-12 text-base"
                     />
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
 
               {/* Delivery Address */}
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
-                <div className="px-6 py-4 border-b border-gray-100">
-                  <h2 className="text-xl font-bold text-gray-900">
-                    Delivery Address
-                  </h2>
-                </div>
-                <div className="p-6 grid gap-4">
+              <Card>
+                <CardHeader className="border-b">
+                  <CardTitle className="text-xl">Delivery Address</CardTitle>
+                </CardHeader>
+                <CardContent className="grid gap-4">
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-medium text-gray-700">
                       Street Address <span className="text-secondary">*</span>
                     </label>
-                    <input
+                    <Input
                       value={street}
                       onChange={(e) => setStreet(e.target.value)}
                       required
                       placeholder="Enter your street address"
-                      className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors"
+                      className="h-12 text-base"
                     />
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
@@ -330,24 +346,24 @@ export default function CheckoutPage() {
                       <label className="text-sm font-medium text-gray-700">
                         City <span className="text-secondary">*</span>
                       </label>
-                      <input
+                      <Input
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         required
                         placeholder="Enter your city"
-                        className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors"
+                        className="h-12 text-base"
                       />
                     </div>
                     <div className="flex flex-col gap-2">
                       <label className="text-sm font-medium text-gray-700">
-                        Postal Code <span className="text-secondary">*</span>
+                        Postal Code
                       </label>
-                      <input
+                      <Input
                         value={postal}
                         onChange={(e) => setPostal(e.target.value)}
                         required
                         placeholder="Enter postal code"
-                        className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors"
+                        className="h-12 text-base"
                       />
                     </div>
                   </div>
@@ -355,30 +371,28 @@ export default function CheckoutPage() {
                     <label className="text-sm font-medium text-gray-700">
                       Special Instructions
                     </label>
-                    <textarea
+                    <Textarea
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       placeholder="Any special delivery instructions..."
-                      className="px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-colors min-h-[90px] resize-none"
+                      className="min-h-[90px]"
                     />
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
 
               {/* Payment Method */}
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
-                <div className="px-6 py-4 border-b border-gray-100">
-                  <h2 className="text-xl font-bold text-gray-900">
-                    Payment Method
-                  </h2>
-                </div>
-                <div className="p-6">
+              <Card>
+                <CardHeader className="border-b">
+                  <CardTitle className="text-xl">Payment Method</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <p className="text-sm text-gray-600">
                     Payment will be collected upon delivery. We accept cash and
                     card payments.
                   </p>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
 
               {error && (
                 <div className="p-4 rounded-lg bg-red-50 border border-red-200">
@@ -387,13 +401,15 @@ export default function CheckoutPage() {
               )}
 
               <div className="flex justify-end">
-                <button
+                <Button
+                  className="w-full"
                   type="submit"
+                  size="lg"
+                  variant={"outline"}
                   disabled={isLoading || state.items.length === 0}
-                  className="px-8 py-3 bg-secondary text-white rounded-lg font-medium hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {isLoading ? "Placing Order..." : "Place Order"}
-                </button>
+                </Button>
               </div>
             </form>
           </div>
