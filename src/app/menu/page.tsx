@@ -165,12 +165,12 @@ export default function MenuPage() {
                 />
               ))}
             {error && !loading && (
-              <div className="col-span-full text-center text-sm text-red-500">
+              <div className="col-span-full text-center text-lg text-red-500">
                 {error}
               </div>
             )}
             {!loading && !error && items.length === 0 && (
-              <div className="col-span-full text-center text-sm text-muted-foreground">
+              <div className="col-span-full text-center text-lg text-muted-foreground">
                 No items available
               </div>
             )}
