@@ -25,7 +25,7 @@ export function Footer() {
                 href="https://wa.me/923188868811"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-hover-mix text-foreground hover:bg-secondary hover:text-background transition-colors"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-primary text-primary hover:bg-secondary hover:text-background transition-colors"
               >
                 <MessageCircle className="h-4 w-4" />
               </Link>
@@ -33,7 +33,7 @@ export function Footer() {
                 href="https://www.instagram.com/mealwheelpk/?utm_source=ig_web_button_share_sheet"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-hover-mix text-foreground hover:bg-secondary hover:text-background transition-colors"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-primary text-primary hover:bg-secondary hover:text-background transition-colors"
               >
                 <Instagram className="h-4 w-4" />
               </Link>
@@ -102,7 +102,7 @@ export function Footer() {
               onClick={() => {
                 router.push("/menu");
               }}
-              variant="outline"
+              variant="secondary"
             >
               View Menu
             </Button>

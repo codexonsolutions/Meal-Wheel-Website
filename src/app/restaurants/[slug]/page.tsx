@@ -136,7 +136,6 @@ export default function RestaurantPage({ params }: Params) {
       restaurantId: restaurant?._id,
       selectedOptions,
       qty: 1,
-      variantKey,
     });
     setDialogItem(null);
   }

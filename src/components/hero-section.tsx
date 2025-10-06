@@ -20,11 +20,12 @@ export function HeroSection() {
             {/* Left Side - Text Content */}
             <div className="space-y-6 md:space-y-8">
               <div className="space-y-4 md:space-y-6">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-center sm:text-left">
                   Delicious <span className="text-primary">food</span>,{" "}
                   <span className="text-primary">delivered</span> fast
                 </h1>
-                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-foreground/70 max-w-2xl leading-relaxed">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-foreground/70 max-w-2xl leading-relaxed text-center sm:text-left">
+                  {" "}
                   Order from your favorite restaurants and get fresh, hot meals
                   delivered right to your doorstep in minutes.
                 </p>
@@ -52,7 +53,8 @@ export function HeroSection() {
                 </Button>
               </div>
 
-              <div className="flex flex-row items-center gap-4 sm:gap-6 pt-4 md:pt-6">
+              <div className="flex flex-row items-center gap-4 sm:gap-6 pt-4 md:pt-6 justify-center sm:justify-start">
+                {" "}
                 <div className="flex items-center gap-2">
                   <MapPin className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                   <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium">
