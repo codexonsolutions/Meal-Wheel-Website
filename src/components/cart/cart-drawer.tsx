@@ -170,6 +170,7 @@ export function CartDrawer() {
               </Button>
               <Button
                 className="flex-1"
+                variant="outline"
                 onClick={() => {
                   close();
                   router.push("/checkout");

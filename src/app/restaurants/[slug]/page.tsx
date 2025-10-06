@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { SafeImage } from "@/components/ui/safe-image";
 import { useCart } from "@/components/cart/cart-context";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   CustomizationDialog,
   type Customization,
@@ -147,7 +149,7 @@ export default function RestaurantPage({ params }: Params) {
           <div className="flex items-center gap-4">
             <Link
               href="/restaurants"
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+              className="p-2 hover:bg-gray-100 border border-primary rounded-full text-primary transition-colors cursor-pointer"
             >
               <ArrowLeft className="h-5 w-5" />
             </Link>
@@ -206,45 +208,41 @@ export default function RestaurantPage({ params }: Params) {
                 {featured.length > 0 && (
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold mb-6">Featured Items</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
                       {featured.map((f) => (
-                        <div
+                        <Card
                           key={f._id}
-                          className="group bg-white rounded-2xl transition-all duration-300 overflow-hidden border border-gray-100"
+                          className="p-0 overflow-hidden hover:border-primary transition-border duration-100"
                         >
-                          <div className="relative aspect-[4/3] overflow-hidden">
+                          <div className="relative aspect-[4/3]">
                             <SafeImage
                               src={f.imageUrl || "/placeholder.jpg"}
                               alt={f.name}
                               fill
-                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                              className="object-cover"
                             />
                           </div>
-                          <div className="p-4">
-                            <div className="mb-3">
-                              <h3 className="font-bold text-sm md:text-base leading-tight mb-1">
-                                {f.name}
-                              </h3>
-                              <p className="text-xs text-muted-foreground">
-                                {f.category}
-                              </p>
+                          <CardContent className="py-3 px-4">
+                            <div className="text-sm font-semibold truncate mb-2">
+                              {f.name}
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-sm md:text-lg font-bold text-secondary">
+                              <Badge variant="secondary">{f.category}</Badge>
+                              <span className="text-sm font-bold text-secondary">
                                 Rs. {f.price.toFixed(2)}
                               </span>
+                            </div>
+                            <div className="mt-3 flex justify-end">
                               <Button
                                 onClick={() => openAdd(f)}
                                 size="sm"
-                                variant="default"
-                                className="bg-secondary hover:bg-secondary/90 text-white"
                                 aria-label={`Add ${f.name} to cart`}
                               >
-                                <Plus className="h-4 w-4 mr-2" /> Add
+                                <Plus className="h-4 w-4 mr-1" /> Add
                               </Button>
                             </div>
-                          </div>
-                        </div>
+                          </CardContent>
+                        </Card>
                       ))}
                     </div>
                   </div>
@@ -270,45 +268,42 @@ export default function RestaurantPage({ params }: Params) {
                 {activeCategory && (
                   <div>
                     <h3 className="text-xl font-bold mb-6">{activeCategory}</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
                       {activeItems.map((it) => (
-                        <div
+                        <Card
                           key={it._id}
-                          className="group bg-white rounded-2xl hover:border-secondary transition-all duration-300 overflow-hidden border border-gray-100"
+                          className="p-0 overflow-hidden transition-border duration-100"
                         >
-                          <div className="relative aspect-[4/3] overflow-hidden">
+                          <div className="relative aspect-[4/3]">
                             <SafeImage
                               src={it.imageUrl || "/placeholder.jpg"}
                               alt={it.name}
                               fill
-                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                              className="object-cover"
                             />
                           </div>
-                          <div className="p-4">
-                            <div className="mb-3">
-                              <h4 className="font-bold text-sm md:text-base leading-tight mb-1">
-                                {it.name}
-                              </h4>
-                              <p className="text-xs text-muted-foreground">
-                                {it.category}
-                              </p>
+                          <CardContent className="py-3 px-4">
+                            <div className="text-sm font-semibold truncate mb-2">
+                              {it.name}
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-sm md:text-lg font-bold text-secondary">
+                              <Badge variant="outline">{it.category}</Badge>
+                              <span className="text-sm font-bold text-secondary">
                                 Rs. {it.price.toFixed(2)}
                               </span>
+                            </div>
+                            <div className="mt-3 flex">
                               <Button
                                 onClick={() => openAdd(it)}
                                 size="sm"
-                                variant="default"
-                                className="bg-secondary hover:bg-secondary/90 text-white"
+                                className="w-full"
                                 aria-label={`Add ${it.name} to cart`}
                               >
-                                <Plus className="h-4 w-4 mr-2" /> Add
+                                <Plus className="h-4 w-4 mr-1" /> Add
                               </Button>
                             </div>
-                          </div>
-                        </div>
+                          </CardContent>
+                        </Card>
                       ))}
                       {activeItems.length === 0 && (
                         <div className="text-sm text-muted-foreground col-span-full">

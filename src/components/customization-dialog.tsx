@@ -1,9 +1,21 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 export type CustomizationOption = { name: string; price: number };
-export type Customization = { name: string; required: boolean; options: CustomizationOption[] };
+export type Customization = {
+  name: string;
+  required: boolean;
+  options: CustomizationOption[];
+};
 
 export function CustomizationDialog({
   open,
@@ -16,7 +28,9 @@ export function CustomizationDialog({
   itemName: string;
   customizations?: Customization[];
   onClose: () => void;
-  onConfirm: (selected: { group: string; options: { name: string; price: number }[] }[]) => void;
+  onConfirm: (
+    selected: { group: string; options: { name: string; price: number }[] }[]
+  ) => void;
 }) {
   const [selected, setSelected] = useState<Record<string, string | null>>({});
   const [enabled, setEnabled] = useState<Record<string, boolean>>({});
@@ -69,35 +83,44 @@ export function CustomizationDialog({
         if (!opt) return null;
         return { group: g.name, options: [opt] };
       })
-      .filter(Boolean) as { group: string; options: { name: string; price: number }[] }[];
+      .filter(Boolean) as {
+      group: string;
+      options: { name: string; price: number }[];
+    }[];
     onConfirm(selectedOptions);
   };
 
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative w-full max-w-lg mx-4 rounded-lg border bg-white">
-        <div className="p-4 border-b">
-          <h3 className="text-lg font-semibold">Customize {itemName}</h3>
-        </div>
-        <div className="p-4 space-y-4 max-h-[70vh] overflow-auto">
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Customize {itemName}</DialogTitle>
+          <DialogDescription>
+            Choose options to personalize your order.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 max-h-[60vh] overflow-auto pr-1">
           {(customizations || []).length === 0 ? (
-            <p className="text-sm text-gray-600">No customizations available for this item.</p>
+            <p className="text-sm text-muted-foreground">
+              No customizations available for this item.
+            </p>
           ) : (
             (customizations || []).map((group) => (
               <div key={group.name} className="border rounded-md p-3">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="font-medium">{group.name}</div>
                   {group.required ? (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700">Required</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700">
+                      Required
+                    </span>
                   ) : (
                     <label className="text-xs inline-flex items-center gap-2">
                       <input
                         type="checkbox"
                         checked={!!enabled[group.name]}
-                        onChange={(e) => setOptionalEnabled(group.name, e.target.checked)}
+                        onChange={(e) =>
+                          setOptionalEnabled(group.name, e.target.checked)
+                        }
                       />
                       Enable
                     </label>
@@ -106,7 +129,10 @@ export function CustomizationDialog({
                 {(group.required || enabled[group.name]) && (
                   <div className="space-y-2">
                     {group.options.map((opt) => (
-                      <label key={opt.name} className="flex items-center gap-2 text-sm">
+                      <label
+                        key={opt.name}
+                        className="flex items-center gap-2 text-sm"
+                      >
                         <input
                           type="radio"
                           name={`opt-${group.name}`}
@@ -125,15 +151,24 @@ export function CustomizationDialog({
             ))
           )}
         </div>
-        <div className="p-4 flex justify-between gap-2 items-center">
-          <div className="text-sm text-foreground/70">Extra: Rs. {extraPrice.toFixed(2)}</div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={onClose}>Cancel</Button>
-            <Button onClick={handleConfirm}>Add to Cart</Button>
+        <DialogFooter>
+          <div className="mr-auto text-sm text-foreground/70">
+            Extra: Rs. {extraPrice.toFixed(2)}
           </div>
-        </div>
-      </div>
-    </div>
+          <div className="flex gap-2">
+            <Button className="flex-1" variant="secondary" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button
+              className="flex-1"
+              variant="outline"
+              onClick={handleConfirm}
+            >
+              Add to Cart
+            </Button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
-
