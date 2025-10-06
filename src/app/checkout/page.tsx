@@ -186,7 +186,7 @@ export default function CheckoutPage() {
 
           <div className="flex flex-col lg:grid lg:grid-cols-[1fr_400px] gap-8 items-start">
             {/* Order Summary */}
-            <aside className="order-1 lg:order-2 lg:sticky lg:top-24">
+            <aside className="w-full order-1 lg:order-2 lg:sticky lg:top-24">
               <Card>
                 <CardHeader className="border-b">
                   <CardTitle className="text-xl">Order Summary</CardTitle>
@@ -273,10 +273,10 @@ export default function CheckoutPage() {
             {/* Form */}
             <form
               onSubmit={placeOrder}
-              className="order-2 lg:order-1 space-y-6"
+              className="w-full order-2 lg:order-1 space-y-6"
             >
               {/* Personal Information */}
-              <Card>
+              <Card className="w-full">
                 <CardHeader className="border-b">
                   <CardTitle className="text-xl">
                     Personal Information
@@ -324,7 +324,7 @@ export default function CheckoutPage() {
               </Card>
 
               {/* Delivery Address */}
-              <Card>
+              <Card className="w-full">
                 <CardHeader className="border-b">
                   <CardTitle className="text-xl">Delivery Address</CardTitle>
                 </CardHeader>
@@ -382,7 +382,7 @@ export default function CheckoutPage() {
               </Card>
 
               {/* Payment Method */}
-              <Card>
+              <Card className="w-full">
                 <CardHeader className="border-b">
                   <CardTitle className="text-xl">Payment Method</CardTitle>
                 </CardHeader>

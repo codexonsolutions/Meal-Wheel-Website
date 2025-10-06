@@ -63,7 +63,7 @@ export function CartDrawer() {
       {/* Drawer */}
       <aside
         className={
-          "fixed top-0 right-0 h-full w-full sm:w-[420px] bg-background border-l border-border rounded-l-md shadow-xl transition-transform" +
+          "fixed top-0 right-0 h-full w-full sm:w-[420px] bg-background border-l border-border sm:rounded-l-md shadow-xl transition-transform" +
           (open ? " translate-x-0" : " translate-x-full")
         }
         style={{ zIndex: 70 }}
