@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import { useCart } from "@/components/cart/cart-context";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CustomizationDialog, type Customization } from "@/components/customization-dialog";
 import { SafeImage } from "@/components/ui/safe-image";
 
-interface MenuItemApi { _id: string; name: string; imageUrl: string; price: number; category: string; isFeatured?: boolean; restaurantName?: string; restaurantId?: string }
+interface MenuItemApi { _id: string; name: string; imageUrl: string; price: number; category: string; isFeatured?: boolean; restaurantName?: string; restaurantId?: string; customizations?: Customization[] }
 
 export default function MenuPage() {
   const { add } = useCart();
   const [items, setItems] = useState<MenuItemApi[]>([])
+  const [dialogItem, setDialogItem] = useState<MenuItemApi | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -35,6 +37,7 @@ export default function MenuPage() {
               price: typeof rec.price === 'number' ? rec.price : 0,
               category: typeof rec.category === 'string' ? rec.category : 'Unknown',
               isFeatured: !!rec.isFeatured,
+              customizations: Array.isArray((rec as any).customizations) ? (rec as any).customizations as any : undefined,
               restaurantName: (function () {
                 const r = rec.restaurant
                 if (typeof r === 'object' && r && 'name' in r && typeof (r as { name: unknown }).name === 'string') {
@@ -64,13 +67,23 @@ export default function MenuPage() {
   }, [])
 
   const handleAddToCart = (item: MenuItemApi) => {
+    setDialogItem(item);
+  };
+
+  const confirmAdd = (selectedOptions: { group: string; options: { name: string; price: number }[] }[]) => {
+    if (!dialogItem) return;
+    const variantKey = selectedOptions.map(g => `${g.group}:${g.options.map(o=>o.name).sort().join('|')}`).sort().join(';')
     add({
-      id: item._id,
-      name: item.name,
-      price: item.price,
-      image: item.imageUrl || "/placeholder.jpg",
-      restaurantId: item.restaurantId
+      id: dialogItem._id,
+      name: dialogItem.name,
+      price: dialogItem.price,
+      image: dialogItem.imageUrl || "/placeholder.jpg",
+      restaurantId: dialogItem.restaurantId,
+      selectedOptions,
+      qty: 1,
+      variantKey,
     });
+    setDialogItem(null);
   };
 
   return (
@@ -142,6 +155,13 @@ export default function MenuPage() {
           </div>
         </div>
       </section>
+      <CustomizationDialog
+        open={!!dialogItem}
+        itemName={dialogItem?.name || ''}
+        customizations={dialogItem?.customizations}
+        onClose={() => setDialogItem(null)}
+        onConfirm={confirmAdd}
+      />
     </div>
   );
 }
