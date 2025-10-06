@@ -149,27 +149,28 @@ export default function MenuPage() {
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               All <span className="text-secondary">Items</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8">
+            <p className="text-lg md:text-xl text-foreground/70 mb-8">
               Browse every available item across restaurants. Freshly updated in
               real time from our partners.
             </p>
-            <div className="max-w-2xl mx-auto">
-              <div className="flex items-center gap-2">
-                <Input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search by name, category, or restaurant"
-                  aria-label="Search menu items"
-                  className="h-12 text-base"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </section>
-
+      <section className="py-4 md:py-6">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center gap-2 m-[25px]">
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by name, category, or restaurant"
+              aria-label="Search menu items"
+              className="h-12 text-base"
+            />
+          </div>
+        </div>
+      </section>
       {/* Items Grid */}
-      <section className="py-16">
+      <section className="pb-16">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {loading &&
@@ -189,7 +190,8 @@ export default function MenuPage() {
                 No items available
               </div>
             )}
-            {!loading && !error &&
+            {!loading &&
+              !error &&
               items
                 .filter((it) => {
                   const q = query.trim().toLowerCase();
@@ -203,54 +205,44 @@ export default function MenuPage() {
                 .map((item) => (
                   <Card
                     key={item._id}
-                    className="p-0 overflow-hidden hover:border-primary transition-border duration-100"
+                    className="p-0 overflow-hidden transition-border duration-100"
                   >
-                    <div className="relative aspect-[4/3] overflow-hidden">
+                    <div className="relative aspect-[4/3]">
                       <SafeImage
-                        src={
-                          item.imageUrl ||
-                          "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop&crop=center"
-                        }
+                        src={item.imageUrl || "/placeholder.jpg"}
                         alt={item.name}
                         fill
-                        className="object-cover transition-transform duration-300 hover:scale-105"
+                        className="object-cover"
                       />
                     </div>
                     <CardContent className="py-3 px-4">
-                      <div className="mb-2">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-base truncate">
-                            {item.name}
-                          </h3>
-                          {item.isFeatured && <Badge>Featured</Badge>}
-                        </div>
-                        <div className="flex flex-wrap gap-1.5">
-                          {item.category && (
-                            <Badge variant="secondary">{item.category}</Badge>
-                          )}
-                          {item.restaurantName && (
-                            <Badge variant="outline">{item.restaurantName}</Badge>
-                          )}
-                        </div>
+                      <div className="text-sm font-semibold truncate mb-2">
+                        {item.name}
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-lg font-bold text-secondary">
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline">{item.restaurantName}</Badge>
+                          <Badge variant="outline">{item.category}</Badge>
+                        </div>
+                        <span className="text-sm font-bold text-secondary">
                           Rs. {item.price.toFixed(2)}
                         </span>
+                      </div>
+                      <div className="mt-3 flex justify-end">
                         <Button
                           onClick={() => handleAddToCart(item)}
-                          size="sm"
-                          variant="default"
-                          className="bg-secondary hover:bg-secondary/90 text-white"
+                          className="w-[100%]"
+                          aria-label={`Add ${item.name} to cart`}
                         >
-                          <Plus className="h-4 w-4" />
-                          Add
+                          <Plus className="h-4 w-4 mr-1" /> Add
                         </Button>
                       </div>
                     </CardContent>
                   </Card>
                 ))}
-            {!loading && !error && items.length > 0 &&
+            {!loading &&
+              !error &&
+              items.length > 0 &&
               items.filter((it) => {
                 const q = query.trim().toLowerCase();
                 if (!q) return false;

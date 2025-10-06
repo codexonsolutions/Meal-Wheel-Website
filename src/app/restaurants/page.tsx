@@ -60,25 +60,32 @@ export default function RestaurantsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="py-8">
-        <div className="container">
-          <div className="max-w-2xl mx-auto">
-            <h1 className="text-2xl md:text-3xl font-semibold text-center mb-4">
-              Search Restaurants
+      <section className="relative py-16 md:py-24">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5" />
+        <div className="container relative z-10">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Our <span className="text-secondary">Restaurants</span>
             </h1>
-            <div className="flex items-center gap-2">
-              <Input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search by name or category"
-                aria-label="Search restaurants"
-                className="h-12 text-base"
-              />
-            </div>
+            <p className="text-lg md:text-xl text-foreground/70 mb-8">
+              Discover amazing flavors from partner restaurants.
+            </p>
           </div>
         </div>
       </section>
-
+      <section className="py-4 md:py-6">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center gap-2 m-[25px]">
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by name or category"
+              aria-label="Search menu items"
+              className="h-12 text-base"
+            />
+          </div>
+        </div>
+      </section>
       <section className="py-10">
         <div className="container">
           {loading && (
