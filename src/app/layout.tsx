@@ -1,4 +1,3 @@
-/* Root layout for Meal Wheel application */
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import { Suspense } from "react";
@@ -9,6 +8,7 @@ import { CartDrawer } from "@/components/cart/cart-drawer";
 import { Analytics } from "@vercel/analytics/react";
 import CountdownModal from "@/components/countdown-modal";
 import { BetaBanner } from "@/components/beta-banner";
+import Script from "next/script";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -31,6 +31,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Script id="crisp-chat" strategy="afterInteractive">
+          {`
+            window.$crisp = [];
+            window.CRISP_WEBSITE_ID = "c2334a78-30ea-428c-8082-08585251aab1";
+            (function() {
+              var d = document;
+              var s = d.createElement("script");
+              s.src = "https://client.crisp.chat/l.js";
+              s.async = 1;
+              d.getElementsByTagName("head")[0].appendChild(s);
+            })();
+          `}
+        </Script>
+      </head>
       <body className={`${outfit.variable} font-sans antialiased`}>
         <CartProvider>
           <CountdownModal />
