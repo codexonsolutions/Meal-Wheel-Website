@@ -156,7 +156,7 @@ export function CustomizationDialog({
             Extra: Rs. {extraPrice.toFixed(2)}
           </div>
           <div className="flex gap-2">
-            <Button className="flex-1" variant="secondary" onClick={onClose}>
+            <Button className="flex-1" variant="outline" onClick={onClose}>
               Cancel
             </Button>
             <Button

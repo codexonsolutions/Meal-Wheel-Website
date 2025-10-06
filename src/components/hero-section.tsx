@@ -45,7 +45,7 @@ export function HeroSection() {
                   onClick={() => {
                     router.push("/menu");
                   }}
-                  variant="secondary"
+                  variant="outline"
                   size="lg"
                   className="w-[150px]"
                 >
@@ -113,4 +113,3 @@ export function HeroSection() {
     </section>
   );
 }
-
