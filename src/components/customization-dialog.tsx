@@ -34,47 +34,52 @@ export function CustomizationDialog({
 }) {
   const [selected, setSelected] = useState<Record<string, string | null>>({});
   const [enabled, setEnabled] = useState<Record<string, boolean>>({});
+  const [frozenCustomizations, setFrozenCustomizations] =
+    useState(customizations);
 
   useEffect(() => {
-    if (!open) return;
-    const sel: Record<string, string | null> = {};
-    const en: Record<string, boolean> = {};
-    (customizations || []).forEach((g) => {
-      sel[g.name] = null;
-      if (!g.required) en[g.name] = false;
-    });
-    setSelected(sel);
-    setEnabled(en);
+    if (open) {
+      setFrozenCustomizations(customizations);
+      const sel: Record<string, string | null> = {};
+      const en: Record<string, boolean> = {};
+      (customizations || []).forEach((g) => {
+        sel[g.name] = null;
+        if (!g.required) en[g.name] = false;
+      });
+      setSelected(sel);
+      setEnabled(en);
+    }
   }, [open, customizations]);
 
   const extraPrice = useMemo(() => {
-    if (!customizations) return 0;
-    return customizations.reduce((sum, g) => {
+    if (!frozenCustomizations) return 0;
+    return frozenCustomizations.reduce((sum, g) => {
       const isEnabled = g.required || enabled[g.name];
       if (!isEnabled) return sum;
       const sel = selected[g.name];
       const opt = g.options.find((o) => o.name === sel);
       return sum + (opt?.price || 0);
     }, 0);
-  }, [customizations, selected, enabled]);
+  }, [frozenCustomizations, selected, enabled]);
 
   const chooseOption = (group: string, optionName: string) => {
     setSelected((prev) => ({ ...prev, [group]: optionName }));
   };
+
   const setOptionalEnabled = (group: string, on: boolean) => {
     setEnabled((prev) => ({ ...prev, [group]: on }));
     if (!on) setSelected((prev) => ({ ...prev, [group]: null }));
   };
 
   const handleConfirm = () => {
-    const groups = customizations || [];
+    const groups = frozenCustomizations || [];
     for (const g of groups) {
       if (g.required && !selected[g.name]) {
         alert(`Please select one option for ${g.name}`);
         return;
       }
     }
-    const selectedOptions = (customizations || [])
+    const selectedOptions = (frozenCustomizations || [])
       .map((g) => {
         const selName = selected[g.name];
         const isEnabled = g.required || enabled[g.name];
@@ -90,8 +95,14 @@ export function CustomizationDialog({
     onConfirm(selectedOptions);
   };
 
+  const handleClose = (isOpen: boolean) => {
+    if (!isOpen) {
+      onClose();
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Customize {itemName}</DialogTitle>
@@ -100,12 +111,12 @@ export function CustomizationDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 max-h-[60vh] overflow-auto pr-1">
-          {(customizations || []).length === 0 ? (
+          {(frozenCustomizations || []).length === 0 ? (
             <p className="text-sm text-muted-foreground">
               No customizations available for this item.
             </p>
           ) : (
-            (customizations || []).map((group) => (
+            (frozenCustomizations || []).map((group) => (
               <div key={group.name} className="border rounded-md p-3">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="font-medium">{group.name}</div>
