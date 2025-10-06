@@ -1,10 +1,13 @@
 "use client";
 import Link from "next/link";
 import { SafeImage } from "@/components/ui/safe-image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 
 interface RestaurantApi {
   _id: string;
@@ -25,6 +28,7 @@ export default function RestaurantsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -56,21 +60,26 @@ export default function RestaurantsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative py-16 md:py-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5" />
-        <div className="container relative z-10">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Our <span className="text-secondary">Restaurants</span>
+      <section className="py-8">
+        <div className="container">
+          <div className="max-w-2xl mx-auto">
+            <h1 className="text-2xl md:text-3xl font-semibold text-center mb-4">
+              Search Restaurants
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8">
-              Discover amazing flavors from partner restaurants.
-            </p>
+            <div className="flex items-center gap-2">
+              <Input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search by name or category"
+                aria-label="Search restaurants"
+                className="h-12 text-base"
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16">
+      <section className="py-10">
         <div className="container">
           {loading && (
             <div
@@ -96,58 +105,72 @@ export default function RestaurantsPage() {
             </div>
           )}
           {!loading && !error && restaurants.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {restaurants.map((r) => {
-                const slug = slugify(r.name);
-                return (
-                  <Link
-                    key={r._id}
-                    href={`/restaurants/${slug}`}
-                    className="group block"
-                  >
-                    <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
-                      <div className="relative h-48 md:h-56 overflow-hidden">
-                        <SafeImage
-                          src={r.imageUrl || "/placeholder.jpg"}
-                          alt={r.name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                      </div>
-                      <div className="p-6">
-                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-secondary transition-colors mb-3">
-                          {r.name}
-                        </h3>
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {r.categories.slice(0, 3).map((c) => (
-                            <span
-                              key={c}
-                              className="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full font-medium"
-                            >
-                              {c}
-                            </span>
-                          ))}
-                          {r.categories.length > 3 && (
-                            <span className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">
-                              +{r.categories.length - 3} more
-                            </span>
-                          )}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {restaurants
+                .filter((r) => {
+                  const q = query.trim().toLowerCase();
+                  if (!q) return true;
+                  return (
+                    r.name.toLowerCase().includes(q) ||
+                    r.categories.some((c) => c.toLowerCase().includes(q))
+                  );
+                })
+                .map((r) => {
+                  const slug = slugify(r.name);
+                  return (
+                    <Link
+                      key={r._id}
+                      href={`/restaurants/${slug}`}
+                      className="block"
+                    >
+                      <Card className="p-0 overflow-hidden hover:border-primary transition-border duration-100">
+                        <div className="relative aspect-[4/3]">
+                          <SafeImage
+                            src={r.imageUrl || "/placeholder.jpg"}
+                            alt={r.name}
+                            fill
+                            className="object-cover"
+                          />
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-500">
-                            {r.categories.length} categories
-                          </span>
-                          <div className="flex items-center gap-2 text-secondary font-medium group-hover:gap-3 transition-all">
-                            <span>View Menu</span>
-                            <ArrowRight className="h-4 w-4" />
+                        <CardContent className="py-3 px-4">
+                          <div className="text-sm font-semibold truncate mb-2">
+                            {r.name}
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
+                          <div className="flex flex-wrap gap-1.5 mb-2">
+                            {r.categories.slice(0, 2).map((c) => (
+                              <Badge key={c} variant="secondary">
+                                {c}
+                              </Badge>
+                            ))}
+                            {r.categories.length > 2 && (
+                              <Badge variant="outline">
+                                +{r.categories.length - 2}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="flex items-center justify-between text-sm text-muted-foreground">
+                            <span>{r.categories.length} categories</span>
+                            <span className="inline-flex items-center gap-1 text-primary">
+                              View Menu <ArrowRight className="h-3 w-3" />
+                            </span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  );
+                })}
+              {restaurants.filter((r) => {
+                const q = query.trim().toLowerCase();
+                if (!q) return false;
+                return !(
+                  r.name.toLowerCase().includes(q) ||
+                  r.categories.some((c) => c.toLowerCase().includes(q))
                 );
-              })}
+              }).length === restaurants.length && (
+                <div className="col-span-full text-center text-muted-foreground">
+                  No restaurants match your search
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -179,7 +179,7 @@ export default function RestaurantPage({ params }: Params) {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="hidden">
                 <div className="sticky top-4">
-                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                  <div className="bg-white rounded-2xl overflow-hidden">
                     <div className="relative h-48">
                       <SafeImage
                         src={restaurant.imageUrl || "/placeholder.jpg"}
@@ -210,7 +210,7 @@ export default function RestaurantPage({ params }: Params) {
                       {featured.map((f) => (
                         <div
                           key={f._id}
-                          className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+                          className="group bg-white rounded-2xl transition-all duration-300 overflow-hidden border border-gray-100"
                         >
                           <div className="relative aspect-[4/3] overflow-hidden">
                             <SafeImage
@@ -274,7 +274,7 @@ export default function RestaurantPage({ params }: Params) {
                       {activeItems.map((it) => (
                         <div
                           key={it._id}
-                          className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+                          className="group bg-white rounded-2xl hover:border-secondary transition-all duration-300 overflow-hidden border border-gray-100"
                         >
                           <div className="relative aspect-[4/3] overflow-hidden">
                             <SafeImage
