@@ -63,7 +63,14 @@ export default function CheckoutPage() {
           postal: postal.trim(),
           notes: notes.trim() || undefined,
         },
-        items: state.items.map((item) => ({ id: item.id, quantity: item.qty })),
+        items: state.items.map((item) => ({
+          id: (item.id.includes('::') ? item.id.split('::')[0] : item.id),
+          quantity: item.qty,
+          selectedOptions: item.selectedOptions?.map(g => ({
+            group: g.group,
+            options: g.options.map(o => ({ name: o.name, price: o.price }))
+          }))
+        })),
         deliveryFee: deliveryFee,
       };
       // restaurant field no longer required; backend derives restaurants from item docs
@@ -202,7 +209,16 @@ export default function CheckoutPage() {
                         <div className="text-sm font-medium text-gray-900">
                           {item.name}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        {item.selectedOptions && item.selectedOptions.length > 0 && (
+                          <div className="text-xs text-gray-500 mt-1 space-y-1">
+                            {item.selectedOptions.map((g) => (
+                              <div key={g.group}>
+                                <span className="font-medium">{g.group}:</span> {g.options.map(o => `${o.name}${o.price ? ` (+Rs. ${o.price.toFixed(2)})` : ''}`).join(', ')}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        <div className="text-xs text-gray-500 mt-1">
                           Qty: {item.qty}
                         </div>
                       </div>

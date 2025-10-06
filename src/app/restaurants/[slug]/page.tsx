@@ -8,7 +8,9 @@ import { Plus, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 interface RestaurantApi { _id: string; name: string; imageUrl: string; categories: string[] }
-interface ItemApi { _id: string; name: string; imageUrl: string; price: number; isFeatured: boolean; category: string; restaurant: string }
+interface CustomizationOption { name: string; price: number }
+interface Customization { name: string; required: boolean; options: CustomizationOption[] }
+interface ItemApi { _id: string; name: string; imageUrl: string; price: number; isFeatured: boolean; category: string; restaurant: string; customizations?: Customization[] }
 
 interface Params { params: { slug: string } }
 
@@ -24,6 +26,11 @@ export default function RestaurantPage({ params }: Params) {
   const [activeCategory, setActiveCategory] = useState<string>("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [dialogItem, setDialogItem] = useState<ItemApi | null>(null)
+  // For each group: selected option name or null
+  const [selected, setSelected] = useState<Record<string, string | null>>({})
+  // For optional groups: whether enabled; required groups are implicitly enabled
+  const [enabled, setEnabled] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
     let active = true
@@ -70,8 +77,47 @@ export default function RestaurantPage({ params }: Params) {
   const featured = items.filter(i => i.isFeatured).slice(0, 8)
   const activeItems = items.filter(i => i.category === activeCategory)
 
-  function handleAdd(item: ItemApi) {
-    add({ id: item._id, name: item.name, price: item.price, image: item.imageUrl, restaurantId: restaurant?._id })
+  function openAdd(item: ItemApi) {
+    const sel: Record<string, string | null> = {}
+    const en: Record<string, boolean> = {}
+    ;(item.customizations || []).forEach(g => {
+      sel[g.name] = null
+      if (!g.required) en[g.name] = false
+    })
+    setSelected(sel)
+    setEnabled(en)
+    setDialogItem(item)
+  }
+  function setOptionalEnabled(group: string, on: boolean) {
+    setEnabled(prev => ({ ...prev, [group]: on }))
+    if (!on) setSelected(prev => ({ ...prev, [group]: null }))
+  }
+  function chooseOption(group: string, optionName: string) {
+    setSelected(prev => ({ ...prev, [group]: optionName }))
+  }
+  function confirmAdd() {
+    if (!dialogItem) return
+    const groups = dialogItem.customizations || []
+    for (const g of groups) {
+      if (g.required) {
+        const sel = selected[g.name]
+        if (!sel) {
+          alert(`Please select one option for ${g.name}`)
+          return
+        }
+      }
+    }
+    const selectedOptions = groups.map(g => {
+      const selName = selected[g.name]
+      const isEnabled = g.required || enabled[g.name]
+      if (!isEnabled || !selName) return null
+      const opt = g.options.find(o => o.name === selName)
+      if (!opt) return null
+      return { group: g.name, options: [opt] }
+    }).filter(Boolean) as { group: string; options: { name: string; price: number }[] }[]
+    const variantKey = selectedOptions.map(g => `${g.group}:${g.options.map(o=>o.name).sort().join('|')}`).sort().join(';')
+    add({ id: dialogItem._id, name: dialogItem.name, price: dialogItem.price, image: dialogItem.imageUrl, restaurantId: restaurant?._id, selectedOptions, qty: 1, variantKey })
+    setDialogItem(null)
   }
 
   return (
@@ -98,7 +144,7 @@ export default function RestaurantPage({ params }: Params) {
           )}
           {!loading && !error && restaurant && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-1">
+              <div className="hidden">
                 <div className="sticky top-4">
                   <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
                     <div className="relative h-48">
@@ -147,7 +193,7 @@ export default function RestaurantPage({ params }: Params) {
                             <div className="flex items-center justify-between">
                               <span className="text-sm md:text-lg font-bold text-secondary">Rs. {f.price.toFixed(2)}</span>
                               <Button
-                                onClick={() => handleAdd(f)}
+                                onClick={() => openAdd(f)}
                                 size="sm"
                                 variant="default"
                                 className="bg-secondary hover:bg-secondary/90 text-white"
@@ -195,7 +241,7 @@ export default function RestaurantPage({ params }: Params) {
                             <div className="flex items-center justify-between">
                               <span className="text-sm md:text-lg font-bold text-secondary">Rs. {it.price.toFixed(2)}</span>
                               <Button
-                                onClick={() => handleAdd(it)}
+                                onClick={() => openAdd(it)}
                                 size="sm"
                                 variant="default"
                                 className="bg-secondary hover:bg-secondary/90 text-white"
@@ -218,6 +264,58 @@ export default function RestaurantPage({ params }: Params) {
           )}
         </div>
       </section>
+      {dialogItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setDialogItem(null)} />
+          <div className="relative w-full max-w-lg mx-4 rounded-lg border bg-white">
+            <div className="p-4 border-b">
+              <h3 className="text-lg font-semibold">Customize {dialogItem.name}</h3>
+            </div>
+            <div className="p-4 space-y-4 max-h-[70vh] overflow-auto">
+              {(dialogItem.customizations || []).length === 0 ? (
+                <p className="text-sm text-gray-600">No customizations available for this item.</p>
+              ) : (
+                (dialogItem.customizations || []).map(group => (
+                  <div key={group.name} className="border rounded-md p-3">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="font-medium">{group.name}</div>
+                      {group.required ? (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700">Required</span>
+                      ) : (
+                        <label className="text-xs inline-flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={!!enabled[group.name]}
+                            onChange={(e) => setOptionalEnabled(group.name, e.target.checked)}
+                          />
+                          Enable
+                        </label>
+                      )}
+                    </div>
+                    {(group.required || enabled[group.name]) && (
+                      <div className="space-y-2">
+                        {group.options.map(opt => {
+                          const checked = selected[group.name] === opt.name
+                          return (
+                            <label key={opt.name} className="flex items-center gap-2 text-sm">
+                              <input type="radio" name={`opt-${group.name}`} checked={checked} onChange={() => chooseOption(group.name, opt.name)} />
+                              <span>{opt.name}{opt.price ? ` (+Rs. ${opt.price.toFixed(2)})` : ''}</span>
+                            </label>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+            <div className="p-4 flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setDialogItem(null)}>Cancel</Button>
+              <Button onClick={confirmAdd}>Add to Cart</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

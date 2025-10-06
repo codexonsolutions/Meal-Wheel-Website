@@ -8,6 +8,7 @@ export type CartItem = {
   image?: string;
   qty: number;
   restaurantId?: string; // optional to maintain backward compatibility
+  selectedOptions?: { group: string; options: { name: string; price: number }[] }[];
 };
 
 type State = {
@@ -19,7 +20,7 @@ type Action =
   | { type: "OPEN" }
   | { type: "CLOSE" }
   | { type: "TOGGLE" }
-  | { type: "ADD"; payload: Omit<CartItem, "qty"> & { qty?: number } }
+  | { type: "ADD"; payload: (Omit<CartItem, "qty"> & { qty?: number; variantKey?: string }) }
   | { type: "REMOVE"; payload: { id: string } }
   | { type: "INCREMENT"; payload: { id: string } }
   | { type: "DECREMENT"; payload: { id: string } }
@@ -34,14 +35,19 @@ function reducer(state: State, action: Action): State {
     case "TOGGLE":
       return { ...state, open: !state.open };
     case "ADD": {
-      const { id, name, price, image, qty = 1, restaurantId } = action.payload;
-      const idx = state.items.findIndex((i) => i.id === id);
+      const { id, name, price, image, qty = 1, restaurantId, selectedOptions, variantKey } = action.payload as any;
+      const cartId = variantKey ? `${id}::${variantKey}` : id;
+      const idx = state.items.findIndex((i) => i.id === cartId);
+      const extra = Array.isArray(selectedOptions)
+        ? selectedOptions.reduce((sum: number, g: any) => sum + (Array.isArray(g.options) ? g.options.reduce((s: number, o: any) => s + (Number(o.price) || 0), 0) : 0), 0)
+        : 0;
+      const unitPrice = Number(price) + extra;
       if (idx >= 0) {
         const items = [...state.items];
         items[idx] = { ...items[idx], qty: items[idx].qty + qty };
         return { ...state, items };
       }
-      return { ...state, items: [...state.items, { id, name, price, image, qty, restaurantId }] };
+      return { ...state, items: [...state.items, { id: cartId, name, price: unitPrice, image, qty, restaurantId, selectedOptions }] };
     }
     case "REMOVE":
       return { ...state, items: state.items.filter((i) => i.id !== action.payload.id) };
