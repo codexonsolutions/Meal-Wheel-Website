@@ -204,29 +204,31 @@ export default function MenuPage() {
                 .map((item) => (
                   <Card
                     key={item._id}
-                    className="p-0 overflow-hidden transition-border duration-100"
+                    className="p-0 overflow-hidden transition-border duration-100 h-full gap-0"
                   >
-                    <div className="relative aspect-[4/3]">
+                    {/* Uniform image height via fixed aspect ratio + cover crop */}
+                    <div className="relative w-full aspect-[4/3] overflow-hidden">
                       <SafeImage
                         src={item.imageUrl || "/placeholder.jpg"}
                         alt={item.name}
                         fill
-                        className="object-cover"
+                        className="object-cover object-center"
                       />
                     </div>
-                    <CardContent className="py-3 px-4">
-                      <div className="text-sm font-semibold truncate mb-2">
+                    <CardContent className="py-3 px-4 flex flex-col flex-1">
+                      <div className="text-sm font-semibold line-clamp-2 mb-2">
                         {item.name}
                       </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2">
+                        {item.restaurantName && (
                           <Badge variant="outline">{item.restaurantName}</Badge>
-                          <Badge variant="outline">{item.category}</Badge>
-                        </div>
-                        <span className="text-sm font-bold text-secondary">
-                          Rs. {item.price.toFixed(2)}
-                        </span>
+                        )}
+                        <Badge variant="outline">{item.category}</Badge>
                       </div>
+                      <div className="mt-2 text-sm font-bold text-secondary">
+                        Rs. {item.price.toFixed(2)}
+                      </div>
+                      <div className="flex-1" />
                       <div className="mt-3 flex justify-end">
                         <Button
                           onClick={() => handleAddToCart(item)}
