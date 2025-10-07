@@ -1,5 +1,6 @@
 "use client";
-import { createContext, useContext, useMemo, useReducer, ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useReducer, ReactNode } from "react";
+import { useToast } from "@/components/ui/toast";
 
 export type CartItem = {
   id: string;
@@ -8,6 +9,7 @@ export type CartItem = {
   image?: string;
   qty: number;
   restaurantId?: string; // optional to maintain backward compatibility
+  selectedOptions?: { group: string; options: { name: string; price: number }[] }[];
 };
 
 type State = {
@@ -19,7 +21,7 @@ type Action =
   | { type: "OPEN" }
   | { type: "CLOSE" }
   | { type: "TOGGLE" }
-  | { type: "ADD"; payload: Omit<CartItem, "qty"> & { qty?: number } }
+  | { type: "ADD"; payload: (Omit<CartItem, "qty"> & { qty?: number; variantKey?: string }) }
   | { type: "REMOVE"; payload: { id: string } }
   | { type: "INCREMENT"; payload: { id: string } }
   | { type: "DECREMENT"; payload: { id: string } }
@@ -34,14 +36,19 @@ function reducer(state: State, action: Action): State {
     case "TOGGLE":
       return { ...state, open: !state.open };
     case "ADD": {
-      const { id, name, price, image, qty = 1, restaurantId } = action.payload;
-      const idx = state.items.findIndex((i) => i.id === id);
+      const { id, name, price, image, qty = 1, restaurantId, selectedOptions, variantKey } = action.payload as any;
+      const cartId = variantKey ? `${id}::${variantKey}` : id;
+      const idx = state.items.findIndex((i) => i.id === cartId);
+      const extra = Array.isArray(selectedOptions)
+        ? selectedOptions.reduce((sum: number, g: any) => sum + (Array.isArray(g.options) ? g.options.reduce((s: number, o: any) => s + (Number(o.price) || 0), 0) : 0), 0)
+        : 0;
+      const unitPrice = Number(price) + extra;
       if (idx >= 0) {
         const items = [...state.items];
         items[idx] = { ...items[idx], qty: items[idx].qty + qty };
         return { ...state, items };
       }
-      return { ...state, items: [...state.items, { id, name, price, image, qty, restaurantId }] };
+      return { ...state, items: [...state.items, { id: cartId, name, price: unitPrice, image, qty, restaurantId, selectedOptions }] };
     }
     case "REMOVE":
       return { ...state, items: state.items.filter((i) => i.id !== action.payload.id) };
@@ -77,7 +84,42 @@ const CartContext = createContext<{
 } | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, { open: false, items: [] });
+  const STORAGE_KEY = "MW_CART_V1";
+
+  // Lazy initializer to safely hydrate on client
+  const [state, dispatch] = useReducer(
+    reducer,
+    undefined,
+    () => {
+      try {
+        if (typeof window === "undefined") return { open: false, items: [] } as State;
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { open: false, items: [] } as State;
+        const parsed = JSON.parse(raw);
+        if (
+          parsed &&
+          Array.isArray(parsed.items)
+        ) {
+          return { open: false, items: parsed.items as CartItem[] } as State;
+        }
+      } catch {
+        // ignore and fall back to empty
+      }
+      return { open: false, items: [] } as State;
+    }
+  );
+  const { toast } = useToast();
+
+  // Persist cart items whenever they change
+  useEffect(() => {
+    try {
+      if (typeof window === "undefined") return;
+      const payload = JSON.stringify({ items: state.items });
+      window.localStorage.setItem(STORAGE_KEY, payload);
+    } catch {
+      // ignore storage errors
+    }
+  }, [state.items]);
 
   const api = useMemo(() => {
     const totalQty = state.items.reduce((sum, i) => sum + i.qty, 0);
@@ -87,7 +129,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
       open: () => dispatch({ type: "OPEN" }),
       close: () => dispatch({ type: "CLOSE" }),
       toggle: () => dispatch({ type: "TOGGLE" }),
-      add: (item: Omit<CartItem, "qty"> & { qty?: number }) => dispatch({ type: "ADD", payload: item }),
+      add: (item: Omit<CartItem, "qty"> & { qty?: number }) => {
+        // Determine if this will create a new line item
+        const raw: any = item as any;
+        const baseId = String(raw.id ?? "");
+        const cartId = raw.variantKey ? `${baseId}::${raw.variantKey}` : baseId;
+        const exists = state.items.some((i) => i.id === cartId);
+
+        dispatch({ type: "ADD", payload: item });
+
+        // Toast only when a new line item is created
+        if (!exists) {
+          try {
+            const name = raw?.name ? String(raw.name) : "Item";
+            toast({ title: "Added to cart", description: `${name} has been added.` });
+          } catch {
+            // no-op toast failures
+          }
+        }
+      },
       remove: (id: string) => dispatch({ type: "REMOVE", payload: { id } }),
       increment: (id: string) => dispatch({ type: "INCREMENT", payload: { id } }),
       decrement: (id: string) => dispatch({ type: "DECREMENT", payload: { id } }),
@@ -95,7 +155,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       totalQty,
       subtotal,
     };
-  }, [state]);
+  }, [state, toast]);
 
   return <CartContext.Provider value={api}>{children}</CartContext.Provider>;
 }

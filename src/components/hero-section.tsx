@@ -20,11 +20,12 @@ export function HeroSection() {
             {/* Left Side - Text Content */}
             <div className="space-y-6 md:space-y-8">
               <div className="space-y-4 md:space-y-6">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-center sm:text-left">
                   Delicious <span className="text-primary">food</span>,{" "}
                   <span className="text-primary">delivered</span> fast
                 </h1>
-                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-foreground/70 max-w-2xl leading-relaxed">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-foreground/70 max-w-2xl leading-relaxed text-center sm:text-left">
+                  {" "}
                   Order from your favorite restaurants and get fresh, hot meals
                   delivered right to your doorstep in minutes.
                 </p>
@@ -32,7 +33,12 @@ export function HeroSection() {
 
               {/* Buttons */}
               <div className="flex flex-row items-center justify-center sm:justify-start gap-3 sm:gap-4 pt-2">
-                <Button onClick={scrollToFeatured} size="lg">
+                <Button
+                  onClick={scrollToFeatured}
+                  size="lg"
+                  variant="outline"
+                  className="w-[150px]"
+                >
                   Order Now
                 </Button>
                 <Button
@@ -41,22 +47,26 @@ export function HeroSection() {
                   }}
                   variant="outline"
                   size="lg"
+                  className="w-[150px]"
                 >
                   View Menu
                 </Button>
               </div>
 
-              <div className="flex flex-row items-center justify-center gap-4 sm:gap-6 pt-4 md:pt-6">
+              <div className="flex flex-row items-center gap-4 sm:gap-6 pt-4 md:pt-6 justify-center sm:justify-start">
+                {" "}
                 <div className="flex items-center gap-2">
                   <MapPin className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                   <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium">
                     Delivery in 40-50 min
                   </span>
                 </div>
-                <div className="hidden sm:block w-2 h-2 bg-primary/30 rounded-full"></div>
-                <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium">
-                  Available 6PM - 2AM
-                </span>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5 md:h-6 md:w-6 text-primary" />
+                  <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium">
+                    Available 6PM - 2AM
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -91,7 +101,7 @@ export function HeroSection() {
               </div>
 
               {/* Floating Badge */}
-              <div className="absolute -top-2 md:-top-4 -right-2 md:-right-4 bg-primary text-background px-3 md:px-4 py-2 rounded-full shadow-lg">
+              <div className="absolute -top-2 md:-top-4 -right-2 md:-right-4 bg-primary text-background px-3 md:px-4 py-2 rounded-full">
                 <span className="font-bold text-xs sm:text-sm md:text-base">
                   30+ Restaurants
                 </span>

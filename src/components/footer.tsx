@@ -1,26 +1,31 @@
+"use client";
+
 import Link from "next/link";
 import { MessageCircle, Instagram, Phone, Mail } from "lucide-react";
 import Logo from "./ui/logo";
+import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 export function Footer() {
+  const router = useRouter();
+
   return (
-    <footer className="bg-bg-secondary mt-16">
+    <footer className="bg-bg-secondary">
       <div className="w-full h-px bg-border-mix mb-0"></div>
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          
-          {/* Brand Section */}
           <div className="space-y-4">
             <Logo />
             <p className="text-sm text-foreground/70 leading-relaxed">
-              Delicious meals delivered fresh to your doorstep. Experience the best flavors from local restaurants.
+              Delicious meals delivered fresh to your doorstep. Experience the
+              best flavors from local restaurants.
             </p>
             <div className="flex items-center gap-3">
               <Link
                 href="https://wa.me/923188868811"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-hover-mix text-foreground hover:bg-secondary hover:text-background transition-colors"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-primary text-primary hover:bg-secondary hover:text-background transition-colors"
               >
                 <MessageCircle className="h-4 w-4" />
               </Link>
@@ -28,7 +33,7 @@ export function Footer() {
                 href="https://www.instagram.com/mealwheelpk/?utm_source=ig_web_button_share_sheet"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-hover-mix text-foreground hover:bg-secondary hover:text-background transition-colors"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-primary text-primary hover:bg-secondary hover:text-background transition-colors"
               >
                 <Instagram className="h-4 w-4" />
               </Link>
@@ -40,23 +45,27 @@ export function Footer() {
             <h3 className="font-semibold text-foreground">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-sm text-foreground/70 hover:text-secondary transition-colors">
+                <Link
+                  href="/"
+                  className="text-sm text-foreground/70 hover:text-secondary transition-colors"
+                >
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/restaurants" className="text-sm text-foreground/70 hover:text-secondary transition-colors">
+                <Link
+                  href="/restaurants"
+                  className="text-sm text-foreground/70 hover:text-secondary transition-colors"
+                >
                   Restaurants
                 </Link>
               </li>
               <li>
-                <Link href="/menu" className="text-sm text-foreground/70 hover:text-secondary transition-colors">
+                <Link
+                  href="/menu"
+                  className="text-sm text-foreground/70 hover:text-secondary transition-colors"
+                >
                   Menu
-                </Link>
-              </li>
-              <li>
-                <Link href="/orders" className="text-sm text-foreground/70 hover:text-secondary transition-colors">
-                  Orders
                 </Link>
               </li>
             </ul>
@@ -86,14 +95,17 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="font-semibold text-foreground">Order Now</h3>
             <p className="text-sm text-foreground/70">
-              Ready to satisfy your cravings? Browse our menu and order your favorite meals.
+              Ready to satisfy your cravings? Browse our menu and order your
+              favorite meals.
             </p>
-            <Link 
-              href="/menu"
-              className="inline-flex items-center justify-center px-4 py-2 bg-secondary rounded-full text-background text-sm font-medium hover:bg-secondary/90 transition-colors"
+            <Button
+              onClick={() => {
+                router.push("/menu");
+              }}
+              variant="secondary"
             >
               View Menu
-            </Link>
+            </Button>
           </div>
         </div>
 
@@ -104,10 +116,16 @@ export function Footer() {
               © 2025 Meal Wheel. All rights reserved. Made for food lovers.
             </p>
             <div className="flex items-center gap-6">
-              <Link href="/privacy" className="text-sm text-foreground/70 hover:text-secondary transition-colors">
+              <Link
+                href="/privacy"
+                className="text-sm text-foreground/70 hover:text-secondary transition-colors"
+              >
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="text-sm text-foreground/70 hover:text-secondary transition-colors">
+              <Link
+                href="/terms"
+                className="text-sm text-foreground/70 hover:text-secondary transition-colors"
+              >
                 Terms of Service
               </Link>
             </div>

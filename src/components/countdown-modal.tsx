@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useEffect, useState } from "react";
 
 function getNextOpeningTime() {
@@ -54,13 +54,17 @@ const CountdownRibbon: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [nextOpen, setNextOpen] = useState<Date | null>(null);
-  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   useEffect(() => {
     setIsMounted(true);
     const nextOpenTime = getNextOpeningTime();
     setNextOpen(nextOpenTime);
-    
+
     if (nextOpenTime) {
       setTimeLeft(getTimeDiff(nextOpenTime));
     }
@@ -70,11 +74,11 @@ const CountdownRibbon: React.FC = () => {
     if (!isMounted || !nextOpen) {
       return;
     }
-    
+
     const interval = setInterval(() => {
       setTimeLeft(getTimeDiff(nextOpen));
     }, 1000);
-    
+
     return () => clearInterval(interval);
   }, [nextOpen, isMounted]);
 
@@ -83,16 +87,22 @@ const CountdownRibbon: React.FC = () => {
   }
 
   if (!nextOpen || !isVisible) return null;
-  
-  const message = `Ordering is available from 6:00 PM to 2:00 AM. Opens in ${String(timeLeft.hours).padStart(2, "0")}:${String(timeLeft.minutes).padStart(2, "0")}:${String(timeLeft.seconds).padStart(2, "0")}`;
+
+  const message = `Ordering is available from 6:00 PM to 2:00 AM. Opens in ${String(
+    timeLeft.hours
+  ).padStart(2, "0")}:${String(timeLeft.minutes).padStart(2, "0")}:${String(
+    timeLeft.seconds
+  ).padStart(2, "0")}`;
 
   return (
     <div
       className="fixed top-0 left-0 right-0 z-50 w-full bg-primary text-black py-1 flex items-center justify-center"
-      style={{ position: 'relative', minHeight: 32 }}
+      style={{ position: "relative", minHeight: 32 }}
     >
-      <span className="font-semibold text-sm text-center px-4">{message}</span>
-      <button 
+      <span className="font-semibold text-sm text-center px-4 text-white">
+        {message}
+      </span>
+      <button
         onClick={() => setIsVisible(false)}
         className="absolute right-4 text-black hover:text-gray-700 cursor-pointer"
       >
