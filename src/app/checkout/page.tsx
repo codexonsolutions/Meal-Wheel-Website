@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 export default function CheckoutPage() {
   const { state, subtotal, clear } = useCart();
   const router = useRouter();
+  const STORAGE_KEY = "MW_CHECKOUT_V1";
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -28,6 +29,54 @@ export default function CheckoutPage() {
   const [error, setError] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
+
+  // Hydrate checkout form from localStorage
+  useEffect(() => {
+    try {
+      if (typeof window === "undefined") return;
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw) as Partial<{
+        fullName: string;
+        email: string;
+        phone: string;
+        street: string;
+        city: string;
+        postal: string;
+        notes: string;
+      }>;
+      if (data.fullName) setFullName(data.fullName);
+      if (data.email) setEmail(data.email);
+      if (data.phone) setPhone(data.phone);
+      if (data.street) setStreet(data.street);
+      if (data.city) setCity(data.city);
+      if (data.postal) setPostal(data.postal);
+      if (data.notes) setNotes(data.notes);
+    } catch {
+      // ignore parse errors
+    }
+    // only on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist checkout form to localStorage
+  useEffect(() => {
+    try {
+      if (typeof window === "undefined") return;
+      const payload = {
+        fullName,
+        email,
+        phone,
+        street,
+        city,
+        postal,
+        notes,
+      };
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch {
+      // ignore storage errors
+    }
+  }, [fullName, email, phone, street, city, postal, notes]);
 
   // Redirect to home if cart is empty
   useEffect(() => {
@@ -115,6 +164,7 @@ export default function CheckoutPage() {
 
       setOrderId(result.order?._id ?? null);
       setShowSuccess(true);
+      // Keep saved checkout info for convenience across orders
       clear();
     } catch (err) {
       console.error("Order placement error:", err);
@@ -161,14 +211,14 @@ export default function CheckoutPage() {
                       : "Thanks for your order!"}
                   </p>
                   <Button
-                    className="mt-4"
+                    className="mt-4 w-[100%]"
                     size="lg"
                     onClick={() => {
                       setShowSuccess(false);
                       router.push("/");
                     }}
                   >
-                    OK
+                    Ok
                   </Button>
                 </div>
               </div>

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui";
 
 function isWithinDeliveryWindow() {
-  return true; // Temporary override to always allow checkout
+  return true;
   const now = new Date();
   const openHour = 18; // 6pm
   const closeHour = 2; // 2am (next day)
@@ -185,7 +185,7 @@ export function CartDrawer() {
                 Checkout
               </Button>
             </div>
-            <div className="text-xs text-foreground/70">
+            <div className="text-base text-foreground/70 text-center m-2">
               {canCheckout
                 ? "You can place your order now!"
                 : "Orders can be placed only between 6PM and 2AM"}

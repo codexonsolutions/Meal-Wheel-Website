@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useMemo, useReducer, ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useReducer, ReactNode } from "react";
 import { useToast } from "@/components/ui/toast";
 
 export type CartItem = {
@@ -84,8 +84,42 @@ const CartContext = createContext<{
 } | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, { open: false, items: [] });
+  const STORAGE_KEY = "MW_CART_V1";
+
+  // Lazy initializer to safely hydrate on client
+  const [state, dispatch] = useReducer(
+    reducer,
+    undefined,
+    () => {
+      try {
+        if (typeof window === "undefined") return { open: false, items: [] } as State;
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { open: false, items: [] } as State;
+        const parsed = JSON.parse(raw);
+        if (
+          parsed &&
+          Array.isArray(parsed.items)
+        ) {
+          return { open: false, items: parsed.items as CartItem[] } as State;
+        }
+      } catch {
+        // ignore and fall back to empty
+      }
+      return { open: false, items: [] } as State;
+    }
+  );
   const { toast } = useToast();
+
+  // Persist cart items whenever they change
+  useEffect(() => {
+    try {
+      if (typeof window === "undefined") return;
+      const payload = JSON.stringify({ items: state.items });
+      window.localStorage.setItem(STORAGE_KEY, payload);
+    } catch {
+      // ignore storage errors
+    }
+  }, [state.items]);
 
   const api = useMemo(() => {
     const totalQty = state.items.reduce((sum, i) => sum + i.qty, 0);

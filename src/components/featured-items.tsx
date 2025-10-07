@@ -21,6 +21,7 @@ interface FeaturedItemApi {
   restaurantName?: string;
   restaurantId?: string;
   customizations?: Customization[];
+  isFeatured?: boolean;
 }
 
 export function FeaturedItems() {
@@ -29,6 +30,7 @@ export function FeaturedItems() {
   const [dialogItem, setDialogItem] = useState<FeaturedItemApi | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const featuredOnly = items.filter((it) => !!it.isFeatured);
 
   useEffect(() => {
     let active = true;
@@ -37,7 +39,8 @@ export function FeaturedItems() {
         setLoading(true);
         const base = process.env.NEXT_PUBLIC_API_URL;
         if (!base) throw new Error("Missing NEXT_PUBLIC_API_URL");
-        const res = await fetch(`${base}/items/featured`, {
+        // Use full items endpoint to ensure customizations field is present
+        const res = await fetch(`${base}/items`, {
           cache: "no-store",
         });
         if (!res.ok) throw new Error("Failed to fetch featured items");
@@ -88,6 +91,7 @@ export function FeaturedItems() {
               customizations: Array.isArray((rec as any).customizations)
                 ? ((rec as any).customizations as any)
                 : undefined,
+              isFeatured: !!(rec as any).isFeatured,
             } satisfies FeaturedItemApi;
           });
           setItems(normalized);
@@ -180,7 +184,7 @@ export function FeaturedItems() {
           </div>
         </div>
 
-        {!loading && !error && items.length === 0 && (
+        {!loading && !error && featuredOnly.length === 0 && (
           <div className="flex justify-center items-center py-12">
             <div className="text-lg text-secondary">
               No featured items found
@@ -205,9 +209,9 @@ export function FeaturedItems() {
             <div className="text-lg text-red-500">{error}</div>
           </div>
         )}
-        {!loading && !error && items.length > 0 && (
+        {!loading && !error && featuredOnly.length > 0 && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-            {items.slice(0, 8).map((item) => (
+            {featuredOnly.slice(0, 8).map((item) => (
               <Card
                 key={item._id}
                 className="p-0 overflow-hidden transition-border duration-100"
