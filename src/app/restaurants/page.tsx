@@ -130,17 +130,17 @@ export default function RestaurantsPage() {
                       href={`/restaurants/${slug}`}
                       className="block"
                     >
-                      <Card className="p-0 overflow-hidden hover:border-primary transition-border duration-100">
-                        <div className="relative aspect-[4/3]">
+                      <Card className="p-0 overflow-hidden hover:border-primary transition-border duration-100 h-full gap-0">
+                        <div className="relative w-full aspect-[5/4] overflow-hidden">
                           <SafeImage
                             src={r.imageUrl || "/placeholder.jpg"}
                             alt={r.name}
                             fill
-                            className="object-cover"
+                            className="object-cover object-center"
                           />
                         </div>
-                        <CardContent className="py-3 px-4">
-                          <div className="text-sm font-semibold truncate mb-2">
+                        <CardContent className="py-3 px-4 flex flex-col flex-1">
+                          <div className="text-sm font-semibold line-clamp-2 mb-2">
                             {r.name}
                           </div>
                           <div className="flex flex-wrap gap-1.5 mb-2">
@@ -155,6 +155,7 @@ export default function RestaurantsPage() {
                               </Badge>
                             )}
                           </div>
+                          <div className="flex-1" />
                           <div className="flex items-center justify-between text-sm text-muted-foreground">
                             <span>{r.categories.length} categories</span>
                             <span className="inline-flex items-center gap-1 text-primary">
@@ -191,7 +192,7 @@ export default function RestaurantsPage() {
           </p>
           <Button
             onClick={() => {
-              router.push("#featured-items");
+              router.push("/#featured-items");
             }}
             variant="outline"
             size="lg"
