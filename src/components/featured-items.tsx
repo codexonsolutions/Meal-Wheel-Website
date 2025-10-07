@@ -193,7 +193,7 @@ export function FeaturedItems() {
         )}
         {loading && (
           <div
-            className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6"
             aria-busy="true"
           >
             {Array.from({ length: 4 }).map((_, i) => (
@@ -210,7 +210,7 @@ export function FeaturedItems() {
           </div>
         )}
         {!loading && !error && featuredOnly.length > 0 && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {featuredOnly.slice(0, 8).map((item) => (
               <Card
                 key={item._id}

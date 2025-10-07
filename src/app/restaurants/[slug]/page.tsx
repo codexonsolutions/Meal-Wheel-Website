@@ -226,7 +226,7 @@ export default function RestaurantPage({ params }: Params) {
                 {activeCategory && (
                   <div>
                     <h3 className="text-xl font-bold mb-6">{activeCategory}</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
                       {activeItems.map((it) => (
                         <Card
                           key={it._id}
