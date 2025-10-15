@@ -2,7 +2,7 @@
 /* Checkout page: Collects user details and shows order summary */
 import Link from "next/link";
 import { SafeImage } from "@/components/ui/safe-image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/cart-context";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,20 @@ export default function CheckoutPage() {
   const [notes, setNotes] = useState("");
 
   const deliveryFee = state.items.length > 0 ? 220 : 0; // flat fee example
-  const total = subtotal + deliveryFee;
+  // Map of restaurantId -> gst percentage
+  const [gstByRestaurant, setGstByRestaurant] = useState<Record<string, number>>({});
+  // Compute GST for the current cart based on restaurant GST
+  const gstTotal = useMemo(() => {
+    if (!state.items || state.items.length === 0) return 0;
+    let tax = 0;
+    for (const item of state.items) {
+      const rid = item.restaurantId || "";
+      const pct = typeof gstByRestaurant[rid] === "number" ? gstByRestaurant[rid] : 0;
+      if (pct > 0) tax += (item.price * item.qty) * (pct / 100);
+    }
+    return Math.max(0, Number.isFinite(tax) ? tax : 0);
+  }, [state.items, gstByRestaurant]);
+  const total = subtotal + gstTotal + deliveryFee;
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,6 +70,36 @@ export default function CheckoutPage() {
     }
     // only on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Fetch restaurant GST mapping for pricing calculations
+  useEffect(() => {
+    let active = true;
+    async function loadGst() {
+      try {
+        const base = process.env.NEXT_PUBLIC_API_URL;
+        if (!base) return;
+        const res = await fetch(`${base}/restaurant`, { cache: "no-store" });
+        if (!res.ok) return;
+        const data = await res.json();
+        const list: Array<{ _id?: string; gst?: number }> = Array.isArray(data?.restaurants)
+          ? data.restaurants
+          : [];
+        const map: Record<string, number> = {};
+        for (const r of list) {
+          const id = typeof r._id === "string" ? r._id : undefined;
+          const gst = typeof r.gst === "number" && r.gst >= 0 ? r.gst : 0;
+          if (id) map[id] = gst;
+        }
+        if (active) setGstByRestaurant(map);
+      } catch {
+        // ignore; fallback GST is 0
+      }
+    }
+    loadGst();
+    return () => {
+      active = false;
+    };
   }, []);
 
   // Persist checkout form to localStorage
@@ -299,9 +342,11 @@ export default function CheckoutPage() {
                   <div className="mt-6 border-t border-gray-200 pt-4 space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Subtotal</span>
-                      <span className="font-medium">
-                        Rs. {subtotal.toFixed(2)}
-                      </span>
+                      <span className="font-medium">Rs. {subtotal.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">GST</span>
+                      <span className="font-medium">Rs. {gstTotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Delivery Fee</span>
