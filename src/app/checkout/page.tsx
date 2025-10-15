@@ -24,15 +24,18 @@ export default function CheckoutPage() {
 
   const deliveryFee = state.items.length > 0 ? 220 : 0; // flat fee example
   // Map of restaurantId -> gst percentage
-  const [gstByRestaurant, setGstByRestaurant] = useState<Record<string, number>>({});
+  const [gstByRestaurant, setGstByRestaurant] = useState<
+    Record<string, number>
+  >({});
   // Compute GST for the current cart based on restaurant GST
   const gstTotal = useMemo(() => {
     if (!state.items || state.items.length === 0) return 0;
     let tax = 0;
     for (const item of state.items) {
       const rid = item.restaurantId || "";
-      const pct = typeof gstByRestaurant[rid] === "number" ? gstByRestaurant[rid] : 0;
-      if (pct > 0) tax += (item.price * item.qty) * (pct / 100);
+      const pct =
+        typeof gstByRestaurant[rid] === "number" ? gstByRestaurant[rid] : 0;
+      if (pct > 0) tax += item.price * item.qty * (pct / 100);
     }
     return Math.max(0, Number.isFinite(tax) ? tax : 0);
   }, [state.items, gstByRestaurant]);
@@ -82,7 +85,9 @@ export default function CheckoutPage() {
         const res = await fetch(`${base}/restaurant`, { cache: "no-store" });
         if (!res.ok) return;
         const data = await res.json();
-        const list: Array<{ _id?: string; gst?: number }> = Array.isArray(data?.restaurants)
+        const list: Array<{ _id?: string; gst?: number }> = Array.isArray(
+          data?.restaurants
+        )
           ? data.restaurants
           : [];
         const map: Record<string, number> = {};
@@ -257,11 +262,14 @@ export default function CheckoutPage() {
                     className="mt-4 w-[100%]"
                     size="lg"
                     onClick={() => {
-                      setShowSuccess(false);
-                      router.push("/");
+                      if (orderId) {
+                        router.push(`/order/${orderId}`);
+                      } else {
+                        router.push("/");
+                      }
                     }}
                   >
-                    Ok
+                    Track Order
                   </Button>
                 </div>
               </div>
@@ -342,11 +350,15 @@ export default function CheckoutPage() {
                   <div className="mt-6 border-t border-gray-200 pt-4 space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Subtotal</span>
-                      <span className="font-medium">Rs. {subtotal.toFixed(2)}</span>
+                      <span className="font-medium">
+                        Rs. {subtotal.toFixed(2)}
+                      </span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">GST</span>
-                      <span className="font-medium">Rs. {gstTotal.toFixed(2)}</span>
+                      <span className="font-medium">
+                        Rs. {gstTotal.toFixed(2)}
+                      </span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Delivery Fee</span>
