@@ -8,7 +8,7 @@ import { ToastProvider } from "@/components/ui/toast";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { Analytics } from "@vercel/analytics/react";
 import CountdownModal from "@/components/countdown-modal";
-import { BetaBanner } from "@/components/beta-banner";
+import { Banner } from "@/components/banner";
 import Script from "next/script";
 import "./globals.css";
 
@@ -51,7 +51,7 @@ export default function RootLayout({
         <ToastProvider>
           <CartProvider>
             <CountdownModal />
-            {/* <BetaBanner /> */}
+            <Banner />
             <Header />
             <Suspense fallback={null}>{children}</Suspense>
             <Footer />
