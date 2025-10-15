@@ -496,7 +496,7 @@ export default function CheckoutPage() {
                 <CardContent>
                   <p className="text-sm text-gray-600">
                     Payment will be collected upon delivery. We accept cash and
-                    card payments.
+                    online payments.
                   </p>
                 </CardContent>
               </Card>
