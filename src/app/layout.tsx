@@ -36,7 +36,7 @@ export default function RootLayout({
         <Script id="crisp-chat" strategy="afterInteractive">
           {`
             window.$crisp = [];
-            window.CRISP_WEBSITE_ID = "c2334a78-30ea-428c-8082-08585251aab1";
+            window.CRISP_WEBSITE_ID = "65758126-6314-4307-ab69-d5599a9b0765";
             (function() {
               var d = document;
               var s = d.createElement("script");
