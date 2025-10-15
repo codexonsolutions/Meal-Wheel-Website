@@ -8,7 +8,7 @@ import { ToastProvider } from "@/components/ui/toast";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { Analytics } from "@vercel/analytics/react";
 import CountdownModal from "@/components/countdown-modal";
-import { BetaBanner } from "@/components/beta-banner";
+import { Banner } from "@/components/banner";
 import Script from "next/script";
 import "./globals.css";
 
@@ -36,7 +36,7 @@ export default function RootLayout({
         <Script id="crisp-chat" strategy="afterInteractive">
           {`
             window.$crisp = [];
-            window.CRISP_WEBSITE_ID = "c2334a78-30ea-428c-8082-08585251aab1";
+            window.CRISP_WEBSITE_ID = "65758126-6314-4307-ab69-d5599a9b0765";
             (function() {
               var d = document;
               var s = d.createElement("script");
@@ -51,7 +51,7 @@ export default function RootLayout({
         <ToastProvider>
           <CartProvider>
             <CountdownModal />
-            {/* <BetaBanner /> */}
+            <Banner />
             <Header />
             <Suspense fallback={null}>{children}</Suspense>
             <Footer />

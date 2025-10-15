@@ -1,15 +1,34 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Logo from "./ui/logo";
 
-export const BetaBanner = () => {
+export const Banner = () => {
+  const [isAvailable, setIsAvailable] = useState<boolean>(true);
+
+  useEffect(() => {
+    const base = process.env.NEXT_PUBLIC_API_URL;
+    if (!base) return;
+    (async () => {
+      try {
+        const res = await fetch(`${base}/status`, { cache: "no-store" });
+        if (!res.ok) return;
+        const data = await res.json().catch(() => null);
+        if (data && typeof data.status === "boolean") setIsAvailable(!!data.status);
+      } catch (_) {
+        // keep default
+      }
+    })();
+  }, []);
+
   const handleWhatsAppRedirect = () => {
-    // Replace this with your actual WhatsApp business number
     const whatsappNumber = "923188868811";
     const message = encodeURIComponent("Hi! I'd like to place an order.");
     window.open(`https://wa.me/${whatsappNumber}?text=${message}`, "_blank");
   };
+
+  if (isAvailable) return null;
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -17,10 +36,9 @@ export const BetaBanner = () => {
         <div className="flex flex-col items-center gap-4 text-center">
           <Logo />
           <p className="text-lg font-semibold text-neutral-600">
-            We are finalizing a few things. Please use WhatsApp to place your
-            order.
+            We are currently not taking orders. Please use WhatsApp to chat.
           </p>
-          <Button onClick={handleWhatsAppRedirect}>Order on WhatsApp</Button>
+          <Button onClick={handleWhatsAppRedirect}>Contact on WhatsApp</Button>
         </div>
       </div>
     </div>
