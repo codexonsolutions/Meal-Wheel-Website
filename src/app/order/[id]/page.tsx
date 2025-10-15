@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { SafeImage } from "@/components/ui/safe-image";
+// No item images on this page
 
 type ApiOrderItem = {
   itemId: string;
@@ -290,190 +290,100 @@ export default function Page() {
               </CardHeader>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Left: Status + Details */}
-              <div className="lg:col-span-2 space-y-8">
-                <Card>
-                  <CardHeader className="border-b">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <CardTitle className="text-xl flex items-center gap-2">
-                          <span>Order</span>
-                          <span className="text-secondary">
-                            #{order._id.slice(-6)}
-                          </span>
-                        </CardTitle>
-                        <CardDescription>
-                          Placed on {prettyDate(order.createdAt)}{" "}
-                          {restaurantName ? `• ${restaurantName}` : ""}
-                          {hasMultiRestaurants ? " • Multiple restaurants" : ""}
-                        </CardDescription>
-                      </div>
-                      <StatusBadge status={order.status} />
+            <div className="space-y-8">
+              {/* Status Card */}
+              <Card>
+                <CardHeader className="border-b">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <CardTitle className="text-xl flex items-center gap-2">
+                        <span>Order</span>
+                        <span className="text-secondary">#{order._id.slice(-6)}</span>
+                      </CardTitle>
+                      <CardDescription>
+                        Placed on {prettyDate(order.createdAt)} {restaurantName ? `• ${restaurantName}` : ""}
+                        {hasMultiRestaurants ? " • Multiple restaurants" : ""}
+                      </CardDescription>
                     </div>
-                  </CardHeader>
-                  <CardContent className="py-6">
-                    <StatusStepper status={order.status} />
-                  </CardContent>
-                </Card>
+                    <StatusBadge status={order.status} />
+                  </div>
+                </CardHeader>
+                <CardContent className="py-6">
+                  <StatusStepper status={order.status} />
+                </CardContent>
+              </Card>
 
-                <Card>
-                  <CardHeader className="border-b">
-                    <CardTitle className="text-lg">Order Items</CardTitle>
-                    <CardDescription>
-                      A summary of everything in your order
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="py-6 space-y-4">
-                    {order.items.map((it, idx) => (
-                      <div
-                        key={`${it.itemId}-${idx}`}
-                        className="flex items-start gap-4"
-                      >
-                        <div className="relative h-16 w-16 rounded-lg overflow-hidden border bg-gray-50">
-                          <SafeImage
-                            src={it.imageUrl}
-                            alt={it.name}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between gap-2">
-                            <div>
-                              <div className="font-medium text-foreground leading-tight">
-                                {it.name}
-                              </div>
-                              <div className="text-xs text-muted-foreground">
-                                Qty: {it.quantity}
-                              </div>
-                              {it.customizations &&
-                                it.customizations.length > 0 && (
-                                  <div className="text-xs text-muted-foreground mt-1 space-y-0.5">
-                                    {it.customizations.map((g) => (
-                                      <div key={g.group}>
-                                        <span className="font-medium">
-                                          {g.group}:
-                                        </span>{" "}
-                                        {g.options
-                                          .map((o) => o.name)
-                                          .join(", ")}
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
+              {/* Order Card (like admin, without status controls) */}
+              <Card>
+                <CardHeader className="border-b">
+                  <CardTitle className="text-lg">Order Details</CardTitle>
+                </CardHeader>
+                <CardContent className="py-6 space-y-6">
+                  {/* Top details */}
+                  <div className="grid md:grid-cols-3 gap-6 text-sm">
+                    <div>
+                      <h4 className="font-medium mb-2">Customer</h4>
+                      <p className="text-muted-foreground"><strong className="text-foreground">Name:</strong> {order.customer?.fullName || "—"}</p>
+                      <p className="text-muted-foreground"><strong className="text-foreground">Phone:</strong> {order.customer?.phone || "—"}</p>
+                      <p className="text-muted-foreground"><strong className="text-foreground">Email:</strong> {order.customer?.email || "—"}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Restaurant</h4>
+                      <p className="text-muted-foreground">{restaurantName || "—"}</p>
+                      <p className="text-muted-foreground"><strong className="text-foreground">Subtotal:</strong> {currency(order.subtotal)}</p>
+                      <p className="text-muted-foreground"><strong className="text-foreground">GST:</strong> {currency(order.gstTotal)}</p>
+                      <p className="text-muted-foreground"><strong className="text-foreground">Delivery Fee:</strong> {currency(order.deliveryFee)}</p>
+                      <p className="text-muted-foreground"><strong className="text-foreground">Total:</strong> {currency(order.total)}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-2">Delivery</h4>
+                      <p className="text-muted-foreground">
+                        {order.deliveryAddress?.street || "—"}
+                        <br />
+                        {[order.deliveryAddress?.city, order.deliveryAddress?.postal].filter(Boolean).join(", ")}
+                      </p>
+                      {order.deliveryAddress?.notes && (
+                        <p className="mt-1 text-muted-foreground"><strong className="text-foreground">Notes:</strong> {order.deliveryAddress.notes}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Items */}
+                  <div>
+                    <h4 className="font-medium mb-2">Items ({order.items.length})</h4>
+                    <div className="space-y-3 text-sm">
+                      {order.items.map((it, idx) => (
+                        <div key={`${it.itemId}-${idx}`} className="space-y-1 border-b pb-3 last:border-b-0">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="text-muted-foreground">
+                              <span className="text-foreground font-medium">{it.name}</span>
+                              <span className="ml-2 text-xs">x {it.quantity}</span>
+                              <span className="ml-2 text-xs italic">{it.category}</span>
+                              {it.customizations && it.customizations.length > 0 && (
+                                <div className="mt-1 text-xs">
+                                  {it.customizations.map((g) => (
+                                    <div key={g.group}>
+                                      <span className="font-medium">{g.group}:</span> {g.options.map((o) => o.name).join(", ")}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </div>
-                            <div className="text-sm font-semibold text-secondary">
+                            <div className="text-sm font-semibold text-secondary whitespace-nowrap">
                               {currency(it.price * it.quantity)}
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
+                      ))}
+                    </div>
+                  </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Card>
-                    <CardHeader className="border-b">
-                      <CardTitle className="text-lg">Customer</CardTitle>
-                    </CardHeader>
-                    <CardContent className="py-6 space-y-1 text-sm">
-                      <div className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Name</span>
-                        <span className="font-medium">
-                          {order.customer?.fullName || "—"}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Phone</span>
-                        <span className="font-medium">
-                          {order.customer?.phone || "—"}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Email</span>
-                        <span className="font-medium break-all">
-                          {order.customer?.email || "—"}
-                        </span>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader className="border-b">
-                      <CardTitle className="text-lg">
-                        Delivery Address
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="py-6 space-y-1 text-sm">
-                      <div className="text-foreground font-medium">
-                        {order.deliveryAddress?.street || "—"}
-                      </div>
-                      <div className="text-muted-foreground">
-                        {[
-                          order.deliveryAddress?.city,
-                          order.deliveryAddress?.postal,
-                        ]
-                          .filter(Boolean)
-                          .join(", ") || ""}
-                      </div>
-                      {order.deliveryAddress?.notes ? (
-                        <div className="text-muted-foreground text-xs mt-2">
-                          Notes: {order.deliveryAddress?.notes}
-                        </div>
-                      ) : null}
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-
-              {/* Right: Summary */}
-              <aside className="lg:col-span-1">
-                <Card>
-                  <CardHeader className="border-b">
-                    <CardTitle className="text-lg">Order Summary</CardTitle>
-                    <CardDescription>Totals and fees</CardDescription>
-                  </CardHeader>
-                  <CardContent className="py-6 space-y-3">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Subtotal</span>
-                      <span className="font-medium">
-                        {currency(order.subtotal)}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">GST</span>
-                      <span className="font-medium">
-                        {currency(order.gstTotal)}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        Delivery Fee
-                      </span>
-                      <span className="font-medium">
-                        {currency(order.deliveryFee)}
-                      </span>
-                    </div>
-                    <div className="border-t pt-3 flex items-center justify-between text-base font-semibold">
-                      <span>Total</span>
-                      <span className="text-secondary">
-                        {currency(order.total)}
-                      </span>
-                    </div>
-
-                    <div className="mt-6">
-                      <div className="text-xs text-muted-foreground">
-                        Last updated
-                      </div>
-                      <div className="text-sm font-medium">
-                        {prettyDate(order.updatedAt)}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </aside>
+                  <div className="pt-2">
+                    <div className="text-xs text-muted-foreground">Last updated</div>
+                    <div className="text-sm font-medium">{prettyDate(order.updatedAt)}</div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           )}
         </div>
