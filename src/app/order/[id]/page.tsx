@@ -202,6 +202,11 @@ export default function Page() {
           cache: "no-store",
           signal,
         });
+        if (res.status === 404 || res.status === 400) {
+          // If the order is not found or the id is invalid, go back home
+          router.replace("/");
+          return;
+        }
         if (!res.ok) {
           const msg = await res.json().catch(() => ({} as any));
           throw new Error(msg?.error || "Failed to fetch order");
@@ -250,8 +255,8 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="p-16">
-        <div className="container">
+      <section className="px-2 sm:px-4 md:px-12 lg:px-16 py-10 md:py-16">
+        <div className="container w-full">
           {loading ? (
             <Card>
               <CardHeader className="border-b">
@@ -298,10 +303,13 @@ export default function Page() {
                     <div>
                       <CardTitle className="text-xl flex items-center gap-2">
                         <span>Order</span>
-                        <span className="text-secondary">#{order._id.slice(-6)}</span>
+                        <span className="text-secondary">
+                          #{order._id.slice(-6)}
+                        </span>
                       </CardTitle>
                       <CardDescription>
-                        Placed on {prettyDate(order.createdAt)} {restaurantName ? `• ${restaurantName}` : ""}
+                        Placed on {prettyDate(order.createdAt)}{" "}
+                        {restaurantName ? `• ${restaurantName}` : ""}
                         {hasMultiRestaurants ? " • Multiple restaurants" : ""}
                       </CardDescription>
                     </div>
@@ -323,53 +331,103 @@ export default function Page() {
                   <div className="grid md:grid-cols-3 gap-6 text-sm">
                     <div>
                       <h4 className="font-medium mb-2">Customer</h4>
-                      <p className="text-muted-foreground"><strong className="text-foreground">Name:</strong> {order.customer?.fullName || "—"}</p>
-                      <p className="text-muted-foreground"><strong className="text-foreground">Phone:</strong> {order.customer?.phone || "—"}</p>
-                      <p className="text-muted-foreground"><strong className="text-foreground">Email:</strong> {order.customer?.email || "—"}</p>
+                      <p className="text-muted-foreground">
+                        <strong className="text-foreground">Name:</strong>{" "}
+                        {order.customer?.fullName || "—"}
+                      </p>
+                      <p className="text-muted-foreground">
+                        <strong className="text-foreground">Phone:</strong>{" "}
+                        {order.customer?.phone || "—"}
+                      </p>
+                      <p className="text-muted-foreground">
+                        <strong className="text-foreground">Email:</strong>{" "}
+                        {order.customer?.email || "—"}
+                      </p>
                     </div>
                     <div>
                       <h4 className="font-medium mb-2">Restaurant</h4>
-                      <p className="text-muted-foreground">{restaurantName || "—"}</p>
-                      <p className="text-muted-foreground"><strong className="text-foreground">Subtotal:</strong> {currency(order.subtotal)}</p>
-                      <p className="text-muted-foreground"><strong className="text-foreground">GST:</strong> {currency(order.gstTotal)}</p>
-                      <p className="text-muted-foreground"><strong className="text-foreground">Delivery Fee:</strong> {currency(order.deliveryFee)}</p>
-                      <p className="text-muted-foreground"><strong className="text-foreground">Total:</strong> {currency(order.total)}</p>
+                      <p className="text-muted-foreground">
+                        {restaurantName || "—"}
+                      </p>
+                      <p className="text-muted-foreground">
+                        <strong className="text-foreground">Subtotal:</strong>{" "}
+                        {currency(order.subtotal)}
+                      </p>
+                      <p className="text-muted-foreground">
+                        <strong className="text-foreground">GST:</strong>{" "}
+                        {currency(order.gstTotal)}
+                      </p>
+                      <p className="text-muted-foreground">
+                        <strong className="text-foreground">
+                          Delivery Fee:
+                        </strong>{" "}
+                        {currency(order.deliveryFee)}
+                      </p>
+                      <p className="text-muted-foreground">
+                        <strong className="text-foreground">Total:</strong>{" "}
+                        {currency(order.total)}
+                      </p>
                     </div>
                     <div>
                       <h4 className="font-medium mb-2">Delivery</h4>
                       <p className="text-muted-foreground">
                         {order.deliveryAddress?.street || "—"}
                         <br />
-                        {[order.deliveryAddress?.city, order.deliveryAddress?.postal].filter(Boolean).join(", ")}
+                        {[
+                          order.deliveryAddress?.city,
+                          order.deliveryAddress?.postal,
+                        ]
+                          .filter(Boolean)
+                          .join(", ")}
                       </p>
                       {order.deliveryAddress?.notes && (
-                        <p className="mt-1 text-muted-foreground"><strong className="text-foreground">Notes:</strong> {order.deliveryAddress.notes}</p>
+                        <p className="mt-1 text-muted-foreground">
+                          <strong className="text-foreground">Notes:</strong>{" "}
+                          {order.deliveryAddress.notes}
+                        </p>
                       )}
                     </div>
                   </div>
 
                   {/* Items */}
                   <div>
-                    <h4 className="font-medium mb-2">Items ({order.items.length})</h4>
+                    <h4 className="font-medium mb-2">
+                      Items ({order.items.length})
+                    </h4>
                     <div className="space-y-3 text-sm">
                       {order.items.map((it, idx) => (
-                        <div key={`${it.itemId}-${idx}`} className="space-y-1 border-b pb-3 last:border-b-0">
+                        <div
+                          key={`${it.itemId}-${idx}`}
+                          className="space-y-1 border-b pb-3 last:border-b-0"
+                        >
                           <div className="flex items-start justify-between gap-3">
                             <div className="text-muted-foreground">
-                              <span className="text-foreground font-medium">{it.name}</span>
-                              <span className="ml-2 text-xs">x {it.quantity}</span>
-                              <span className="ml-2 text-xs italic">{it.category}</span>
-                              {it.customizations && it.customizations.length > 0 && (
-                                <div className="mt-1 text-xs">
-                                  {it.customizations.map((g) => (
-                                    <div key={g.group}>
-                                      <span className="font-medium">{g.group}:</span> {g.options.map((o) => o.name).join(", ")}
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
+                              <span className="text-foreground font-medium">
+                                {it.name}
+                              </span>
+                              <span className="ml-2 text-xs">
+                                x {it.quantity}
+                              </span>
+                              <span className="ml-2 text-xs italic">
+                                {it.category}
+                              </span>
+                              {it.customizations &&
+                                it.customizations.length > 0 && (
+                                  <div className="mt-1 text-xs">
+                                    {it.customizations.map((g) => (
+                                      <div key={g.group}>
+                                        <span className="font-medium">
+                                          {g.group}:
+                                        </span>{" "}
+                                        {g.options
+                                          .map((o) => o.name)
+                                          .join(", ")}
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
                             </div>
-                            <div className="text-sm font-semibold text-secondary whitespace-nowrap">
+                            <div className="text-sm text-foreground whitespace-nowrap">
                               {currency(it.price * it.quantity)}
                             </div>
                           </div>
@@ -379,8 +437,12 @@ export default function Page() {
                   </div>
 
                   <div className="pt-2">
-                    <div className="text-xs text-muted-foreground">Last updated</div>
-                    <div className="text-sm font-medium">{prettyDate(order.updatedAt)}</div>
+                    <div className="text-xs text-muted-foreground">
+                      Last updated
+                    </div>
+                    <div className="text-sm font-medium">
+                      {prettyDate(order.updatedAt)}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
