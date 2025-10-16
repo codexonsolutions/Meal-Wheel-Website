@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui";
 
 function isWithinDeliveryWindow() {
-  return true;
   const now = new Date();
   const openHour = 18; // 6pm
   const closeHour = 2; // 2am (next day)
