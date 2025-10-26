@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui";
 
 function isWithinDeliveryWindow() {
+  if (process.env.NEXT_PUBLIC_DEV === "1") {
+    return true;
+  }
   const now = new Date();
   const openHour = 18; // 6pm
   const closeHour = 2; // 2am (next day)
