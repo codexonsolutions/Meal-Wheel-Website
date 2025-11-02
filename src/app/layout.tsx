@@ -20,9 +20,6 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Meal Wheel - Food Delivery Made Simple",
   description: "Order from your favorite restaurants with Meal Wheel",
-  icons: {
-    icon: "/mealwheel.svg",
-  },
 };
 
 export default function RootLayout({
