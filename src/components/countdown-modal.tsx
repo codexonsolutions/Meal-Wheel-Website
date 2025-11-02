@@ -14,9 +14,10 @@ function getNextOpeningTime() {
   // Align start/end around 'now' for windows crossing midnight
   if (closeHour <= openHour) {
     if (now < start) {
-      // After midnight, before today's opening
-      // Current window (yesterday 6pm -> today 2am) already ended; next open is today 6pm
-      // 'start' already points to today 6pm
+      // Before today's opening. If we're after midnight but before close,
+      // the active window started yesterday at 6pm. Shift start back a day
+      // so the within-window check works for 12:00am–2:00am.
+      start.setDate(start.getDate() - 1);
     } else {
       // Evening: closing is next day
       end.setDate(end.getDate() + 1);
