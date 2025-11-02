@@ -22,7 +22,7 @@ export function Footer() {
             </p>
             <div className="flex items-center gap-3">
               <Link
-                href="https://wa.me/923188868811"
+                href="https://wa.me/923283688688"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-primary text-primary hover:bg-secondary hover:text-background transition-colors"
@@ -77,7 +77,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-sm text-foreground/70">
                 <Phone className="h-4 w-4" />
-                <span>+92 318 886 8811</span>
+                <span>+92 328 368 8688</span>
               </li>
               <li className="flex items-center gap-2 text-sm text-foreground/70">
                 <Mail className="h-4 w-4" />

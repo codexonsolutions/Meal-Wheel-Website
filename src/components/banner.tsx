@@ -15,7 +15,8 @@ export const Banner = () => {
         const res = await fetch(`${base}/status`, { cache: "no-store" });
         if (!res.ok) return;
         const data = await res.json().catch(() => null);
-        if (data && typeof data.status === "boolean") setIsAvailable(!!data.status);
+        if (data && typeof data.status === "boolean")
+          setIsAvailable(!!data.status);
       } catch (_) {
         // keep default
       }
@@ -23,7 +24,7 @@ export const Banner = () => {
   }, []);
 
   const handleWhatsAppRedirect = () => {
-    const whatsappNumber = "923188868811";
+    const whatsappNumber = "923283688688";
     const message = encodeURIComponent("Hi! I'd like to place an order.");
     window.open(`https://wa.me/${whatsappNumber}?text=${message}`, "_blank");
   };
