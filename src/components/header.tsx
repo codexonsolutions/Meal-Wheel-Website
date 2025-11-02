@@ -70,7 +70,7 @@ export function Header() {
 
           <div className="hidden md:flex items-center gap-3">
             <Link
-              href="https://wa.me/923188868811"
+              href="https://wa.me/923283688688"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
@@ -183,7 +183,7 @@ export function Header() {
               <div className="pt-4 border-t border-gray-100">
                 <div className="flex items-center justify-end gap-4">
                   <Link
-                    href="https://wa.me/923188868811"
+                    href="https://wa.me/923283688688"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="WhatsApp"
