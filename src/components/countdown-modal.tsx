@@ -94,14 +94,22 @@ const CountdownRibbon: React.FC = () => {
   ).padStart(2, "0")}:${String(timeLeft.minutes).padStart(2, "0")}:${String(
     timeLeft.seconds
   ).padStart(2, "0")}`;
+  const shortMessage = `Currently Closed. Opens in ${String(
+    timeLeft.hours
+  ).padStart(2, "0")}:${String(timeLeft.minutes).padStart(2, "0")}:${String(
+    timeLeft.seconds
+  ).padStart(2, "0")}`;
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-50 w-full bg-primary text-black py-1 flex items-center justify-center"
+      className="fixed top-0 left-0 right-0 z-50 w-full bg-primary text-black py-1 flex items-center justify-center pr-10 sm:pr-12"
       style={{ position: "relative", minHeight: 32 }}
     >
-      <span className="font-semibold text-sm text-center px-4 text-white">
+      <span className="font-semibold text-sm text-center px-4 text-white hidden sm:inline">
         {message}
+      </span>
+      <span className="font-semibold text-sm text-center px-4 text-white sm:hidden">
+        {shortMessage}
       </span>
       <button
         onClick={() => setIsVisible(false)}

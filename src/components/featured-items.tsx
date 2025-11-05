@@ -39,8 +39,7 @@ export function FeaturedItems() {
         setLoading(true);
         const base = process.env.NEXT_PUBLIC_API_URL;
         if (!base) throw new Error("Missing NEXT_PUBLIC_API_URL");
-        // Use full items endpoint to ensure customizations field is present
-        const res = await fetch(`${base}/items`, {
+        const res = await fetch(`${base}/items/featured`, {
           cache: "no-store",
         });
         if (!res.ok) throw new Error("Failed to fetch featured items");

@@ -105,17 +105,19 @@ export function CustomizationDialog({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Customize {itemName}</DialogTitle>
+          <DialogTitle>
+            {(frozenCustomizations && frozenCustomizations.length > 0)
+              ? `Customize ${itemName}`
+              : itemName}
+          </DialogTitle>
           <DialogDescription>
-            Choose options to personalize your order.
+            {(frozenCustomizations && frozenCustomizations.length > 0)
+              ? "Choose options to personalize your order."
+              : "Confirm this item to add to cart"}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 max-h-[60vh] overflow-auto pr-1">
-          {(frozenCustomizations || []).length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              No customizations available for this item.
-            </p>
-          ) : (
+          {(frozenCustomizations && frozenCustomizations.length > 0) &&
             (frozenCustomizations || []).map((group) => (
               <div key={group.name} className="border rounded-md p-3">
                 <div className="flex items-center gap-3 mb-2">
@@ -159,13 +161,14 @@ export function CustomizationDialog({
                   </div>
                 )}
               </div>
-            ))
-          )}
+            ))}
         </div>
         <DialogFooter>
-          <div className="mr-auto text-sm text-foreground/70">
-            Extra: Rs. {extraPrice.toFixed(2)}
-          </div>
+          {extraPrice > 0 && (
+            <div className="mr-auto text-sm text-foreground/70">
+              Extra: Rs. {extraPrice.toFixed(2)}
+            </div>
+          )}
           <div className="flex gap-2">
             <Button className="flex-1" variant="outline" onClick={onClose}>
               Cancel

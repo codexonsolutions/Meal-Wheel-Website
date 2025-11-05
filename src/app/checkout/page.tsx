@@ -187,7 +187,7 @@ export default function CheckoutPage() {
 
       // Send order to backend
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/orders/public`,
+        `${process.env.NEXT_PUBLIC_API_URL}/orders`,
         {
           method: "POST",
           headers: {

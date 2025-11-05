@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { MapPin } from "lucide-react";
+import { MapPin, Clock } from "lucide-react";
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +20,7 @@ export function HeroSection() {
             {/* Left Side - Text Content */}
             <div className="space-y-6 md:space-y-8">
               <div className="space-y-4 md:space-y-6">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-center sm:text-left">
+                <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-center sm:text-left">
                   Delicious <span className="text-primary">food</span>,{" "}
                   <span className="text-primary">delivered</span> fast
                 </h1>
@@ -32,12 +32,12 @@ export function HeroSection() {
               </div>
 
               {/* Buttons */}
-              <div className="flex flex-row items-center justify-center sm:justify-start gap-3 sm:gap-4 pt-2">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start justify-center sm:justify-start gap-3 sm:gap-4 pt-2 w-full">
                 <Button
                   onClick={scrollToFeatured}
                   size="lg"
                   variant="outline"
-                  className="w-[150px]"
+                  className="w-full sm:w-[150px]"
                 >
                   Order Now
                 </Button>
@@ -47,23 +47,23 @@ export function HeroSection() {
                   }}
                   variant="outline"
                   size="lg"
-                  className="w-[150px]"
+                  className="w-full sm:w-[150px]"
                 >
                   View Menu
                 </Button>
               </div>
 
-              <div className="flex flex-row items-center gap-4 sm:gap-6 pt-4 md:pt-6 justify-center sm:justify-start">
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6 pt-4 md:pt-6 justify-center sm:justify-start">
                 {" "}
                 <div className="flex items-center gap-2">
                   <MapPin className="h-5 w-5 md:h-6 md:w-6 text-primary" />
-                  <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium">
-                    Delivery in 40-50 min
+                  <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium whitespace-nowrap">
+                    Delivery in 40-50 minutes
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 md:h-6 md:w-6 text-primary" />
-                  <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium">
+                  <Clock className="h-5 w-5 md:h-6 md:w-6 text-primary" />
+                  <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium whitespace-nowrap">
                     Available 6PM - 2AM
                   </span>
                 </div>
