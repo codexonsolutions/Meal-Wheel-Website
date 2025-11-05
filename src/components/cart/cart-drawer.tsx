@@ -47,6 +47,26 @@ export function CartDrawer() {
     return () => clearInterval(interval);
   }, []);
 
+  // Disable background scroll when cart is open
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (open) {
+      const prevHtmlOverflow = document.documentElement.style.overflow;
+      const prevBodyOverflow = document.body.style.overflow;
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        document.documentElement.style.overflow = prevHtmlOverflow;
+        document.body.style.overflow = prevBodyOverflow;
+      };
+    } else {
+      // Ensure reset if closed
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    }
+  }, [open]);
+
   return (
     <>
       {/* Overlay */}
