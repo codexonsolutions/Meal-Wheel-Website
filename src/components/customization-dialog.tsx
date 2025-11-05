@@ -106,18 +106,19 @@ export function CustomizationDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {(frozenCustomizations && frozenCustomizations.length > 0)
+            {frozenCustomizations && frozenCustomizations.length > 0
               ? `Customize ${itemName}`
               : itemName}
           </DialogTitle>
           <DialogDescription>
-            {(frozenCustomizations && frozenCustomizations.length > 0)
+            {frozenCustomizations && frozenCustomizations.length > 0
               ? "Choose options to personalize your order."
               : "Confirm this item to add to cart"}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 max-h-[60vh] overflow-auto pr-1">
-          {(frozenCustomizations && frozenCustomizations.length > 0) &&
+          {frozenCustomizations &&
+            frozenCustomizations.length > 0 &&
             (frozenCustomizations || []).map((group) => (
               <div key={group.name} className="border rounded-md p-3">
                 <div className="flex items-center gap-3 mb-2">
@@ -135,7 +136,7 @@ export function CustomizationDialog({
                           setOptionalEnabled(group.name, e.target.checked)
                         }
                       />
-                      Enable
+                      Yes
                     </label>
                   )}
                 </div>
