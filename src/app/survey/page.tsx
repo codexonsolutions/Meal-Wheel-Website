@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogFooter,
 } from "@/components/ui/dialog";
 
 function StarRating({
@@ -64,14 +65,6 @@ export default function SurveyPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [successOpen, setSuccessOpen] = useState(false);
-
-  useEffect(() => {
-    if (!successOpen) return;
-    const t = setTimeout(() => {
-      router.push("/");
-    }, 1200);
-    return () => clearTimeout(t);
-  }, [successOpen, router]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -196,9 +189,17 @@ export default function SurveyPage() {
           <DialogHeader>
             <DialogTitle>Submitted successfully</DialogTitle>
             <DialogDescription>
-              Thank you for your feedback. Redirecting to the home page...
+              Thank you for your feedback.
             </DialogDescription>
           </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => router.push("/menu")}
+            >
+              Go to Menu
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
