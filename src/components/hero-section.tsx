@@ -58,7 +58,7 @@ export function HeroSection() {
                 <div className="flex items-center gap-2">
                   <MapPin className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                   <span className="text-sm sm:text-base md:text-lg text-foreground/70 font-medium whitespace-nowrap">
-                    Delivery in 40-50 min
+                    Delivery in 40-50 minutes
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
